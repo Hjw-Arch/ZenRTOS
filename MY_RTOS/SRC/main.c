@@ -37,6 +37,7 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 	task->delayTicks = 0;
 }
 
+// 任务调度函数，来决定下一个运行的任务是哪个
 void taskSched(void) {
 	if (currentTask == idleTaskp) {
 		if (taskTable[0]->delayTicks == 0) nextTask = taskTable[0];
@@ -132,6 +133,7 @@ void idleTaskEntry (void* param) {
 
 int main(){
 	setSysTick(TIME_SLICE);
+	
 	taskInit(&ttask1, task1Entry, (void*)0x1145, &task1Env[1024]);
 	taskInit(&ttask2, task2Entry, (void*)0x1919, &task2Env[1024]);
 	
