@@ -88,7 +88,7 @@ void SysTick_Handler() {
 }
 
 // 要实现任务延时，需要使用定时器，而且每个任务都配备一个定时器才行，但是硬件只有一个定时器而任务数量很多
-// 因此可以利用SysTick产生这个硬件定时器来实现软定时器
+// 因此可以利用SysTick这个硬件定时器来实现软定时器
 // 因为SysTick周期性触发中断，因此可以以这个周期为最基本的软件定时器的时间单位
 // 每触发一次SysTick就将软定时器的值-1即可
 // 因此软定时器的定时时间都是SysTick中断的倍数
@@ -100,6 +100,7 @@ void SysTick_Handler() {
 
 int task1Flag;
 void task1Entry (void* param) {
+	setSysTick(TIME_SLICE);
 	while(1) {
 		task1Flag = 0;
 		taskDelay(20);
@@ -132,7 +133,8 @@ void idleTaskEntry (void* param) {
 }
 
 int main(){
-	setSysTick(TIME_SLICE);
+	__set_PSP((uint32_t)(&idleTaskEnv[256]));			// 将idletask的栈拿来用，将在任务切换中来保存任务运行前的R4-R11（没有用），这样不会浪费空间。
+	MEM8(NVIC_SYSPRI2) = NVIC_PENDSV_PRI;
 	
 	taskInit(&ttask1, task1Entry, (void*)0x1145, &task1Env[1024]);
 	taskInit(&ttask2, task2Entry, (void*)0x1919, &task2Env[1024]);
@@ -146,7 +148,11 @@ int main(){
 	nextTask = &ttask1;
 	idleTaskp = &idleTask;
 	
-	runFirstTask(); // 运行之后不会返回，下方的return 0其实没什么作用
+//	runFirstTask(); // 运行之后不会返回，下方的return 0其实没什么作用
+	
+	currentTask = (task_t*)(&idleTaskEnv[512]);		// 将currenttask指向idletask栈区，在任务切换中来使用（没有用），这样不会浪费空间。
+	
+	taskSwitch();
 	
 	return 0;
 }
