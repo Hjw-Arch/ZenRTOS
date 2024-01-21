@@ -7,7 +7,7 @@ Section Cross References
     main.o(i.SysTick_Handler) refers to main.o(i.taskTimeSliceHandler) for taskTimeSliceHandler
     main.o(i.main) refers to main.o(i.taskInit) for taskInit
     main.o(i.main) refers to switch.o(i.taskSwitch) for taskSwitch
-    main.o(i.main) refers to main.o(.bss) for idleTaskEnv
+    main.o(i.main) refers to main.o(.bss) for task1Env
     main.o(i.main) refers to main.o(i.task1Entry) for task1Entry
     main.o(i.main) refers to main.o(.data) for ttask1
     main.o(i.main) refers to main.o(i.task2Entry) for task2Entry
@@ -283,24 +283,24 @@ Image Symbol Table
     i.SystemInit                             0x00000250   Section        0  system_armcm3.o(i.SystemInit)
     i.idleTaskEntry                          0x00000260   Section        0  main.o(i.idleTaskEntry)
     i.main                                   0x00000264   Section        0  main.o(i.main)
-    i.setSysTick                             0x00000300   Section        0  main.o(i.setSysTick)
-    i.task1Entry                             0x00000358   Section        0  main.o(i.task1Entry)
-    i.task2Entry                             0x00000380   Section        0  main.o(i.task2Entry)
-    i.taskDelay                              0x000003a0   Section        0  main.o(i.taskDelay)
-    i.taskInit                               0x000003c4   Section        0  main.o(i.taskInit)
-    i.taskSched                              0x0000044c   Section        0  main.o(i.taskSched)
-    i.taskSwitch                             0x000004ec   Section        0  switch.o(i.taskSwitch)
-    i.taskTimeSliceHandler                   0x000004fc   Section        0  main.o(i.taskTimeSliceHandler)
-    .data                                    0x20000000   Section       40  main.o(.data)
-    .data                                    0x20000028   Section       16  switch.o(.data)
-    .data                                    0x20000038   Section        4  system_armcm3.o(.data)
-    .bss                                     0x2000003c   Section    10240  main.o(.bss)
-    .bss                                     0x2000283c   Section       96  libspace.o(.bss)
-    HEAP                                     0x200028a0   Section     3072  startup_armcm3.o(HEAP)
-    Heap_Mem                                 0x200028a0   Data        3072  startup_armcm3.o(HEAP)
-    STACK                                    0x200034a0   Section     1024  startup_armcm3.o(STACK)
-    Stack_Mem                                0x200034a0   Data        1024  startup_armcm3.o(STACK)
-    __initial_sp                             0x200038a0   Data           0  startup_armcm3.o(STACK)
+    i.setSysTick                             0x000002fc   Section        0  main.o(i.setSysTick)
+    i.task1Entry                             0x00000354   Section        0  main.o(i.task1Entry)
+    i.task2Entry                             0x0000037c   Section        0  main.o(i.task2Entry)
+    i.taskDelay                              0x0000039c   Section        0  main.o(i.taskDelay)
+    i.taskInit                               0x000003c0   Section        0  main.o(i.taskInit)
+    i.taskSched                              0x00000448   Section        0  main.o(i.taskSched)
+    i.taskSwitch                             0x000004e8   Section        0  switch.o(i.taskSwitch)
+    i.taskTimeSliceHandler                   0x000004f8   Section        0  main.o(i.taskTimeSliceHandler)
+    .data                                    0x20000000   Section       36  main.o(.data)
+    .data                                    0x20000024   Section       16  switch.o(.data)
+    .data                                    0x20000034   Section        4  system_armcm3.o(.data)
+    .bss                                     0x20000038   Section    10240  main.o(.bss)
+    .bss                                     0x20002838   Section       96  libspace.o(.bss)
+    HEAP                                     0x20002898   Section     3072  startup_armcm3.o(HEAP)
+    Heap_Mem                                 0x20002898   Data        3072  startup_armcm3.o(HEAP)
+    STACK                                    0x20003498   Section     1024  startup_armcm3.o(STACK)
+    Stack_Mem                                0x20003498   Data        1024  startup_armcm3.o(STACK)
+    __initial_sp                             0x20003898   Data           0  startup_armcm3.o(STACK)
 
     Global Symbols
 
@@ -436,32 +436,31 @@ Image Symbol Table
     SystemInit                               0x00000251   Thumb Code     8  system_armcm3.o(i.SystemInit)
     idleTaskEntry                            0x00000261   Thumb Code     4  main.o(i.idleTaskEntry)
     main                                     0x00000265   Thumb Code    92  main.o(i.main)
-    setSysTick                               0x00000301   Thumb Code    74  main.o(i.setSysTick)
-    task1Entry                               0x00000359   Thumb Code    34  main.o(i.task1Entry)
-    task2Entry                               0x00000381   Thumb Code    28  main.o(i.task2Entry)
-    taskDelay                                0x000003a1   Thumb Code    32  main.o(i.taskDelay)
-    taskInit                                 0x000003c5   Thumb Code   136  main.o(i.taskInit)
-    taskSched                                0x0000044d   Thumb Code   142  main.o(i.taskSched)
-    taskSwitch                               0x000004ed   Thumb Code    10  switch.o(i.taskSwitch)
-    taskTimeSliceHandler                     0x000004fd   Thumb Code    46  main.o(i.taskTimeSliceHandler)
-    Region$$Table$$Base                      0x00000530   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00000550   Number         0  anon$$obj.o(Region$$Table)
+    setSysTick                               0x000002fd   Thumb Code    74  main.o(i.setSysTick)
+    task1Entry                               0x00000355   Thumb Code    34  main.o(i.task1Entry)
+    task2Entry                               0x0000037d   Thumb Code    28  main.o(i.task2Entry)
+    taskDelay                                0x0000039d   Thumb Code    32  main.o(i.taskDelay)
+    taskInit                                 0x000003c1   Thumb Code   136  main.o(i.taskInit)
+    taskSched                                0x00000449   Thumb Code   142  main.o(i.taskSched)
+    taskSwitch                               0x000004e9   Thumb Code    10  switch.o(i.taskSwitch)
+    taskTimeSliceHandler                     0x000004f9   Thumb Code    46  main.o(i.taskTimeSliceHandler)
+    Region$$Table$$Base                      0x0000052c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x0000054c   Number         0  anon$$obj.o(Region$$Table)
     idleTaskp                                0x20000000   Data           4  main.o(.data)
     task1Flag                                0x20000004   Data           4  main.o(.data)
     task2Flag                                0x20000008   Data           4  main.o(.data)
     ttask1                                   0x2000000c   Data           8  main.o(.data)
     ttask2                                   0x20000014   Data           8  main.o(.data)
     idleTask                                 0x2000001c   Data           8  main.o(.data)
-    uninitspace                              0x20000024   Data           4  main.o(.data)
-    currentTask                              0x20000028   Data           4  switch.o(.data)
-    nextTask                                 0x2000002c   Data           4  switch.o(.data)
-    taskTable                                0x20000030   Data           8  switch.o(.data)
-    SystemCoreClock                          0x20000038   Data           4  system_armcm3.o(.data)
-    task1Env                                 0x2000003c   Data        4096  main.o(.bss)
-    task2Env                                 0x2000103c   Data        4096  main.o(.bss)
-    idleTaskEnv                              0x2000203c   Data        2048  main.o(.bss)
-    __libspace_start                         0x2000283c   Data          96  libspace.o(.bss)
-    __temporary_stack_top$libspace           0x2000289c   Data           0  libspace.o(.bss)
+    currentTask                              0x20000024   Data           4  switch.o(.data)
+    nextTask                                 0x20000028   Data           4  switch.o(.data)
+    taskTable                                0x2000002c   Data           8  switch.o(.data)
+    SystemCoreClock                          0x20000034   Data           4  system_armcm3.o(.data)
+    task1Env                                 0x20000038   Data        4096  main.o(.bss)
+    task2Env                                 0x20001038   Data        4096  main.o(.bss)
+    idleTaskEnv                              0x20002038   Data        2048  main.o(.bss)
+    __libspace_start                         0x20002838   Data          96  libspace.o(.bss)
+    __temporary_stack_top$libspace           0x20002898   Data           0  libspace.o(.bss)
 
 
 
@@ -471,9 +470,9 @@ Memory Map of the image
 
   Image Entry point : 0x0000018d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x0000058c, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000584, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x00000550, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x0000054c, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -539,36 +538,35 @@ Memory Map of the image
     0x0000024e   0x00000002   PAD
     0x00000250   0x00000010   Code   RO          174    i.SystemInit        system_armcm3.o
     0x00000260   0x00000004   Code   RO            5    i.idleTaskEntry     main.o
-    0x00000264   0x0000009c   Code   RO            6    i.main              main.o
-    0x00000300   0x00000058   Code   RO            7    i.setSysTick        main.o
-    0x00000358   0x00000028   Code   RO            8    i.task1Entry        main.o
-    0x00000380   0x00000020   Code   RO            9    i.task2Entry        main.o
-    0x000003a0   0x00000024   Code   RO           10    i.taskDelay         main.o
-    0x000003c4   0x00000088   Code   RO           11    i.taskInit          main.o
-    0x0000044c   0x000000a0   Code   RO           12    i.taskSched         main.o
-    0x000004ec   0x00000010   Code   RO          124    i.taskSwitch        switch.o
-    0x000004fc   0x00000034   Code   RO           13    i.taskTimeSliceHandler  main.o
-    0x00000530   0x00000020   Data   RO          368    Region$$Table       anon$$obj.o
+    0x00000264   0x00000098   Code   RO            6    i.main              main.o
+    0x000002fc   0x00000058   Code   RO            7    i.setSysTick        main.o
+    0x00000354   0x00000028   Code   RO            8    i.task1Entry        main.o
+    0x0000037c   0x00000020   Code   RO            9    i.task2Entry        main.o
+    0x0000039c   0x00000024   Code   RO           10    i.taskDelay         main.o
+    0x000003c0   0x00000088   Code   RO           11    i.taskInit          main.o
+    0x00000448   0x000000a0   Code   RO           12    i.taskSched         main.o
+    0x000004e8   0x00000010   Code   RO          124    i.taskSwitch        switch.o
+    0x000004f8   0x00000034   Code   RO           13    i.taskTimeSliceHandler  main.o
+    0x0000052c   0x00000020   Data   RO          368    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Base: 0x20000000, Size: 0x0000003c, Max: 0xffffffff, ABSOLUTE)
-
-    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
-
-    0x20000000   0x00000028   Data   RW           16    .data               main.o
-    0x20000028   0x00000010   Data   RW          125    .data               switch.o
-    0x20000038   0x00000004   Data   RW          175    .data               system_armcm3.o
-
-
-    Execution Region ER_ZI (Base: 0x2000003c, Size: 0x00003864, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Base: 0x20000000, Size: 0x00000038, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x2000003c   0x00002800   Zero   RW           15    .bss                main.o
-    0x2000283c   0x00000060   Zero   RW          242    .bss                c_w.l(libspace.o)
-    0x2000289c   0x00000004   PAD
-    0x200028a0   0x00000c00   Zero   RW          164    HEAP                startup_armcm3.o
-    0x200034a0   0x00000400   Zero   RW          163    STACK               startup_armcm3.o
+    0x20000000   0x00000024   Data   RW           16    .data               main.o
+    0x20000024   0x00000010   Data   RW          125    .data               switch.o
+    0x20000034   0x00000004   Data   RW          175    .data               system_armcm3.o
+
+
+    Execution Region ER_ZI (Base: 0x20000038, Size: 0x00003860, Max: 0xffffffff, ABSOLUTE)
+
+    Base Addr    Size         Type   Attr      Idx    E Section Name        Object
+
+    0x20000038   0x00002800   Zero   RW           15    .bss                main.o
+    0x20002838   0x00000060   Zero   RW          242    .bss                c_w.l(libspace.o)
+    0x20002898   0x00000c00   Zero   RW          164    HEAP                startup_armcm3.o
+    0x20003498   0x00000400   Zero   RW          163    STACK               startup_armcm3.o
 
 
 ==============================================================================
@@ -578,13 +576,13 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       712        116          0         40      10240      40527   main.o
+       708        112          0         36      10240      40487   main.o
         64         26        192          0       4096        840   startup_armcm3.o
         64         14          0         16          0       1870   switch.o
         16          8          0          4          0        659   system_armcm3.o
 
     ----------------------------------------------------------------------
-       858        164        224         60      14336      43896   Object Totals
+       854        160        224         56      14336      43856   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          2          0          0          0          0          0   (incl. Padding)
 
@@ -614,8 +612,8 @@ Image component sizes
          2          0          0          0          0         68   use_no_semi.o
 
     ----------------------------------------------------------------------
-       278         16          0          0        100        584   Library Totals
-         6          0          0          0          4          0   (incl. Padding)
+       278         16          0          0         96        584   Library Totals
+         6          0          0          0          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -624,7 +622,7 @@ Image component sizes
        272         16          0          0         96        584   c_w.l
 
     ----------------------------------------------------------------------
-       278         16          0          0        100        584   Library Totals
+       278         16          0          0         96        584   Library Totals
 
     ----------------------------------------------------------------------
 
@@ -633,15 +631,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      1136        180        224         60      14436      43800   Grand Totals
-      1136        180        224         60      14436      43800   ELF Image Totals
-      1136        180        224         60          0          0   ROM Totals
+      1132        176        224         56      14432      43760   Grand Totals
+      1132        176        224         56      14432      43760   ELF Image Totals
+      1132        176        224         56          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 1360 (   1.33kB)
-    Total RW  Size (RW Data + ZI Data)             14496 (  14.16kB)
-    Total ROM Size (Code + RO Data + RW Data)       1420 (   1.39kB)
+    Total RO  Size (Code + RO Data)                 1356 (   1.32kB)
+    Total RW  Size (RW Data + ZI Data)             14488 (  14.15kB)
+    Total ROM Size (Code + RO Data + RW Data)       1412 (   1.38kB)
 
 ==============================================================================
 

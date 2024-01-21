@@ -56,20 +56,31 @@ void taskSched(void) {
 	taskSwitch();
 }
 
+// 要实现任务延时，需要使用定时器，而且每个任务都配备一个定时器才行，但是硬件只有一个定时器而任务数量很多
+// 因此可以利用SysTick这个硬件定时器来实现软定时器
+// 因为SysTick周期性触发中断，因此可以以这个周期为最基本的软件定时器的时间单位
+// 每触发一次SysTick就将软定时器的值-1即可
+// 因此软定时器的定时时间都是SysTick中断的倍数
+// 中断处理也需要时间，不能太频繁这样会导致系统在切换任务这个事情上占用太多资源，本末倒置，一般设置为10ms-100ms就可以
+
+
+// 软定时器延时精度并不准确，要注意使用场合 eg：延时一个单位，在两个SysTick中间开始延时，那么只能延时半个SysTick中断周期。
+// 假如在将要触发定时器中断的时候发生了更高级别的中断，会导致延时时间变长
+
+void taskDelay (uint32_t ms) {
+	if (ms < TIME_SLICE) ms = TIME_SLICE;
+	
+	currentTask->delayTicks = (ms + TIME_SLICE / 2) / TIME_SLICE; // 四舍五入算法
+	
+	taskSched();
+}
+
 void taskTimeSliceHandler() {
 	for (int i = 0; i < 2; ++i) {
 		if (taskTable[i]->delayTicks > 0) {
 			taskTable[i]->delayTicks--;
 		}
 	}
-	
-	taskSched();
-}
-
-void taskDelay (uint32_t ms) {
-	if (ms < TIME_SLICE) ms = TIME_SLICE;
-	
-	currentTask->delayTicks = (ms + TIME_SLICE / 2) / TIME_SLICE; // 四舍五入算法
 	
 	taskSched();
 }
@@ -87,16 +98,6 @@ void SysTick_Handler() {
 	taskTimeSliceHandler();
 }
 
-// 要实现任务延时，需要使用定时器，而且每个任务都配备一个定时器才行，但是硬件只有一个定时器而任务数量很多
-// 因此可以利用SysTick这个硬件定时器来实现软定时器
-// 因为SysTick周期性触发中断，因此可以以这个周期为最基本的软件定时器的时间单位
-// 每触发一次SysTick就将软定时器的值-1即可
-// 因此软定时器的定时时间都是SysTick中断的倍数
-// 中断处理也需要时间，不能太频繁这样会导致系统在切换任务这个事情上占用太多资源，本末倒置，一般设置为10ms-100ms就可以
-
-
-// 软定时器延时精度并不准确，要注意使用场合 eg：延时一个单位，在两个SysTick中间开始延时，那么只能延时半个SysTick中断周期。
-// 假如在将要触发定时器中断的时候发生了更高级别的中断，会导致延时时间变长
 
 int task1Flag;
 void task1Entry (void* param) {
@@ -133,9 +134,6 @@ void idleTaskEntry (void* param) {
 }
 
 int main(){
-	__set_PSP((uint32_t)(&idleTaskEnv[256]));			// 将idletask的栈拿来用，将在任务切换中来保存任务运行前的R4-R11（没有用），这样不会浪费空间。
-	MEM8(NVIC_SYSPRI2) = NVIC_PENDSV_PRI;
-	
 	taskInit(&ttask1, task1Entry, (void*)0x1145, &task1Env[1024]);
 	taskInit(&ttask2, task2Entry, (void*)0x1919, &task2Env[1024]);
 	
@@ -150,7 +148,11 @@ int main(){
 	
 //	runFirstTask(); // 运行之后不会返回，下方的return 0其实没什么作用
 	
+	__set_PSP((uint32_t)(&idleTaskEnv[256]));			// 将idletask的栈拿来用，将在任务切换中来保存任务运行前的R4-R11（没有用），这样不会浪费空间。
+														// 只要将psp和currenttask指向一段无用的地址就可以了
 	currentTask = (task_t*)(&idleTaskEnv[512]);		// 将currenttask指向idletask栈区，在任务切换中来使用（没有用），这样不会浪费空间。
+	
+	MEM8(NVIC_SYSPRI2) = NVIC_PENDSV_PRI;			// 设置PendSVC的优先级
 	
 	taskSwitch();
 	
