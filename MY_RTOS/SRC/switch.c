@@ -5,12 +5,16 @@ task_t* currentTask;
 task_t* nextTask;
 task_t* taskTable[2];
 
+extern taskStack_t idleTaskEnv[512];
+
 __asm void PendSV_Handler (void) {
 	IMPORT currentTask
 	IMPORT nextTask
 	
 	MRS R0, PSP
-//	CBZ R0, noSave 			// 检测标志位，是第一个任务就跳过保存阶段
+
+//  使用runfirsttak，需要下面这条指令，使用runfirsttask2，不需要下面这条指令
+//	CBZ R0, noSave 			// 检测标志位，是第一个任务就跳过保存阶段,
 	
 	STMDB R0!, {R4-R11}     // 手动保存R4-R11到当前任务的栈空间，其它的寄存器已经被硬件自动保存
 	
@@ -44,6 +48,17 @@ void runFirstTask() {
 	MEM8(NVIC_SYSPRI2) = NVIC_PENDSV_PRI; // 设置PendSVC的优先级
 	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET; // 使能PendSVC，触发PendSVC异常
 }
+
+void runFirstTask2() {
+//	将idletask的栈拿来用，将在任务切换中来保存任务运行前的R4-R11（没有用），这样不会浪费空间。
+//	只要将psp和currenttask指向一段无用的地址就可以了
+	__set_PSP((uint32_t)(&idleTaskEnv[256]));
+	currentTask = (task_t*)(&idleTaskEnv[256]);		// 将currenttask指向idletask栈区，在任务切换中来使用（没有用），这样不会浪费空间。
+	
+	MEM8(NVIC_SYSPRI2) = NVIC_PENDSV_PRI;			// 设置PendSVC的优先级
+	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET; 			// 使能PendSVC，触发PendSVC异常
+}
+
 
 void taskSwitch() {
 	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET; // 使能PendSVC，触发PendSVC异常

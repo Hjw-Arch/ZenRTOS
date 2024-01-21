@@ -30,6 +30,7 @@ extern task_t* taskTable[2];
 
 
 void runFirstTask(void);
+void runFirstTask2(void);
 void taskSwitch(void);
 
 
