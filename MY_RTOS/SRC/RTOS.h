@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+#include "lock.h"
+
 #define NVIC_INT_CTRL				0xe000ed04	// 中断控制及状态寄存器ICSR
 #define NVIC_PENDSVSET				0x10000000  //  pendsv中断使能位，使能PendSVC中断
 #define NVIC_SYSPRI2				0xe000ed22	//  PendSV的优先级寄存器

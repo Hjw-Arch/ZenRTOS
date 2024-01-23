@@ -39,10 +39,15 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 
 // 任务调度函数，来决定下一个运行的任务是哪个
 void taskSched(void) {
+	uint32_t st = enterCritical();
+	
 	if (currentTask == idleTaskp) {
 		if (taskTable[0]->delayTicks == 0) nextTask = taskTable[0];
 		else if (taskTable[1]->delayTicks == 0) nextTask = taskTable[1];
-		else return;
+		else {
+			leaveCritical(st);
+			return;
+		}
 	}
 	
 	if (currentTask == taskTable[0] && taskTable[1]->delayTicks == 0) {
@@ -52,6 +57,8 @@ void taskSched(void) {
 	} else if (taskTable[0]->delayTicks != 0 && taskTable[1] != 0) {
 		nextTask = idleTaskp;
 	}
+	
+	leaveCritical(st);
 	
 	taskSwitch();
 }
@@ -103,7 +110,9 @@ int task1Flag;
 void task1Entry (void* param) {
 	setSysTick(TIME_SLICE);
 	while(1) {
+		uint32_t st = enterCritical();
 		task1Flag = 0;
+		leaveCritical(st);
 		taskDelay(20);
 		task1Flag = 1;
 		taskDelay(20);
