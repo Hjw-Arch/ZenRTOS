@@ -4,11 +4,6 @@
 
 task_t* idleTaskp;
 
-void triggerPenderSVC (void) {
-	MEM8(NVIC_SYSPRI2) = NVIC_PENDSV_PRI;
-	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET;
-}
-
 // 任务初始化
 void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* stack) {
 	// 进入中断/异常时， 硬件会自动将8个寄存器压栈，顺序是xPSR、PC(R15)、LR(R14)、R12以及R3-R0
@@ -41,6 +36,11 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 void taskSched(void) {
 	uint32_t st = enterCritical();
 	
+	if (schedLockCount > 0) {
+		leaveCritical(st);
+		return;
+	}
+	
 	if (currentTask == idleTaskp) {
 		if (taskTable[0]->delayTicks == 0) nextTask = taskTable[0];
 		else if (taskTable[1]->delayTicks == 0) nextTask = taskTable[1];
@@ -58,9 +58,9 @@ void taskSched(void) {
 		nextTask = idleTaskp;
 	}
 	
-	leaveCritical(st);
-	
 	taskSwitch();
+	
+	leaveCritical(st);
 }
 
 // 要实现任务延时，需要使用定时器，而且每个任务都配备一个定时器才行，但是硬件只有一个定时器而任务数量很多
@@ -75,9 +75,13 @@ void taskSched(void) {
 // 假如在将要触发定时器中断的时候发生了更高级别的中断，会导致延时时间变长
 
 void taskDelay (uint32_t ms) {
-	if (ms < TIME_SLICE) ms = TIME_SLICE;
+//  对于本代码需不需要加锁存疑
+//	if (ms < TIME_SLICE) ms = TIME_SLICE;
+	
+	uint32_t st = enterCritical();
 	
 	currentTask->delayTicks = (ms + TIME_SLICE / 2) / TIME_SLICE; // 四舍五入算法
+//	leaveCritical(st);
 	
 	taskSched();
 }
