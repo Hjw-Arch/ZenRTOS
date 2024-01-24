@@ -2,7 +2,7 @@
 #define RTOS_H
 
 #include <stdint.h>
-
+#include "rtLib.h"
 #include "lock.h"
 
 #define NVIC_INT_CTRL				0xe000ed04	// ÖÐ¶Ï¿ØÖÆ¼°×´Ì¬¼Ä´æÆ÷ICSR

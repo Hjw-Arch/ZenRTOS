@@ -112,6 +112,16 @@ void SysTick_Handler() {
 
 int task1Flag;
 void task1Entry (void* param) {
+	Bitmap bitmap;
+	bitmapInit(&bitmap);
+	
+	for (int i = bitmapPosCount() - 1; i >= 0; --i) {
+		bitmapSet(&bitmap, i);
+		int firstSet = bitmapGetFirstSet(&bitmap);
+		bitmapClear(&bitmap, i);
+	}
+	
+	
 	setSysTick(TIME_SLICE);
 	while(1) {
 		uint32_t st = enterCritical();
