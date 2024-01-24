@@ -76,9 +76,9 @@ void taskSched(void) {
 
 void taskDelay (uint32_t ms) {
 //  对于本代码需不需要加锁存疑
-//	if (ms < TIME_SLICE) ms = TIME_SLICE;
+	if (ms < TIME_SLICE) ms = TIME_SLICE;
 	
-	uint32_t st = enterCritical();
+//	uint32_t st = enterCritical();
 	
 	currentTask->delayTicks = (ms + TIME_SLICE / 2) / TIME_SLICE; // 四舍五入算法
 //	leaveCritical(st);
