@@ -44,7 +44,9 @@ Section Cross References
     rt_task.o(i.getHighestReady) refers to rt_task.o(.data) for taskPriorityBitmap
     rt_task.o(i.getHighestReady) refers to rt_task.o(.bss) for taskTable
     rt_task.o(i.setSysTick) refers to system_armcm3.o(.data) for SystemCoreClock
+    rt_task.o(i.taskDelay) refers to lock.o(i.enterCritical) for enterCritical
     rt_task.o(i.taskDelay) refers to bitmap.o(i.bitmapClear) for bitmapClear
+    rt_task.o(i.taskDelay) refers to lock.o(i.leaveCritical) for leaveCritical
     rt_task.o(i.taskDelay) refers to rt_task.o(i.taskSched) for taskSched
     rt_task.o(i.taskDelay) refers to rt_task.o(.data) for currentTask
     rt_task.o(i.taskInit) refers to bitmap.o(i.bitmapSet) for bitmapSet
@@ -366,10 +368,10 @@ Image Symbol Table
     i.task1Entry                             0x000005d8   Section        0  main.o(i.task1Entry)
     i.task2Entry                             0x00000600   Section        0  main.o(i.task2Entry)
     i.taskDelay                              0x00000620   Section        0  rt_task.o(i.taskDelay)
-    i.taskInit                               0x00000654   Section        0  rt_task.o(i.taskInit)
-    i.taskSched                              0x00000704   Section        0  rt_task.o(i.taskSched)
-    i.taskSwitch                             0x00000748   Section        0  switch.o(i.taskSwitch)
-    i.taskTimeSliceHandler                   0x00000758   Section        0  rt_task.o(i.taskTimeSliceHandler)
+    i.taskInit                               0x00000660   Section        0  rt_task.o(i.taskInit)
+    i.taskSched                              0x00000710   Section        0  rt_task.o(i.taskSched)
+    i.taskSwitch                             0x00000754   Section        0  switch.o(i.taskSwitch)
+    i.taskTimeSliceHandler                   0x00000764   Section        0  rt_task.o(i.taskTimeSliceHandler)
     .constdata                               0x000007a4   Section      256  bitmap.o(.constdata)
     quickFindTable                           0x000007a4   Data         256  bitmap.o(.constdata)
     .data                                    0x20000000   Section        8  main.o(.data)
@@ -542,11 +544,11 @@ Image Symbol Table
     setSysTick                               0x00000581   Thumb Code    74  rt_task.o(i.setSysTick)
     task1Entry                               0x000005d9   Thumb Code    34  main.o(i.task1Entry)
     task2Entry                               0x00000601   Thumb Code    28  main.o(i.task2Entry)
-    taskDelay                                0x00000621   Thumb Code    44  rt_task.o(i.taskDelay)
-    taskInit                                 0x00000655   Thumb Code   168  rt_task.o(i.taskInit)
-    taskSched                                0x00000705   Thumb Code    56  rt_task.o(i.taskSched)
-    taskSwitch                               0x00000749   Thumb Code    10  switch.o(i.taskSwitch)
-    taskTimeSliceHandler                     0x00000759   Thumb Code    66  rt_task.o(i.taskTimeSliceHandler)
+    taskDelay                                0x00000621   Thumb Code    56  rt_task.o(i.taskDelay)
+    taskInit                                 0x00000661   Thumb Code   168  rt_task.o(i.taskInit)
+    taskSched                                0x00000711   Thumb Code    56  rt_task.o(i.taskSched)
+    taskSwitch                               0x00000755   Thumb Code    10  switch.o(i.taskSwitch)
+    taskTimeSliceHandler                     0x00000765   Thumb Code    56  rt_task.o(i.taskTimeSliceHandler)
     Region$$Table$$Base                      0x000008a4   Number         0  anon$$obj.o(Region$$Table)
     Region$$Table$$Limit                     0x000008c4   Number         0  anon$$obj.o(Region$$Table)
     task1Flag                                0x20000000   Data           4  main.o(.data)
@@ -669,11 +671,11 @@ Memory Map of the image
     0x00000580   0x00000058   Code   RO          233    i.setSysTick        rt_task.o
     0x000005d8   0x00000028   Code   RO            6    i.task1Entry        main.o
     0x00000600   0x00000020   Code   RO            7    i.task2Entry        main.o
-    0x00000620   0x00000034   Code   RO          234    i.taskDelay         rt_task.o
-    0x00000654   0x000000b0   Code   RO          235    i.taskInit          rt_task.o
-    0x00000704   0x00000044   Code   RO          236    i.taskSched         rt_task.o
-    0x00000748   0x00000010   Code   RO           96    i.taskSwitch        switch.o
-    0x00000758   0x0000004c   Code   RO          237    i.taskTimeSliceHandler  rt_task.o
+    0x00000620   0x00000040   Code   RO          234    i.taskDelay         rt_task.o
+    0x00000660   0x000000b0   Code   RO          235    i.taskInit          rt_task.o
+    0x00000710   0x00000044   Code   RO          236    i.taskSched         rt_task.o
+    0x00000754   0x00000010   Code   RO           96    i.taskSwitch        switch.o
+    0x00000764   0x00000040   Code   RO          237    i.taskTimeSliceHandler  rt_task.o
     0x000007a4   0x00000100   Data   RO          192    .constdata          bitmap.o
     0x000008a4   0x00000020   Data   RO          516    Region$$Table       anon$$obj.o
 
@@ -711,13 +713,13 @@ Image component sizes
        230         66        256          0          0       2744   bitmap.o
         34          4          0          1          0       4401   lock.o
        228         62          0          8       8216      11029   main.o
-       496         60          0         16       2188      29053   rt_task.o
+       496         58          0         16       2188      29073   rt_task.o
         64         26        192          0       4096        840   startup_armcm3.o
        104         26          0          0          0       3969   switch.o
         16          8          0          4          0        659   system_armcm3.o
 
     ----------------------------------------------------------------------
-      1178        252        480         32      14500      52695   Object Totals
+      1178        250        480         32      14500      52715   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          6          0          0          3          0          0   (incl. Padding)
 
@@ -774,9 +776,9 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      1764        344        480         32      14600      52283   Grand Totals
-      1764        344        480         32      14600      52283   ELF Image Totals
-      1764        344        480         32          0          0   ROM Totals
+      1764        342        480         32      14600      52303   Grand Totals
+      1764        342        480         32      14600      52303   ELF Image Totals
+      1764        342        480         32          0          0   ROM Totals
 
 ==============================================================================
 

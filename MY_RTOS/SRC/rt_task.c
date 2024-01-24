@@ -82,12 +82,12 @@ void taskDelay (uint32_t ms) {
 //  对于本代码需不需要加锁存疑
 	if (ms < TIME_SLICE) ms = TIME_SLICE;
 	
-//	uint32_t st = enterCritical();
+	uint32_t st = enterCritical();
 	
 	currentTask->delayTicks = (ms + TIME_SLICE / 2) / TIME_SLICE; // 四舍五入算法
 	bitmapClear(&taskPriorityBitmap, currentTask->priority);
 	
-//	leaveCritical(st);
+	leaveCritical(st);
 	
 	taskSched();
 }
@@ -98,9 +98,6 @@ void taskTimeSliceHandler() {
 			if (--taskTable[i]->delayTicks == 0) {
 				bitmapSet(&taskPriorityBitmap, i);
 			}
-		}
-		else {
-			bitmapSet(&taskPriorityBitmap, i);
 		}
 	}
 	
