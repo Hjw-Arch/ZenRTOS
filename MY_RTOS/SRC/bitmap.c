@@ -9,13 +9,16 @@ void bitmapSet(Bitmap* bitmap, uint32_t pos) {
 	assert(pos < 32);
 	bitmap->bitmap |= 1 << pos;
 }
+
 void bitmapClear(Bitmap* bitmap, uint32_t pos) {
 	assert(pos < 32);
 	bitmap->bitmap &= ~(1 << pos);
 }
+
 uint32_t bitmapPosCount() {
 	return 32;
 }
+
 uint32_t bitmapGetFirstSet(Bitmap* bitmap) {
 	static const uint8_t quickFindTable[] = {
 		/* 00 */ 0xff, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0,

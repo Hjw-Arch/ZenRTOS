@@ -1,12 +1,6 @@
 #include "RTOS.h"
 #include "ARMCM3.h"
 
-task_t* currentTask;
-task_t* nextTask;
-task_t* taskTable[2];
-
-extern taskStack_t idleTaskEnv[512];
-
 __asm void PendSV_Handler (void) {
 	IMPORT currentTask
 	IMPORT nextTask

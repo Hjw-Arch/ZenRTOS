@@ -15,9 +15,6 @@ void leaveCritical(uint32_t status) {
 	__set_PRIMASK(status);
 }
 
-
-
-
 void schedLockInit(void){
 	schedLockCount = 0;
 }
