@@ -1,7 +1,6 @@
 #include "rt_task.h"
 #include "lock.h"
 #include "ARMCM3.h"
-#include "rtLib.h"
 
 Bitmap taskPriorityBitmap;
 
@@ -13,7 +12,6 @@ task_t* idleTask;
 task_t* taskTable[RTOS_PRIORITY_COUNT];
 
 taskStack_t idleTaskEnv[512];
-
 
 
 // 任务初始化
@@ -48,6 +46,8 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 	bitmapSet(&taskPriorityBitmap, priority);
 }
 
+
+
 // 任务调度函数，来决定下一个运行的任务是哪个
 void taskSched(void) {
 	uint32_t st = enterCritical();
@@ -57,24 +57,12 @@ void taskSched(void) {
 		return;
 	}
 	
-	if (currentTask == idleTask) {
-		if (taskTable[0]->delayTicks == 0) nextTask = taskTable[0];
-		else if (taskTable[1]->delayTicks == 0) nextTask = taskTable[1];
-		else {
-			leaveCritical(st);
-			return;
-		}
-	}
+	task_t* tempTask = getHighestReady();
 	
-	if (currentTask == taskTable[0] && taskTable[1]->delayTicks == 0) {
-		nextTask = taskTable[1];
-	} else if (currentTask == taskTable[1] && taskTable[0]->delayTicks == 0){
-		nextTask = taskTable[0];
-	} else if (taskTable[0]->delayTicks != 0 && taskTable[1] != 0) {
-		nextTask = idleTask;
+	if (tempTask != currentTask) {
+		nextTask = tempTask;
+		taskSwitch();
 	}
-	
-	taskSwitch();
 	
 	leaveCritical(st);
 }
@@ -97,23 +85,29 @@ void taskDelay (uint32_t ms) {
 //	uint32_t st = enterCritical();
 	
 	currentTask->delayTicks = (ms + TIME_SLICE / 2) / TIME_SLICE; // 四舍五入算法
+	bitmapClear(&taskPriorityBitmap, currentTask->priority);
+	
 //	leaveCritical(st);
 	
 	taskSched();
 }
 
 void taskTimeSliceHandler() {
-	for (int i = 0; i < 2; ++i) {
+	for (int i = 0; i < RTOS_PRIORITY_COUNT; ++i) {
 		if (taskTable[i]->delayTicks > 0) {
-			taskTable[i]->delayTicks--;
+			if (--taskTable[i]->delayTicks == 0) {
+				bitmapSet(&taskPriorityBitmap, i);
+			}
+		}
+		else {
+			bitmapSet(&taskPriorityBitmap, i);
 		}
 	}
 	
 	taskSched();
 }
 
-// 设置SysTick定时中断的时间（中断周期，任务的时间片）
-// 
+// 设置SysTick定时中断的时间（中断周期，任务的时间片） 
 void setSysTick(uint32_t ms) {
 	SysTick->LOAD = ms * SystemCoreClock / 1000 - 1; // 设定预载值
 	NVIC_SetPriority(SysTick_IRQn, (1 << __NVIC_PRIO_BITS) - 1);  //设定优先级
@@ -128,4 +122,9 @@ void SysTick_Handler() {
 
 void idleTaskEntry (void* param) {
 	while(1) ;
+}
+
+
+task_t* getHighestReady(void) {
+	return taskTable[bitmapGetFirstSet(&taskPriorityBitmap)];
 }

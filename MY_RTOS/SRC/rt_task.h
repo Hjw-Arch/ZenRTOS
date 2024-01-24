@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include "rtConfig.h"
+#include "rtLib.h"
 
 // 定义任务堆栈的类型为uint32
 typedef uint32_t taskStack_t;
@@ -23,6 +24,8 @@ extern task_t* idleTask;
 extern task_t* taskTable[RTOS_PRIORITY_COUNT];
 extern taskStack_t idleTaskEnv[512];
 
+extern Bitmap taskPriorityBitmap;
+
 
 void runFirstTask(void);
 void runFirstTask2(void);
@@ -32,5 +35,6 @@ void taskSched(void);
 void taskDelay (uint32_t ms);
 void setSysTick(uint32_t ms);
 void idleTaskEntry (void* param);
+task_t* getHighestReady(void);
 
 #endif

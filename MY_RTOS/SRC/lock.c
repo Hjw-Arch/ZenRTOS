@@ -15,11 +15,12 @@ void leaveCritical(uint32_t status) {
 	__set_PRIMASK(status);
 }
 
+// 调度锁
+
 void schedLockInit(void){
 	schedLockCount = 0;
 }
 
-// 调度锁
 void lockSched(void) {
 	uint32_t st = enterCritical();
 	
