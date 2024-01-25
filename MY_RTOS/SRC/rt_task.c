@@ -79,7 +79,6 @@ void taskSched(void) {
 // 假如在将要触发定时器中断的时候发生了更高级别的中断，会导致延时时间变长
 
 void taskDelay (uint32_t ms) {
-//  对于本代码需不需要加锁存疑
 	if (ms < TIME_SLICE) ms = TIME_SLICE;
 	
 	uint32_t st = enterCritical();
