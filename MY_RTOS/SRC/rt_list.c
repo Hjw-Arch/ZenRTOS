@@ -1,6 +1,123 @@
 #include "rtLib.h"
 
-
-void listHeadInit(listNode* node) {
-	
+void listNodeInit(listNode* listnode) {
+	listnode->prev = NULL;
+	listnode->next = NULL;
 }
+
+void listHeadInit(listHead* listhead) {
+	listhead->firstNode = NULL;
+	listhead->lastNode = NULL;
+	listhead->nodeCount = 0;
+}
+
+uint32_t getListNodeNum(listHead* listhead) {
+	return listhead->nodeCount;
+}
+
+listNode* getFirstListNode(listHead* listhead) {
+	if (listhead->nodeCount == 0){
+		return NULL;
+	}
+	return listhead->firstNode;
+}
+
+listNode* getLastListNode(listHead* listhead) {
+	if (listhead->nodeCount == 0) {
+		return NULL;
+	}
+	return listhead->lastNode;
+}
+
+listNode* getPrevListNode (listNode* listnode) {
+	if (listnode->prev == listnode) {
+		return NULL;
+	}
+	else {
+		return listnode->prev;
+	}
+}
+
+listNode* getNextListNode (listNode* listnode) {
+	if (listnode->next == listnode) {
+		return NULL;
+	}
+	else {
+		return listnode->next;
+	}
+}
+
+void listClearALL (listHead* listhead) {
+	listNode* nextnode;
+	
+	nextnode = listhead->firstNode;
+	
+	for (int i = listhead->nodeCount; i > 0; --i) {
+		listNode* currentnode = nextnode;
+		nextnode = nextnode->next;
+		
+		currentnode->prev = NULL;
+		currentnode->next = NULL;
+	}
+	
+	listhead->firstNode = NULL;
+	listhead->lastNode = NULL;
+	listhead->nodeCount = 0;
+}
+
+void listNodeInsert2Head (listHead* listhead, listNode* listnode) {
+	listnode->prev = listhead->firstNode->prev;
+	listnode->next = listhead->firstNode;
+	
+	listhead->firstNode->prev = listnode;
+	listhead->firstNode = listnode;
+	listhead->nodeCount++;
+}
+
+
+void listNodeInsert2Tail (listHead* listhead, listNode* listnode) {
+	listnode->next = listhead->lastNode->next;
+	listnode->prev = listhead->lastNode;
+	
+	listhead->lastNode->next = listnode;
+	listhead->lastNode = listnode;
+	listhead->nodeCount++;
+}
+
+listNode* listRemoveFirst (listHead* listhead) {
+	listNode* node = listhead->firstNode;
+	if (listhead->nodeCount == 0) {
+		return NULL;
+	}
+	else {
+		listhead->firstNode->next->prev = listhead->firstNode->prev;
+		listhead->firstNode = listhead->firstNode->next;
+		listhead->nodeCount--;
+	}
+	return node;
+}
+
+void listInsert(listHead* listhead, listNode* node, listNode* node2insert) {
+	node2insert->prev = node;
+	node2insert->next = node->next;
+	
+	node->next->prev = node2insert;
+	node->next = node2insert;
+	
+	listhead->nodeCount++;
+}
+
+void listRemove(listHead* listhead, listNode* node2remove) {
+	node2remove->next->prev = node2remove->prev;
+	node2remove->prev->next = node2remove->next;
+	
+	listhead->nodeCount--;
+}
+
+
+
+
+
+
+
+

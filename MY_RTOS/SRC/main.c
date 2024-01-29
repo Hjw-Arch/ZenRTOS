@@ -1,10 +1,27 @@
 #include "RTOS.h"
 #include "ARMCM3.h"
 
+listHead listhead;
+listNode listnode[8];
+
+
 
 int task1Flag;
 void task1Entry (void* param) {
 	setSysTick(TIME_SLICE);
+	
+	listHeadInit(&listhead);
+	
+	for (int i = 0; i < 8; ++i){
+		listNodeInit(&listnode[i]);
+		listNodeInsert2Head(&listhead, &listnode[i]);
+	}
+	
+	for (int i = 0; i < 8; ++i) {
+		listRemove(&listhead, &listnode[i]);
+	}
+	
+	
 	while(1) {
 		task1Flag = 0;
 		taskDelay(20);
