@@ -5,6 +5,11 @@
 #include "rtConfig.h"
 #include "rtLib.h"
 
+
+#define TASK_STATUS_READY		0		// 任务状态：就绪态
+#define TASK_STATUS_DELAY		1		// 任务状态：延时态
+
+
 // 定义任务堆栈的类型为uint32
 typedef uint32_t taskStack_t;
 
@@ -14,7 +19,11 @@ typedef struct _t_Task {
 	
 	uint32_t delayTicks; // 任务延时计数器，在调用延时函数时每SysTick中断减一
 	
-	uint32_t priority;
+	listNode delayNode; // 延时队列结点
+	
+	uint32_t state; //任务此时的状态
+	
+	uint32_t priority; // 任务的优先级
 }task_t;
 
 extern task_t _idleTask;
@@ -23,6 +32,8 @@ extern task_t* nextTask;
 extern task_t* idleTask;
 extern task_t* taskTable[RTOS_PRIORITY_COUNT];
 extern taskStack_t idleTaskEnv[512];
+
+extern listHead rtTaskDelayList;
 
 extern Bitmap taskPriorityBitmap;
 

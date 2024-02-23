@@ -19,16 +19,16 @@ uint32_t bitmapGetFirstSet(Bitmap* bitmap);
 
 
 
-// 通用链表
+// 通用链表结构，双向循环链表
 
 typedef struct _ListNode {
 	struct _ListNode* prev;
 	struct _ListNode* next;
 }listNode;
 
+// 链表头部，记录链表的数量
 typedef struct _ListHead {
-	listNode* firstNode;
-	listNode* lastNode;
+	listNode headNode;
 	uint32_t nodeCount;
 }listHead;
 
@@ -40,8 +40,8 @@ void listHeadInit(listHead* listhead);
 uint32_t getListNodeNum(listHead* listhead);
 listNode* getFirstListNode(listHead* listhead);
 listNode* getLastListNode(listHead* listhead);
-listNode* getPrevListNode (listNode* listnode);
-listNode* getNextListNode (listNode* listnode);
+listNode* getPrevListNode (listHead* listhead, listNode* listnode);
+listNode* getNextListNode (listHead* listhead, listNode* listnode);
 void listClearALL (listHead* listhead);
 void listNodeInsert2Head (listHead* listhead, listNode* listnode);
 void listNodeInsert2Tail (listHead* listhead, listNode* listnode);

@@ -1,13 +1,18 @@
 #include "rtLib.h"
 
+#define firstNode headNode.next
+#define lastNode  headNode.prev
+
+// 初始化结点,指向null
 void listNodeInit(listNode* listnode) {
 	listnode->prev = NULL;
 	listnode->next = NULL;
 }
 
+// 初始化链表头
 void listHeadInit(listHead* listhead) {
-	listhead->firstNode = NULL;
-	listhead->lastNode = NULL;
+	listhead->firstNode = &(listhead->headNode);
+	listhead->lastNode = &(listhead->headNode);
 	listhead->nodeCount = 0;
 }
 
@@ -29,8 +34,8 @@ listNode* getLastListNode(listHead* listhead) {
 	return listhead->lastNode;
 }
 
-listNode* getPrevListNode (listNode* listnode) {
-	if (listnode->prev == listnode) {
+listNode* getPrevListNode (listHead* listhead, listNode* listnode) {
+	if (listnode->prev == &(listhead->headNode)) {
 		return NULL;
 	}
 	else {
@@ -38,8 +43,8 @@ listNode* getPrevListNode (listNode* listnode) {
 	}
 }
 
-listNode* getNextListNode (listNode* listnode) {
-	if (listnode->next == listnode) {
+listNode* getNextListNode (listHead* listhead, listNode* listnode) {
+	if (listnode->next == &(listhead->headNode)) {
 		return NULL;
 	}
 	else {
@@ -60,9 +65,9 @@ void listClearALL (listHead* listhead) {
 		currentnode->next = NULL;
 	}
 	
-	listhead->firstNode = NULL;
-	listhead->lastNode = NULL;
 	listhead->nodeCount = 0;
+	listhead->firstNode = &(listhead->headNode);
+	listhead->lastNode = &(listhead->headNode);
 }
 
 void listNodeInsert2Head (listHead* listhead, listNode* listnode) {
