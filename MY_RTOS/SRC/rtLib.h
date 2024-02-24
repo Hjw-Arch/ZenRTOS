@@ -21,6 +21,9 @@ uint32_t bitmapGetFirstSet(Bitmap* bitmap);
 
 // 通用链表结构，双向循环链表
 
+#define firstNode headNode.next
+#define lastNode  headNode.prev
+
 typedef struct _ListNode {
 	struct _ListNode* prev;
 	struct _ListNode* next;

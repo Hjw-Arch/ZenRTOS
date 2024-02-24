@@ -13,6 +13,8 @@ task_t* taskTable[RTOS_PRIORITY_COUNT];
 
 taskStack_t idleTaskEnv[512];
 
+listHead taskDelayedList;		// 延时队列
+
 
 // 任务初始化
 void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* stack, uint32_t priority) {
@@ -40,6 +42,8 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 	task->stack = stack;
 	task->delayTicks = 0;
 	task->priority = priority;
+	task->state = TASK_STATUS_READY;	// 初始状态为就绪态
+	listNodeInit(&(task->delayNode)); // 初始化延时结点
 	
 	// 将task加入优先级队列，并将对应的位图置位
 	taskTable[priority] = task;
@@ -52,19 +56,35 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 void taskSched(void) {
 	uint32_t st = enterCritical();
 	
+	// 如果调度锁计数器大于0，则不切换任务
 	if (schedLockCount > 0) {
 		leaveCritical(st);
 		return;
 	}
 	
-	task_t* tempTask = getHighestReady();
+	// 寻找最高优先级的任务
+	task_t* tempTask = getHighestReadyTask();
 	
+	// 如果最高优先级的任务不是当前的任务，则切换到最高优先级的任务进行运行，否则不切换
 	if (tempTask != currentTask) {
 		nextTask = tempTask;
 		taskSwitch();
 	}
 	
 	leaveCritical(st);
+}
+
+
+// 将任务加入就绪表
+void taskSched2Ready(task_t* task) {
+	taskTable[task->priority] = task;
+	bitmapSet(&taskPriorityBitmap, task->priority);
+}
+
+// 将任务从就绪表中移除
+void taskSched2Unready(task_t* task) {
+	taskTable[task->priority] = NULL;
+	bitmapClear(&taskPriorityBitmap, task->priority);
 }
 
 // 要实现任务延时，需要使用定时器，而且每个任务都配备一个定时器才行，但是硬件只有一个定时器而任务数量很多
@@ -84,7 +104,10 @@ void taskDelay (uint32_t ms) {
 	uint32_t st = enterCritical();
 	
 	currentTask->delayTicks = (ms + TIME_SLICE / 2) / TIME_SLICE; // 四舍五入算法
-	bitmapClear(&taskPriorityBitmap, currentTask->priority);
+	
+	taskWait(currentTask);
+	
+	taskSched2Unready(currentTask);
 	
 	leaveCritical(st);
 	
@@ -92,11 +115,12 @@ void taskDelay (uint32_t ms) {
 }
 
 void taskTimeSliceHandler() {
-	for (int i = 0; i < RTOS_PRIORITY_COUNT; ++i) {
-		if (taskTable[i]->delayTicks > 0) {
-			if (--taskTable[i]->delayTicks == 0) {
-				bitmapSet(&taskPriorityBitmap, i);
-			}
+	// 待完善：这里直接使用了list内部的元素进行迭代，没有进行封装，可以实现一个链表迭代器来封装一下
+	for (listNode* node = taskDelayedList.firstNode; node != &(taskDelayedList.headNode); node = node->next) {
+		task_t *task = getListNodeParent(node, task_t, delayNode);
+		if (--task->delayTicks == 0) {
+			taskWakeUp(task);
+			taskSched2Ready(task);
 		}
 	}
 	
@@ -121,6 +145,21 @@ void idleTaskEntry (void* param) {
 }
 
 
-task_t* getHighestReady(void) {
+task_t* getHighestReadyTask(void) {
 	return taskTable[bitmapGetFirstSet(&taskPriorityBitmap)];
+}
+
+// 初始化任务延时队列
+void taskDelayedListInit(void) {
+	listHeadInit(&taskDelayedList);
+}
+
+void taskWait(task_t* task) {
+	listNodeInsert2Head(&taskDelayedList, &task->delayNode);
+	task->state |= TASK_STATUS_DELAY;
+}
+
+void taskWakeUp(task_t* task) {
+	listRemove(&taskDelayedList, &task->delayNode);
+	task->state &= ~TASK_STATUS_DELAY;
 }

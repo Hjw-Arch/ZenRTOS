@@ -10,18 +10,6 @@ int task1Flag;
 void task1Entry (void* param) {
 	setSysTick(TIME_SLICE);
 	
-	listHeadInit(&listhead);
-	
-	for (int i = 0; i < 8; ++i){
-		listNodeInit(&listnode[i]);
-		listNodeInsert2Head(&listhead, &listnode[i]);
-	}
-	
-	for (int i = 0; i < 8; ++i) {
-		listRemove(&listhead, &listnode[i]);
-	}
-	
-	
 	while(1) {
 		task1Flag = 0;
 		taskDelay(20);
@@ -50,6 +38,7 @@ void rtosInit() {
 	// idletask
 	schedLockInit();   //没必要
 	bitmapInit(&taskPriorityBitmap);   //没必要
+	taskDelayedListInit();
 	taskInit(&_idleTask, idleTaskEntry, (void*)0, &idleTaskEnv[512], RTOS_PRIORITY_COUNT - 1);
 	idleTask = &_idleTask;
 }
@@ -63,7 +52,7 @@ int main(){
 	taskTable[0] = &ttask1;
 	taskTable[1] = &ttask2;
 	
-	nextTask = getHighestReady();
+	nextTask = getHighestReadyTask();
 	
 	runFirstTask2(); // 运行之后不会返回，下方的return 0其实没什么作用
 	

@@ -46,6 +46,10 @@ void taskSched(void);
 void taskDelay (uint32_t ms);
 void setSysTick(uint32_t ms);
 void idleTaskEntry (void* param);
-task_t* getHighestReady(void);
+task_t* getHighestReadyTask(void);
+void taskDelayedListInit(void);
+
+void taskWait(task_t* task);
+void taskWakeUp(task_t* task);
 
 #endif

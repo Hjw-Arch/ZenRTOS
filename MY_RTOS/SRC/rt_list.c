@@ -1,8 +1,5 @@
 #include "rtLib.h"
 
-#define firstNode headNode.next
-#define lastNode  headNode.prev
-
 // 初始化结点,指向null
 void listNodeInit(listNode* listnode) {
 	listnode->prev = NULL;
