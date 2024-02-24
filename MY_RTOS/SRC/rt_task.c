@@ -9,7 +9,7 @@ task_t _idleTask;
 task_t* currentTask;
 task_t* nextTask;
 task_t* idleTask;
-task_t* taskTable[RTOS_PRIORITY_COUNT];
+listHead taskTable[RTOS_PRIORITY_COUNT];
 
 taskStack_t idleTaskEnv[512];
 
@@ -43,10 +43,13 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 	task->delayTicks = 0;
 	task->priority = priority;
 	task->state = TASK_STATUS_READY;	// 初始状态为就绪态
+	task->slice = TIME_SLICE;
 	listNodeInit(&(task->delayNode)); // 初始化延时结点
+	listNodeInit(&(task->linkNode)); // 初始化任务结点
 	
 	// 将task加入优先级队列，并将对应的位图置位
-	taskTable[priority] = task;
+	listNodeInsert2Head(&taskTable[priority], &(task->linkNode));
+	
 	bitmapSet(&taskPriorityBitmap, priority);
 }
 
@@ -77,14 +80,16 @@ void taskSched(void) {
 
 // 将任务加入就绪表
 void taskSched2Ready(task_t* task) {
-	taskTable[task->priority] = task;
+	listNodeInsert2Head(&taskTable[task->priority], &task->linkNode);
 	bitmapSet(&taskPriorityBitmap, task->priority);
 }
 
 // 将任务从就绪表中移除
 void taskSched2Unready(task_t* task) {
-	taskTable[task->priority] = NULL;
-	bitmapClear(&taskPriorityBitmap, task->priority);
+	listRemove(&taskTable[task->priority], &task->linkNode);
+	if (getListNodeNum(&taskTable[task->priority]) == 0){
+		bitmapClear(&taskPriorityBitmap, task->priority);
+	}
 }
 
 // 要实现任务延时，需要使用定时器，而且每个任务都配备一个定时器才行，但是硬件只有一个定时器而任务数量很多
@@ -99,11 +104,11 @@ void taskSched2Unready(task_t* task) {
 // 假如在将要触发定时器中断的时候发生了更高级别的中断，会导致延时时间变长
 
 void taskDelay (uint32_t ms) {
-	if (ms < TIME_SLICE) ms = TIME_SLICE;
+	if (ms < SYS_TICK) ms = SYS_TICK;
 	
 	uint32_t st = enterCritical();
 	
-	currentTask->delayTicks = (ms + TIME_SLICE / 2) / TIME_SLICE; // 四舍五入算法
+	currentTask->delayTicks = (ms + SYS_TICK / 2) / SYS_TICK; // 四舍五入算法
 	
 	taskWait(currentTask);
 	
@@ -122,6 +127,14 @@ void taskTimeSliceHandler() {
 			taskWakeUp(task);
 			taskSched2Ready(task);
 		}
+	}
+	
+	if (--currentTask->slice == 0) {
+		if (getListNodeNum(&taskTable[currentTask->priority]) > 1) {
+			listRemoveFirst(&taskTable[currentTask->priority]);
+			listNodeInsert2Tail(&taskTable[currentTask->priority], &currentTask->linkNode);
+		}
+		currentTask->slice = TIME_SLICE;
 	}
 	
 	taskSched();
@@ -146,7 +159,9 @@ void idleTaskEntry (void* param) {
 
 
 task_t* getHighestReadyTask(void) {
-	return taskTable[bitmapGetFirstSet(&taskPriorityBitmap)];
+	uint32_t hightPriorityTask = bitmapGetFirstSet(&taskPriorityBitmap);
+	listNode* node = getFirstListNode(&taskTable[hightPriorityTask]);
+	return (task_t*)getListNodeParent(node, task_t, linkNode);
 }
 
 // 初始化任务延时队列

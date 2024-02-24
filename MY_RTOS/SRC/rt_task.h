@@ -17,7 +17,11 @@ typedef uint32_t taskStack_t;
 typedef struct _t_Task {
 	taskStack_t *stack;  // 任务的栈指针
 	
+	uint32_t slice; // 时间片
+	
 	uint32_t delayTicks; // 任务延时计数器，在调用延时函数时每SysTick中断减一
+	
+	listNode linkNode;
 	
 	listNode delayNode; // 延时队列结点
 	
@@ -30,7 +34,7 @@ extern task_t _idleTask;
 extern task_t* currentTask;
 extern task_t* nextTask;
 extern task_t* idleTask;
-extern task_t* taskTable[RTOS_PRIORITY_COUNT];
+extern listHead taskTable[RTOS_PRIORITY_COUNT];
 extern taskStack_t idleTaskEnv[512];
 
 extern listHead rtTaskDelayList;

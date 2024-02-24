@@ -16,7 +16,6 @@ void leaveCritical(uint32_t status) {
 }
 
 // µ÷¶ÈËø
-
 void schedLockInit(void){
 	schedLockCount = 0;
 }
