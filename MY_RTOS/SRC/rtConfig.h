@@ -7,6 +7,8 @@
 
 #define TIME_SLICE					10  // 任务时间片，单位是系统节拍
 
+#define TASK_STACK_SIZE				1024  // 默认的任务堆栈大小
+
 
 
 #endif
