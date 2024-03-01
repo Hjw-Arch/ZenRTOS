@@ -9,6 +9,7 @@
 #define TASK_STATUS_READY		0				// 任务状态：就绪态
 #define TASK_STATUS_DELAY		(1 << 1)		// 任务状态：延时态
 #define TASK_STATUS_SUSPEND		(1 << 2)		// 任务状态：挂起态
+#define TASK_STATUS_DESTORYED	(1 << 3)		// 任务状态：删除态
 
 
 // 定义任务堆栈的类型为uint32
@@ -31,6 +32,12 @@ typedef struct _t_Task {
 	uint32_t priority; // 任务的优先级
 	
 	uint32_t suspendCounter; // 挂起计数器
+	
+	// 任务删除相关：任务清理函数
+	void (*clean) (void* param);
+	void* cleanParam;
+	uint8_t requestDeleteFlag;		//请求删除标记
+	
 }task_t;
 
 extern task_t _idleTask;
@@ -63,5 +70,11 @@ void taskSched2Undelay(task_t* task);
 
 void taskSuspend(task_t* task);
 void taskWakeUp(task_t* task);
+
+void taskSetCleanCallFunc (task_t* task, void (*clean)(void* param), void* param);
+void taskForceDelete (task_t* task);
+void taskRequestDelete(task_t* task);
+uint8_t taskIsRequestedDelete(task_t* task);
+void taskDeleteSelf(void);
 
 #endif

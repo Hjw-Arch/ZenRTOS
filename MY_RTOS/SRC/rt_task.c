@@ -42,6 +42,10 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 	task->priority = priority;
 	task->state = TASK_STATUS_READY;	// 初始状态为就绪态
 	task->slice = TIME_SLICE;
+	task->suspendCounter = 0;
+	task->clean = NULL;
+	task->cleanParam = NULL;
+	task->requestDeleteFlag = 0;
 	listNodeInit(&(task->delayNode)); // 初始化延时结点
 	listNodeInit(&(task->linkNode)); // 初始化任务结点
 	
@@ -116,6 +120,7 @@ void taskSched2Undelay(task_t* task) {
 	task->state &= ~TASK_STATUS_DELAY;
 }
 
+
 // 可能被任务调用，要加锁
 void taskSuspend(task_t* task) {
 	uint32_t st = enterCritical();
@@ -136,7 +141,7 @@ void taskSuspend(task_t* task) {
 	leaveCritical(st);
 }
 
-
+// 唤醒挂起的任务
 void taskWakeUp(task_t* task) {
 	uint32_t st = enterCritical();
 	
@@ -151,3 +156,68 @@ void taskWakeUp(task_t* task) {
 	leaveCritical(st);
 }
 
+// 设置任务的清理回调函数
+void taskSetCleanCallFunc (task_t* task, void (*clean)(void* param), void* param) {
+	task->clean = clean;
+	task->cleanParam = param;
+}
+
+// 强制删除任务
+void taskForceDelete (task_t* task) {
+	uint32_t st = enterCritical();
+	
+	if (task->state & TASK_STATUS_DELAY) {
+		taskSched2Undelay(task);
+	}
+	
+	if (!(task->state & TASK_STATUS_SUSPEND)) {
+		taskSched2Unready(task);
+	}
+	
+	if (task->clean) {
+		task->clean(task->cleanParam);
+	}
+	
+	if (task == currentTask) {
+		taskSched();
+	}
+	
+	leaveCritical(st);
+}
+
+//下面这两个函数的临界区保护不一定需要
+
+// 请求删除任务
+void taskRequestDelete(task_t* task){
+	uint32_t st = enterCritical();
+	
+	task->requestDeleteFlag = 1;
+	
+	leaveCritical(st);
+}
+
+uint8_t taskIsRequestedDelete(task_t* task) {
+	uint8_t delete;
+	
+	uint32_t st = enterCritical();
+	
+	delete = task->requestDeleteFlag;
+	
+	leaveCritical(st);
+	
+	return delete;
+}
+
+void taskDeleteSelf(void) {
+	uint32_t st = enterCritical();
+	
+	taskSched2Unready(currentTask);
+	
+	if (currentTask->clean) {
+		currentTask->clean(currentTask->cleanParam);
+	}
+	
+	taskSched();
+	
+	leaveCritical(st);
+}
