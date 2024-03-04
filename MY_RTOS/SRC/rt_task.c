@@ -168,9 +168,7 @@ void taskForceDelete (task_t* task) {
 	
 	if (task->state & TASK_STATUS_DELAY) {
 		taskSched2Undelay(task);
-	}
-	
-	if (!(task->state & TASK_STATUS_SUSPEND)) {
+	}else if (!(task->state & TASK_STATUS_SUSPEND)) {
 		taskSched2Unready(task);
 	}
 	
@@ -197,17 +195,18 @@ void taskRequestDelete(task_t* task){
 }
 
 uint8_t taskIsRequestedDelete(task_t* task) {
-	uint8_t delete;
+	uint8_t deleteFlag;
 	
 	uint32_t st = enterCritical();
 	
-	delete = task->requestDeleteFlag;
+	deleteFlag = task->requestDeleteFlag;
 	
 	leaveCritical(st);
 	
-	return delete;
+	return deleteFlag;
 }
 
+// 任务删除自己
 void taskDeleteSelf(void) {
 	uint32_t st = enterCritical();
 	
@@ -221,3 +220,34 @@ void taskDeleteSelf(void) {
 	
 	leaveCritical(st);
 }
+
+// 此处性能可以继续优化为下面的版本，避免了创建taskinfo和复制taskinfo的成本
+// 但这种方式更符合编程习惯
+taskInfo_t getTaskInfo(task_t* task) {
+	taskInfo_t taskinfo;
+	
+	uint32_t st = enterCritical();
+	
+	taskinfo.priority = task->priority;
+	taskinfo.slice = task->slice;
+	taskinfo.state = task->state;
+	taskinfo.suspendCounter = task->suspendCounter;
+	
+	leaveCritical(st);
+	
+	return taskinfo;
+}
+
+/**
+void getTaskInfo(task_t* task, taskInfo_t* taskinfo) {
+	
+	uint32_t st = enterCritical();
+	
+	taskinfo->priority = task->priority;
+	taskinfo->slice = task->slice;
+	taskinfo->state = task->state;
+	taskinfo->suspendCounter = task->suspendCounter;
+	
+	leaveCritical(st);
+}
+**/

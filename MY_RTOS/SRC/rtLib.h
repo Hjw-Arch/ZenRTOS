@@ -52,5 +52,7 @@ listNode* listRemoveFirst (listHead* listhead);
 void listInsert(listHead* listhead, listNode* node, listNode* node2insert);
 void listRemove(listHead* listhead, listNode* node2remove);
 
+uint8_t checkNodeIsInList(listHead* listhead, listNode* node);
+
 
 #endif

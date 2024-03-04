@@ -1,4 +1,5 @@
 #include "rtLib.h"
+#include <assert.h>
 
 // 初始化结点,指向null
 void listNodeInit(listNode* listnode) {
@@ -110,13 +111,27 @@ void listInsert(listHead* listhead, listNode* node, listNode* node2insert) {
 }
 
 void listRemove(listHead* listhead, listNode* node2remove) {
+	uint8_t flag = checkNodeIsInList(listhead, node2remove);
+	
+	assert(flag == 1);	// 参数合法性检查
+	
+	if (flag != 1) return;
+	
 	node2remove->next->prev = node2remove->prev;
 	node2remove->prev->next = node2remove->next;
 	
 	listhead->nodeCount--;
 }
 
-
+uint8_t checkNodeIsInList(listHead* listhead, listNode* node) {
+	uint8_t flag = 0;
+	for (listNode* tempnode = listhead->firstNode; tempnode != &(listhead->headNode); tempnode = tempnode->next) {
+		if (node == tempnode) {
+			flag = 1;
+		}
+	}
+	return flag;
+}
 
 
 
