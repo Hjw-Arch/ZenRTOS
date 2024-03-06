@@ -123,6 +123,7 @@ void listRemove(listHead* listhead, listNode* node2remove) {
 	listhead->nodeCount--;
 }
 
+// 做一些检查
 uint8_t checkNodeIsInList(listHead* listhead, listNode* node) {
 	uint8_t flag = 0;
 	for (listNode* tempnode = listhead->firstNode; tempnode != &(listhead->headNode); tempnode = tempnode->next) {

@@ -7,6 +7,7 @@
 #include "rtConfig.h"
 #include "rt_task.h"
 #include "rt_time.h"
+#include "rt_event.h"
 
 void appInit(void);
 

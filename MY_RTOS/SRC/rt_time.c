@@ -1,6 +1,7 @@
 #include "rt_task.h"
 #include "rtLib.h"
 #include "lock.h"
+#include "rt_event.h"
 
 listHead taskDelayedList;		// 延时队列
 
@@ -19,11 +20,9 @@ void taskDelay (uint32_t ms) {
 	if (ms < SYS_TICK) ms = SYS_TICK;
 	
 	uint32_t st = enterCritical();
-	
-	currentTask->delayTicks = (ms + SYS_TICK / 2) / SYS_TICK; // 四舍五入算法
 
 	// 这里或许可以优化，因为taskSched2Delay应该包含taskSched2Unready
-	taskSched2Delay(currentTask);
+	taskSched2Delay(currentTask, ms);
 	
 	taskSched2Unready(currentTask);
 	
@@ -38,6 +37,9 @@ void taskTimeSliceHandler() {
 	for (listNode* node = taskDelayedList.firstNode; node != &(taskDelayedList.headNode); node = node->next) {
 		task_t *task = getListNodeParent(node, task_t, delayNode);
 		if (--task->delayTicks == 0) {
+			if(task->waitEvent) {
+				eventRemoveTask(task, NULL, ERROR_TIMEOUT);
+			}
 			taskSched2Undelay(task);
 			taskSched2Ready(task);
 		}

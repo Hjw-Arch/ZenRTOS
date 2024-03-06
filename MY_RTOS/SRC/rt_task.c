@@ -54,7 +54,7 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 }
 
 
-
+// 由于调用此函数的所有函数都加了锁，此函数不必加锁
 // 任务调度函数，来决定下一个运行的任务是哪个
 void taskSched(void) {
 	uint32_t st = enterCritical();
@@ -102,20 +102,33 @@ void taskSched2Ready(task_t* task) {
 
 // 将任务从就绪表中移除，即将任务从就绪态移除
 void taskSched2Unready(task_t* task) {
+	
+	if (!checkNodeIsInList(&taskTable[task->priority], &task->linkNode)) {
+		return;
+	}
+	
 	listRemove(&taskTable[task->priority], &task->linkNode);
+	
 	if (getListNodeNum(&taskTable[task->priority]) == 0){
 		bitmapClear(&taskPriorityBitmap, task->priority);
 	}
 }
 
 // 将任务加入延时队列，状态设置为延时态
-void taskSched2Delay(task_t* task) {
+void taskSched2Delay(task_t* task, uint32_t ms) {
+	if (ms < SYS_TICK) ms = SYS_TICK;
+	currentTask->delayTicks = (ms + SYS_TICK / 2) / SYS_TICK; // 四舍五入算法
 	listNodeInsert2Head(&taskDelayedList, &task->delayNode);
 	task->state |= TASK_STATUS_DELAY;
 }
 
 // 将任务移除延时队列，将延时态清除
 void taskSched2Undelay(task_t* task) {
+	
+	if (!checkNodeIsInList(&taskDelayedList, &task->delayNode)) {
+		return;
+	}
+	
 	listRemove(&taskDelayedList, &task->delayNode);
 	task->state &= ~TASK_STATUS_DELAY;
 }
@@ -187,23 +200,12 @@ void taskForceDelete (task_t* task) {
 
 // 请求删除任务
 void taskRequestDelete(task_t* task){
-	uint32_t st = enterCritical();
-	
 	task->requestDeleteFlag = 1;
-	
-	leaveCritical(st);
 }
 
+// 查询是否被请求删除
 uint8_t taskIsRequestedDelete(task_t* task) {
-	uint8_t deleteFlag;
-	
-	uint32_t st = enterCritical();
-	
-	deleteFlag = task->requestDeleteFlag;
-	
-	leaveCritical(st);
-	
-	return deleteFlag;
+	return task->requestDeleteFlag;
 }
 
 // 任务删除自己
@@ -238,7 +240,7 @@ taskInfo_t getTaskInfo(task_t* task) {
 	return taskinfo;
 }
 
-/**
+/** 此版本相较于上一个函数，开销更小一点
 void getTaskInfo(task_t* task, taskInfo_t* taskinfo) {
 	
 	uint32_t st = enterCritical();

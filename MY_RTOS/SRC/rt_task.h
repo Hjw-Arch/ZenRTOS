@@ -6,14 +6,24 @@
 #include "rtLib.h"
 
 // 目前任务这里做的并不好，一个任务只能同时处于一个状态，这里太混乱了
-#define TASK_STATUS_READY		0				// 任务状态：就绪态
+#define TASK_STATUS_READY		0				// 任务状态：就绪态或运行态
 #define TASK_STATUS_DELAY		(1 << 1)		// 任务状态：延时态
 #define TASK_STATUS_SUSPEND		(1 << 2)		// 任务状态：挂起态
 #define TASK_STATUS_DESTORYED	(1 << 3)		// 任务状态：删除态
 
+// 或许可以改进
+#define TASK_STATUS_WAIT_MASK	(0xff << 16)	// 事件等待
+
 
 // 定义任务堆栈的类型为uint32
 typedef uint32_t taskStack_t;
+
+typedef enum _error {
+	NO_ERROR = 0,
+	ERROR_TIMEOUT = 1,
+}rt_error;
+
+struct _eventCtrlBlock_t;		// 前向引用
 
 // 定义任务结构
 typedef struct _t_Task {
@@ -37,6 +47,10 @@ typedef struct _t_Task {
 	void (*clean) (void* param);
 	void* cleanParam;
 	uint8_t requestDeleteFlag;		//请求删除标记
+	
+	struct _eventCtrlBlock_t* waitEvent;		// 等待的事件控制块
+	void* eventMsg;		// 事件信息
+	uint32_t eventWaitResult;	// 事件的等待结果
 	
 }task_t;
 
@@ -73,7 +87,7 @@ void taskDelayedListInit(void);
 void taskSched2Ready(task_t* task);
 void taskSched2Unready(task_t* task);
 
-void taskSched2Delay(task_t* task);
+void taskSched2Delay(task_t* task, uint32_t ms);
 void taskSched2Undelay(task_t* task);
 
 void taskSuspend(task_t* task);
