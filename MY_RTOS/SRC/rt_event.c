@@ -30,6 +30,7 @@ void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state,
 }
 
 
+// HIGH_RT_MODE有可能导致死锁，需要注意
 task_t* eventWakeUp(eventCtrlBlock_t* event, void* msg, uint32_t result) {	
 	
 	task_t* task = NULL;
@@ -46,6 +47,7 @@ task_t* eventWakeUp(eventCtrlBlock_t* event, void* msg, uint32_t result) {
 			task = temptask;
 		}
 	}
+	
 	if (task) {
 		listRemove(&event->waitlist, &task->linkNode);
 	}
@@ -60,6 +62,7 @@ task_t* eventWakeUp(eventCtrlBlock_t* event, void* msg, uint32_t result) {
 #endif
 	
 	if (task == NULL) {
+		leaveCritical(st);
 		return NULL;
 	}
 	
@@ -80,8 +83,8 @@ task_t* eventWakeUp(eventCtrlBlock_t* event, void* msg, uint32_t result) {
 }
 
 
-// 这里不加锁也行
-
+// 这里不加锁也行，因为调用它的一定是加锁的函数
+// 把任务从事件控制块中拿走，但是没有将该任务从延时队列中放出来
 void eventRemoveTask(task_t* task, void* msg, uint32_t result) {
 	uint32_t st = enterCritical();
 	
@@ -95,6 +98,45 @@ void eventRemoveTask(task_t* task, void* msg, uint32_t result) {
 	leaveCritical(st);
 }
 
+
+uint32_t eventRemoveAllTask(eventCtrlBlock_t* event, void* msg, uint32_t result) {
+	
+	uint32_t st = enterCritical();
+	
+	uint32_t count = getListNodeNum(&event->waitlist);
+	
+	for (listNode* node = event->waitlist.firstNode; node != &event->waitlist.headNode;) {
+		task_t* task = getListNodeParent(node, task_t, linkNode);
+		
+		node = node->next;
+		
+		eventRemoveTask(task, msg, result);
+		
+		if (task->state & TASK_STATUS_DELAY) {
+			taskSched2Undelay(task);
+		}
+		
+		taskSched2Ready(task);
+		
+	}
+	
+	leaveCritical(st);
+	
+	return count;
+}
+
+// 这里需不需要加锁，还需考量
+uint32_t eventGetWaitNum(eventCtrlBlock_t* event) {
+	uint32_t count = 0;
+	
+	uint32_t st = enterCritical();
+	
+	count = getListNodeNum(&event->waitlist);
+	
+	leaveCritical(st);
+	
+	return count;
+}
 
 
 

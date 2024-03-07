@@ -10,29 +10,34 @@ task_t ttask2;
 task_t ttask3;
 task_t ttask4;
 
-eventCtrlBlock_t event1, event2;
+eventCtrlBlock_t event2;
 
 
 int task1Flag;
 
+uint32_t count;
+uint32_t cleannum;
+
 void task1Entry (void* param) {
 	setSysTick(SYS_TICK);
-	
-	eventInit(&event1, eventTypeUnknown);
+
 	eventInit(&event2, eventTypeUnknown);
 	
 	while(1) {
+		
+		count = eventGetWaitNum(&event2);
+		cleannum = eventRemoveAllTask(&event2, NULL, 0);
+		
+		if (cleannum > 0) {
+			taskSched();
+			count = eventGetWaitNum(&event2);
+		}
+		
 		task1Flag = 0;
-		eventWait(&event1, currentTask, NULL, 0, 50);
-		taskSched();
 		taskDelay(10);
 		task1Flag = 1;
 		taskDelay(10);
 	}
-}
-
-void delay() {
-	for (int i = 0; i < 0xff; i++);
 }
 
 int task2Flag;
@@ -74,7 +79,7 @@ void task4Entry (void* param) {
 void appInit() {
 	taskInit(&ttask1, task1Entry, (void*)0x1145, &task1Env[TASK_STACK_SIZE], 0);
 	taskInit(&ttask2, task2Entry, (void*)0x1919, &task2Env[TASK_STACK_SIZE], 1);
-	taskInit(&ttask3, task3Entry, (void*)0x1919, &task3Env[TASK_STACK_SIZE], 0);
+	taskInit(&ttask3, task3Entry, (void*)0x1919, &task3Env[TASK_STACK_SIZE], 1);
 	taskInit(&ttask4, task4Entry, (void*)0x1919, &task4Env[TASK_STACK_SIZE], 1);
 }
 

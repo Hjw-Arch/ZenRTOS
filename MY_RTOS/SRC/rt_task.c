@@ -94,6 +94,7 @@ void taskDelayedListInit(void) {
 	listHeadInit(&taskDelayedList);
 }
 
+// 应该做检查，检查任务的状态，如果处于延时、挂起、删除状态就不应该将其加入就绪表
 // 将任务加入就绪表，即将任务加入就绪态
 void taskSched2Ready(task_t* task) {
 	listNodeInsert2Tail(&taskTable[task->priority], &task->linkNode);

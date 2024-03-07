@@ -10,7 +10,7 @@
 #define TASK_STACK_SIZE				1024  // 默认的任务堆栈大小
 
 
-// #define HIGH_RT_MODE
+#define HIGH_RT_MODE
 
 
 

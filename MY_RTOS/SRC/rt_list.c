@@ -113,7 +113,7 @@ void listInsert(listHead* listhead, listNode* node, listNode* node2insert) {
 void listRemove(listHead* listhead, listNode* node2remove) {
 	uint8_t flag = checkNodeIsInList(listhead, node2remove);
 	
-	assert(flag == 1);	// 参数合法性检查
+//	assert(flag == 1);	// 参数合法性检查
 	
 	if (flag != 1) return;
 	
@@ -126,6 +126,7 @@ void listRemove(listHead* listhead, listNode* node2remove) {
 // 做一些检查
 uint8_t checkNodeIsInList(listHead* listhead, listNode* node) {
 	uint8_t flag = 0;
+	
 	for (listNode* tempnode = listhead->firstNode; tempnode != &(listhead->headNode); tempnode = tempnode->next) {
 		if (node == tempnode) {
 			flag = 1;
