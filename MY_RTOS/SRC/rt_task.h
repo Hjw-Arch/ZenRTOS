@@ -6,7 +6,7 @@
 #include "rtLib.h"
 
 // 目前任务这里做的并不好，一个任务只能同时处于一个状态，这里太混乱了
-#define TASK_STATUS_READY		0				// 任务状态：就绪态或运行态
+#define TASK_STATUS_READY		(1 << 0)		// 任务状态：就绪态或运行态
 #define TASK_STATUS_DELAY		(1 << 1)		// 任务状态：延时态
 #define TASK_STATUS_SUSPEND		(1 << 2)		// 任务状态：挂起态
 #define TASK_STATUS_DESTORYED	(1 << 3)		// 任务状态：删除态

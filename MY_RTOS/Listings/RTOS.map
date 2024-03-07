@@ -501,15 +501,15 @@ Image Symbol Table
     i.taskDelay                              0x000009a0   Section        0  rt_time.o(i.taskDelay)
     i.taskDelayedListInit                    0x000009d4   Section        0  rt_task.o(i.taskDelayedListInit)
     i.taskInit                               0x000009e4   Section        0  rt_task.o(i.taskInit)
-    i.taskSched                              0x00000aa8   Section        0  rt_task.o(i.taskSched)
-    i.taskSched2Delay                        0x00000aec   Section        0  rt_task.o(i.taskSched2Delay)
-    i.taskSched2Ready                        0x00000b24   Section        0  rt_task.o(i.taskSched2Ready)
-    i.taskSched2Undelay                      0x00000b50   Section        0  rt_task.o(i.taskSched2Undelay)
-    i.taskSched2Unready                      0x00000b7c   Section        0  rt_task.o(i.taskSched2Unready)
-    i.taskSwitch                             0x00000bd4   Section        0  switch.o(i.taskSwitch)
-    i.taskTimeSliceHandler                   0x00000be4   Section        0  rt_time.o(i.taskTimeSliceHandler)
-    .constdata                               0x00000c8c   Section      256  bitmap.o(.constdata)
-    quickFindTable                           0x00000c8c   Data         256  bitmap.o(.constdata)
+    i.taskSched                              0x00000ab0   Section        0  rt_task.o(i.taskSched)
+    i.taskSched2Delay                        0x00000af4   Section        0  rt_task.o(i.taskSched2Delay)
+    i.taskSched2Ready                        0x00000b2c   Section        0  rt_task.o(i.taskSched2Ready)
+    i.taskSched2Undelay                      0x00000b5c   Section        0  rt_task.o(i.taskSched2Undelay)
+    i.taskSched2Unready                      0x00000b88   Section        0  rt_task.o(i.taskSched2Unready)
+    i.taskSwitch                             0x00000be8   Section        0  switch.o(i.taskSwitch)
+    i.taskTimeSliceHandler                   0x00000bf8   Section        0  rt_time.o(i.taskTimeSliceHandler)
+    .constdata                               0x00000ca0   Section      256  bitmap.o(.constdata)
+    quickFindTable                           0x00000ca0   Data         256  bitmap.o(.constdata)
     .data                                    0x20000000   Section        1  lock.o(.data)
     .data                                    0x20000004   Section       16  rt_task.o(.data)
     .data                                    0x20000014   Section       24  application.o(.data)
@@ -701,16 +701,16 @@ Image Symbol Table
     task4Entry                               0x00000969   Thumb Code    46  application.o(i.task4Entry)
     taskDelay                                0x000009a1   Thumb Code    46  rt_time.o(i.taskDelay)
     taskDelayedListInit                      0x000009d5   Thumb Code    10  rt_task.o(i.taskDelayedListInit)
-    taskInit                                 0x000009e5   Thumb Code   196  rt_task.o(i.taskInit)
-    taskSched                                0x00000aa9   Thumb Code    56  rt_task.o(i.taskSched)
-    taskSched2Delay                          0x00000aed   Thumb Code    46  rt_task.o(i.taskSched2Delay)
-    taskSched2Ready                          0x00000b25   Thumb Code    34  rt_task.o(i.taskSched2Ready)
-    taskSched2Undelay                        0x00000b51   Thumb Code    40  rt_task.o(i.taskSched2Undelay)
-    taskSched2Unready                        0x00000b7d   Thumb Code    78  rt_task.o(i.taskSched2Unready)
-    taskSwitch                               0x00000bd5   Thumb Code    10  switch.o(i.taskSwitch)
-    taskTimeSliceHandler                     0x00000be5   Thumb Code   154  rt_time.o(i.taskTimeSliceHandler)
-    Region$$Table$$Base                      0x00000d8c   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00000dac   Number         0  anon$$obj.o(Region$$Table)
+    taskInit                                 0x000009e5   Thumb Code   204  rt_task.o(i.taskInit)
+    taskSched                                0x00000ab1   Thumb Code    56  rt_task.o(i.taskSched)
+    taskSched2Delay                          0x00000af5   Thumb Code    46  rt_task.o(i.taskSched2Delay)
+    taskSched2Ready                          0x00000b2d   Thumb Code    38  rt_task.o(i.taskSched2Ready)
+    taskSched2Undelay                        0x00000b5d   Thumb Code    40  rt_task.o(i.taskSched2Undelay)
+    taskSched2Unready                        0x00000b89   Thumb Code    86  rt_task.o(i.taskSched2Unready)
+    taskSwitch                               0x00000be9   Thumb Code    10  switch.o(i.taskSwitch)
+    taskTimeSliceHandler                     0x00000bf9   Thumb Code   154  rt_time.o(i.taskTimeSliceHandler)
+    Region$$Table$$Base                      0x00000da0   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00000dc0   Number         0  anon$$obj.o(Region$$Table)
     schedLockCount                           0x20000000   Data           1  lock.o(.data)
     taskPriorityBitmap                       0x20000004   Data           4  rt_task.o(.data)
     currentTask                              0x20000008   Data           4  rt_task.o(.data)
@@ -747,9 +747,9 @@ Memory Map of the image
 
   Image Entry point : 0x0000018d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x00000ddc, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x00000df0, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x00000dac, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x00000dc0, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -860,16 +860,16 @@ Memory Map of the image
     0x00000968   0x00000038   Code   RO          487    i.task4Entry        application.o
     0x000009a0   0x00000034   Code   RO          425    i.taskDelay         rt_time.o
     0x000009d4   0x00000010   Code   RO          209    i.taskDelayedListInit  rt_task.o
-    0x000009e4   0x000000c4   Code   RO          212    i.taskInit          rt_task.o
-    0x00000aa8   0x00000044   Code   RO          215    i.taskSched         rt_task.o
-    0x00000aec   0x00000038   Code   RO          216    i.taskSched2Delay   rt_task.o
-    0x00000b24   0x0000002c   Code   RO          217    i.taskSched2Ready   rt_task.o
-    0x00000b50   0x0000002c   Code   RO          218    i.taskSched2Undelay  rt_task.o
-    0x00000b7c   0x00000058   Code   RO          219    i.taskSched2Unready  rt_task.o
-    0x00000bd4   0x00000010   Code   RO           54    i.taskSwitch        switch.o
-    0x00000be4   0x000000a8   Code   RO          426    i.taskTimeSliceHandler  rt_time.o
-    0x00000c8c   0x00000100   Data   RO          168    .constdata          bitmap.o
-    0x00000d8c   0x00000020   Data   RO          777    Region$$Table       anon$$obj.o
+    0x000009e4   0x000000cc   Code   RO          212    i.taskInit          rt_task.o
+    0x00000ab0   0x00000044   Code   RO          215    i.taskSched         rt_task.o
+    0x00000af4   0x00000038   Code   RO          216    i.taskSched2Delay   rt_task.o
+    0x00000b2c   0x00000030   Code   RO          217    i.taskSched2Ready   rt_task.o
+    0x00000b5c   0x0000002c   Code   RO          218    i.taskSched2Undelay  rt_task.o
+    0x00000b88   0x00000060   Code   RO          219    i.taskSched2Unready  rt_task.o
+    0x00000be8   0x00000010   Code   RO           54    i.taskSwitch        switch.o
+    0x00000bf8   0x000000a8   Code   RO          426    i.taskTimeSliceHandler  rt_time.o
+    0x00000ca0   0x00000100   Data   RO          168    .constdata          bitmap.o
+    0x00000da0   0x00000020   Data   RO          777    Region$$Table       anon$$obj.o
 
 
     Execution Region ER_RW (Base: 0x20000000, Size: 0x00000030, Max: 0xffffffff, ABSOLUTE)
@@ -906,18 +906,18 @@ Image component sizes
        412        100          0         24      16656       3378   application.o
        230         66        256          0          0       2744   bitmap.o
         34          4          0          1          0       4401   lock.o
-       120         30          0          0          0       7697   main.o
+       120         30          0          0          0       7705   main.o
         88         14          0          0          0      24304   rt_cpu.o
        384          0          0          0          0       4355   rt_event.o
        194          0          0          0          0       4841   rt_list.o
-       556         60          0         16       2496       6468   rt_task.o
-       228         20          0          0         12       3266   rt_time.o
+       576         60          0         16       2496       6488   rt_task.o
+       228         20          0          0         12       3274   rt_time.o
         64         26        192          0       4096        840   startup_armcm3.o
        104         26          0          0          0       7049   switch.o
         16          8          0          4          0        659   system_armcm3.o
 
     ----------------------------------------------------------------------
-      2434        354        480         48      23260      70002   Object Totals
+      2454        354        480         48      23260      70038   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          4          0          0          3          0          0   (incl. Padding)
 
@@ -974,15 +974,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      3020        446        480         48      23360      68394   Grand Totals
-      3020        446        480         48      23360      68394   ELF Image Totals
-      3020        446        480         48          0          0   ROM Totals
+      3040        446        480         48      23360      68430   Grand Totals
+      3040        446        480         48      23360      68430   ELF Image Totals
+      3040        446        480         48          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 3500 (   3.42kB)
+    Total RO  Size (Code + RO Data)                 3520 (   3.44kB)
     Total RW  Size (RW Data + ZI Data)             23408 (  22.86kB)
-    Total ROM Size (Code + RO Data + RW Data)       3548 (   3.46kB)
+    Total ROM Size (Code + RO Data + RW Data)       3568 (   3.48kB)
 
 ==============================================================================
 

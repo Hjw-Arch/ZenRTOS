@@ -46,6 +46,9 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 	task->clean = NULL;
 	task->cleanParam = NULL;
 	task->requestDeleteFlag = 0;
+	task->waitEvent = NULL;
+	task->eventMsg = NULL;
+	task->eventWaitResult = NO_ERROR;
 	listNodeInit(&(task->delayNode)); // 初始化延时结点
 	listNodeInit(&(task->linkNode)); // 初始化任务结点
 	
@@ -96,8 +99,10 @@ void taskDelayedListInit(void) {
 
 // 应该做检查，检查任务的状态，如果处于延时、挂起、删除状态就不应该将其加入就绪表
 // 将任务加入就绪表，即将任务加入就绪态
+// 非原子操作
 void taskSched2Ready(task_t* task) {
 	listNodeInsert2Tail(&taskTable[task->priority], &task->linkNode);
+	task->state = TASK_STATUS_READY;
 	bitmapSet(&taskPriorityBitmap, task->priority);
 }
 
@@ -109,6 +114,8 @@ void taskSched2Unready(task_t* task) {
 	}
 	
 	listRemove(&taskTable[task->priority], &task->linkNode);
+	
+	task->state &= ~TASK_STATUS_READY;
 	
 	if (getListNodeNum(&taskTable[task->priority]) == 0){
 		bitmapClear(&taskPriorityBitmap, task->priority);
