@@ -7,7 +7,7 @@
 typedef enum _eventType {
 	EVENT_TYPE_UNKNOWN,
 	EVENT_TYPE_SEMAPHORE,
-	
+	EVENT_TYPE_MAILBOX,
 }eventType_t;
 
 // 事件控制块的定义

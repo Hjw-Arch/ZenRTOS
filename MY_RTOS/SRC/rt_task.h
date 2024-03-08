@@ -14,7 +14,8 @@
 // 或许可以改进
 #define TASK_STATUS_WAIT_MASK	(0xff << 16)	// 事件等待
 
-#define TASK_STATUS_WAIT_SEMAPHORE		(1 << 16)
+#define TASK_STATUS_WAIT_SEMAPHORE		(1 << 16)	// 表示任务被阻塞在信号量上
+#define TASK_STATUS_WAIT_MAILBOX		(1 << 17)	// 表示任务被阻塞在邮箱上
 
 
 // 定义任务堆栈的类型为uint32

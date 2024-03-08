@@ -9,6 +9,7 @@
 #include "rt_time.h"
 #include "rt_event.h"
 #include "semaphore.h"
+#include "rt_mailbox.h"
 
 void appInit(void);
 

@@ -10,17 +10,16 @@ task_t ttask2;
 task_t ttask3;
 task_t ttask4;
 
-sem_t semaphore1, semaphore2;
+mailBox_t mailbox;
 
+#define MAILBOX_SIZE 16
+
+void* messageBuffer[MAILBOX_SIZE];
 
 int task1Flag;
-
 void task1Entry (void* param) {
 	setSysTick(SYS_TICK);
-	
-	semInit(&semaphore1, 0, 10);
-	semInit(&semaphore2, 0, 0);
-	semWait(&semaphore1, 0);
+	mailBoxInit(&mailbox, messageBuffer, MAILBOX_SIZE);
 	
 	while(1) {
 		task1Flag = 0;
@@ -30,29 +29,20 @@ void task1Entry (void* param) {
 	}
 }
 
-semInfo_t info;
 
 int task2Flag;
 void task2Entry (void* param) {
-	int isdeleted = 0;
 	while(1) {
 		task2Flag = 0;
 		taskDelay(10);
 		task2Flag = 1;
 		taskDelay(10);
-		if (!isdeleted) {
-			info = semGetInfo(&semaphore1);
-			semDestory(&semaphore1);
-			isdeleted = 1;
-		}
-		info = semGetInfo(&semaphore1);
 	}
 }
 
 int task3Flag;
 void task3Entry (void* param) {
 	while(1) {
-		semWait(&semaphore2, 100);
 		task3Flag = 0;
 		taskDelay(10);
 		task3Flag = 1;
