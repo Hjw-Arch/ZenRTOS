@@ -5,6 +5,7 @@ typedef enum _error {
 	NO_ERROR = 0,
 	ERROR_TIMEOUT = 1,
 	ERROR_RESOURCE_UNAVAILABLE,
+	ERROR_DELETED,
 }rt_error;
 
 #define RTOS_PRIORITY_COUNT			32

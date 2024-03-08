@@ -39,10 +39,6 @@ void taskTimeSliceHandler() {
 		task_t *task = getListNodeParent(node, task_t, delayNode);
 		if (--task->delayTicks == 0) {
 			if(task->waitEvent) {
-				if (task->waitEvent->type == EVENT_TYPE_SEMAPHORE) {
-					sem_t* sem = (sem_t*)((uint32_t)task->waitEvent - (uint32_t)&((sem_t*)0)->event);
-					sem->counter++;
-				}
 				eventRemoveTask(task, NULL, ERROR_TIMEOUT);
 			}
 			taskSched2Undelay(task);

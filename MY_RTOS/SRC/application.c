@@ -20,9 +20,9 @@ void task1Entry (void* param) {
 	
 	semInit(&semaphore1, 0, 10);
 	semInit(&semaphore2, 0, 0);
+	semWait(&semaphore1, 0);
 	
 	while(1) {
-		semWait(&semaphore1, 0);
 		task1Flag = 0;
 		taskDelay(10);
 		task1Flag = 1;
@@ -30,18 +30,22 @@ void task1Entry (void* param) {
 	}
 }
 
+semInfo_t info;
+
 int task2Flag;
 void task2Entry (void* param) {
-	int error = 0;
+	int isdeleted = 0;
 	while(1) {
 		task2Flag = 0;
 		taskDelay(10);
 		task2Flag = 1;
 		taskDelay(10);
-		
-		semPost(&semaphore1);
-		
-		error = semGetWithNoWait(&semaphore1);
+		if (!isdeleted) {
+			info = semGetInfo(&semaphore1);
+			semDestory(&semaphore1);
+			isdeleted = 1;
+		}
+		info = semGetInfo(&semaphore1);
 	}
 }
 
