@@ -138,6 +138,9 @@ void taskSched2Undelay(task_t* task) {
 	}
 	
 	listRemove(&taskDelayedList, &task->delayNode);
+	
+	task->delayTicks = 0;
+	
 	task->state &= ~TASK_STATUS_DELAY;
 }
 
@@ -163,6 +166,7 @@ void taskSuspend(task_t* task) {
 }
 
 // 唤醒挂起的任务
+// 2024.3.8修改了调度算法，若唤醒的任务优先级大于当前任务才进行任务调度
 void taskWakeUp(task_t* task) {
 	uint32_t st = enterCritical();
 	
@@ -170,7 +174,9 @@ void taskWakeUp(task_t* task) {
 		if (--task->suspendCounter == 0) {
 			task->state &= ~TASK_STATUS_SUSPEND;
 			taskSched2Ready(task);
-			taskSched();
+			if (task->priority < currentTask->priority) {
+				taskSched();
+			}
 		}
 	}
 	

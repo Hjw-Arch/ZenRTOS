@@ -8,6 +8,7 @@
 #include "rt_task.h"
 #include "rt_time.h"
 #include "rt_event.h"
+#include "semaphore.h"
 
 void appInit(void);
 

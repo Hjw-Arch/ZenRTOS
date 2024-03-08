@@ -3,14 +3,14 @@
 #include "lock.h"
 
 void eventInit(eventCtrlBlock_t* ecb, eventType_t type){
-	ecb->type = eventTypeUnknown;
+	ecb->type = type;
 	listHeadInit(&ecb->waitlist);
 }
 
 // 将任务阻塞在事件控制块上
 // 此函数要求被操作的任务必须处于就绪态或运行态
 // 此函数是否要加临界区保护待决定
-void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state, uint32_t timeout) {
+void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state, uint32_t waitTime) {
 	uint32_t st = enterCritical();
 	
 	task->state |= state;
@@ -22,8 +22,8 @@ void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state,
 	
 	listNodeInsert2Tail(&event->waitlist, &task->linkNode);
 	
-	if (timeout) {
-		taskSched2Delay(task, timeout);
+	if (waitTime) {
+		taskSched2Delay(task, waitTime);
 	}
 	
 	leaveCritical(st);

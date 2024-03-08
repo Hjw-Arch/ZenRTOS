@@ -10,29 +10,19 @@ task_t ttask2;
 task_t ttask3;
 task_t ttask4;
 
-eventCtrlBlock_t event2;
+sem_t semaphore1, semaphore2;
 
 
 int task1Flag;
 
-uint32_t count;
-uint32_t cleannum;
-
 void task1Entry (void* param) {
 	setSysTick(SYS_TICK);
-
-	eventInit(&event2, eventTypeUnknown);
+	
+	semInit(&semaphore1, 0, 10);
+	semInit(&semaphore2, 0, 0);
 	
 	while(1) {
-		
-		count = eventGetWaitNum(&event2);
-		cleannum = eventRemoveAllTask(&event2, NULL, 0);
-		
-		if (cleannum > 0) {
-			taskSched();
-			count = eventGetWaitNum(&event2);
-		}
-		
+		semWait(&semaphore1, 0);
 		task1Flag = 0;
 		taskDelay(10);
 		task1Flag = 1;
@@ -42,21 +32,23 @@ void task1Entry (void* param) {
 
 int task2Flag;
 void task2Entry (void* param) {
+	int error = 0;
 	while(1) {
-		eventWait(&event2, currentTask, NULL, 0, 0);
-		taskSched();
 		task2Flag = 0;
 		taskDelay(10);
 		task2Flag = 1;
 		taskDelay(10);
+		
+		semPost(&semaphore1);
+		
+		error = semGetWithNoWait(&semaphore1);
 	}
 }
 
 int task3Flag;
 void task3Entry (void* param) {
 	while(1) {
-		eventWait(&event2, currentTask, NULL, 0, 0);
-		taskSched();
+		semWait(&semaphore2, 100);
 		task3Flag = 0;
 		taskDelay(10);
 		task3Flag = 1;
@@ -67,8 +59,6 @@ void task3Entry (void* param) {
 int task4Flag;
 void task4Entry (void* param) {
 	while(1) {
-		task_t* task = eventWakeUp(&event2, NULL, NO_ERROR);
-		taskSched();
 		task4Flag = 0;
 		taskDelay(10);
 		task4Flag = 1;

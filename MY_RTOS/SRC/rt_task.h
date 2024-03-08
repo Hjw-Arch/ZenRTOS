@@ -14,14 +14,11 @@
 // 或许可以改进
 #define TASK_STATUS_WAIT_MASK	(0xff << 16)	// 事件等待
 
+#define TASK_STATUS_WAIT_SEMAPHORE		(1 << 16)
+
 
 // 定义任务堆栈的类型为uint32
 typedef uint32_t taskStack_t;
-
-typedef enum _error {
-	NO_ERROR = 0,
-	ERROR_TIMEOUT = 1,
-}rt_error;
 
 struct _eventCtrlBlock_t;		// 前向引用
 
@@ -103,3 +100,5 @@ taskInfo_t getTaskInfo(task_t* task);
 // void getTaskInfo(task_t* task, taskInfo_t* taskinfo); // 此版本相较于上一个开销更小一点，不过小的不多
 
 #endif
+
+
