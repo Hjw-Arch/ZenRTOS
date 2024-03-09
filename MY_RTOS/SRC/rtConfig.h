@@ -6,6 +6,8 @@ typedef enum _error {
 	ERROR_TIMEOUT = 1,
 	ERROR_RESOURCE_UNAVAILABLE,
 	ERROR_DELETED,
+	ERROR_MAILBOX_FULL,
+	
 }rt_error;
 
 #define RTOS_PRIORITY_COUNT			32
