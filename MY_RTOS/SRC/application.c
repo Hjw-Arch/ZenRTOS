@@ -17,28 +17,23 @@ mbox_t box1, box2;
 void* messageBuffer1[MAILBOX_SIZE];
 void* messageBuffer2[MAILBOX_SIZE];
 
-uint32_t msg[16];
+uint32_t msg1[MAILBOX_SIZE];
+uint32_t msg2[MAILBOX_SIZE];
+
+mboxInfo_t info;
 
 int task1Flag;
 void task1Entry (void* param) {
 	setSysTick(SYS_TICK);
 	mboxInit(&box1, messageBuffer1, MAILBOX_SIZE);
 	mboxInit(&box2, messageBuffer2, MAILBOX_SIZE);
+	void* msg;
+	
+	info = mboxGetInfo(&box1);
+	mboxWait(&box1, &msg, 0);
+	info = mboxGetInfo(&box1);
+	task1Flag = *(uint32_t*)msg;
 	while(1) {
-		for (int i = 0; i < MAILBOX_SIZE; ++i) {
-			msg[i] = i;
-			mboxPost(&box1, &msg[i], PRIORITY_NORMAL);
-		}
-		
-		taskDelay(500);
-		
-		for (int i = 0; i < MAILBOX_SIZE; ++i) {
-			msg[i] = i;
-			mboxPost(&box1, &msg[i], PRIORITY_HIGH);
-		}
-		
-		taskDelay(500);
-		
 		task1Flag = 0;
 		taskDelay(10);
 		task1Flag = 1;
@@ -50,15 +45,10 @@ void task1Entry (void* param) {
 int task2Flag;
 void task2Entry (void* param) {
 	while(1) {
-		void* msg;
-		
-		uint32_t err = mboxWait(&box1, &msg, 0);
-		if (err == NO_ERROR) {
-			int val = *(int *)msg;
-			task2Flag = val;
-			taskDelay(10);
-		}
-		
+		void* msg = (void*)0x3f;
+		info = mboxGetInfo(&box1);
+		mboxPost(&box1, &msg, PRIORITY_NORMAL);
+		info = mboxGetInfo(&box1);
 		task2Flag = 0;
 		taskDelay(10);
 		task2Flag = 1;
@@ -69,8 +59,6 @@ void task2Entry (void* param) {
 int task3Flag;
 void task3Entry (void* param) {
 	while(1) {
-		void* msg;
-		mboxWait(&box2, &msg, 100);
 		task3Flag = 0;
 		taskDelay(10);
 		task3Flag = 1;

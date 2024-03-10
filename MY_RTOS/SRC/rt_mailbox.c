@@ -92,5 +92,65 @@ uint32_t mboxPost(mbox_t* mbox, void* msg, uint32_t isHighPriority) {
 	return NO_ERROR;
 }
 
+// 清空邮件
+// 查看是否还有任务在此等待邮件，如果没有就清空邮箱
+void mboxFlush(mbox_t* mbox) {
+	uint32_t st = enterCritical();
+	
+	// 如果没有任务在此等待，将邮箱清空，这里不能用counter>0来判断，因为counter==0的时候无法判断是否有任务在此等待
+	if (eventGetWaitNum(&mbox->event) == 0) {
+		mbox->counter = 0;
+		mbox->readPos = 0;
+		mbox->writePos = 0;
+	}
+	
+	leaveCritical(st);
+}
+
+// 摧毁邮箱
+uint32_t mboxDestory(mbox_t* mbox) {
+	uint32_t st = enterCritical();
+	
+	uint32_t count = eventRemoveAllTask(&mbox->event, NULL, ERROR_DELETED);
+	
+	mbox->counter = 0;
+	mbox->readPos = 0;
+	mbox->writePos = 0;
+	
+	if (count) {
+		taskSched();
+	}
+	
+	leaveCritical(st);
+	
+	return count;
+}
 
 
+// 获取邮箱状态信息
+mboxInfo_t mboxGetInfo(mbox_t* mbox) {
+	mboxInfo_t info;
+	
+	uint32_t st = enterCritical();
+	
+	info.mailNum = mbox->counter;
+	info.maxcount = mbox->maxcount;
+	info.waitTaskNum = eventGetWaitNum(&mbox->event);
+	
+	leaveCritical(st);
+	
+	return info;
+}
+
+// 相较于上一个函数开销更小，但上一个函数更符合编程习惯
+/**
+void mboxGetInfo(mbox_t* mbox, mboxInfo_t* info) {
+	uint32_t st = enterCritical();
+	
+	info->mailNum = mbox->counter;
+	info->maxcount = mbox->maxcount;
+	info->waitTaskNum = eventGetWaitNum(&mbox->event);
+	
+	leaveCritical(st);
+}
+**/

@@ -239,7 +239,7 @@ void taskDeleteSelf(void) {
 
 // 此处性能可以继续优化为下面的版本，避免了创建taskinfo和复制taskinfo的成本
 // 但这种方式更符合编程习惯
-taskInfo_t getTaskInfo(task_t* task) {
+taskInfo_t taskGetInfo(task_t* task) {
 	taskInfo_t taskinfo;
 	
 	uint32_t st = enterCritical();
@@ -255,7 +255,7 @@ taskInfo_t getTaskInfo(task_t* task) {
 }
 
 /** 此版本相较于上一个函数，开销更小一点
-void getTaskInfo(task_t* task, taskInfo_t* taskinfo) {
+void taskGetInfo(task_t* task, taskInfo_t* taskinfo) {
 	
 	uint32_t st = enterCritical();
 	

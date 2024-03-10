@@ -97,8 +97,8 @@ void taskRequestDelete(task_t* task);
 uint8_t taskIsRequestedDelete(task_t* task);
 void taskDeleteSelf(void);
 
-taskInfo_t getTaskInfo(task_t* task);
-// void getTaskInfo(task_t* task, taskInfo_t* taskinfo); // 此版本相较于上一个开销更小一点，不过小的不多
+taskInfo_t taskGetInfo(task_t* task);
+// void taskGetInfo(task_t* task, taskInfo_t* taskinfo); // 此版本相较于上一个开销更小一点，不过小的不多
 
 #endif
 
