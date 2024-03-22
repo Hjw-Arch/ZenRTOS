@@ -10,6 +10,7 @@
 #include "rt_event.h"
 #include "semaphore.h"
 #include "rt_mailbox.h"
+#include "rt_memblock.h"
 
 void appInit(void);
 

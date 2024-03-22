@@ -13,12 +13,13 @@ void mboxInit(mbox_t* mailbox, void** messageBuffer, uint32_t maxcount) {
 }
 
 // 读取一个邮件，如果没有邮件就将任务阻塞在此
-uint32_t mboxWait(mbox_t* mbox, void** msg, uint32_t waitTime) {
+uint32_t mboxWait(mbox_t* mbox, void* msg, uint32_t waitTime) {
 	uint32_t st = enterCritical();
 	
+	// 创造这种二级指针是为了消除warning，否则编译器会优化掉msg
 	if (mbox->counter > 0) {
 		--mbox->counter;
-		*msg = mbox->messageBuffer[mbox->readPos];
+		*(void**)msg = mbox->messageBuffer[mbox->readPos];	// 这里加个void*是为了消除warning
 		if (++mbox->readPos == mbox->maxcount) {
 			mbox->readPos = 0;
 		}
@@ -30,17 +31,17 @@ uint32_t mboxWait(mbox_t* mbox, void** msg, uint32_t waitTime) {
 	taskSched();
 	leaveCritical(st);
 	
-	*msg = currentTask->eventMsg;
+	*(void**)msg = currentTask->eventMsg;
 	return currentTask->eventWaitResult;
 }
 
 // 读取一个邮件，没有邮件就拉到
-uint32_t mboxGetWithNoWait(mbox_t* mbox, void** msg) {
+uint32_t mboxGetWithNoWait(mbox_t* mbox, void* msg) {
 	uint32_t st = enterCritical();
 	
 	if (mbox->counter > 0) {
 		--mbox->counter;
-		*msg = mbox->messageBuffer[mbox->readPos];
+		*(void**)msg = mbox->messageBuffer[mbox->readPos];
 		if (++mbox->readPos == mbox->maxcount) {
 			mbox->readPos = 0;
 		}
@@ -107,7 +108,7 @@ void mboxFlush(mbox_t* mbox) {
 	leaveCritical(st);
 }
 
-// 摧毁邮箱
+// 摧毁邮箱（叫重置邮箱或许更好，内存没有得到释放，即使的destory之后还是可以继续使用的）
 uint32_t mboxDestory(mbox_t* mbox) {
 	uint32_t st = enterCritical();
 	

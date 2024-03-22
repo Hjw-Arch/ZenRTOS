@@ -10,29 +10,24 @@ task_t ttask2;
 task_t ttask3;
 task_t ttask4;
 
-mbox_t box1, box2;
+typedef uint8_t (*tBlock)[100];
+uint8_t mem[20][100];
+memBlock_t memblock;
 
-#define MAILBOX_SIZE 16
-
-void* messageBuffer1[MAILBOX_SIZE];
-void* messageBuffer2[MAILBOX_SIZE];
-
-uint32_t msg1[MAILBOX_SIZE];
-uint32_t msg2[MAILBOX_SIZE];
-
-mboxInfo_t info;
 
 int task1Flag;
 void task1Entry (void* param) {
 	setSysTick(SYS_TICK);
-	mboxInit(&box1, messageBuffer1, MAILBOX_SIZE);
-	mboxInit(&box2, messageBuffer2, MAILBOX_SIZE);
-	void* msg;
+	tBlock block[20];
+	memBlockInit(&memblock, mem, 100, 20);
+	memBlockInfo_t info = memBlockGetInfo(&memblock);
+	for (int i = 0; i < 20; ++i) {
+		memBlockWait(&memblock, (uint8_t*)&block[i], 0);
+		info = memBlockGetInfo(&memblock);
+	}
 	
-	info = mboxGetInfo(&box1);
-	mboxWait(&box1, &msg, 0);
-	info = mboxGetInfo(&box1);
-	task1Flag = *(uint32_t*)msg;
+	memBlockWait(&memblock, (uint8_t*)&block[0], 0);
+	
 	while(1) {
 		task1Flag = 0;
 		taskDelay(10);
@@ -44,11 +39,12 @@ void task1Entry (void* param) {
 
 int task2Flag;
 void task2Entry (void* param) {
+	uint32_t flag = 0;
 	while(1) {
-		void* msg = (void*)0x3f;
-		info = mboxGetInfo(&box1);
-		mboxPost(&box1, &msg, PRIORITY_NORMAL);
-		info = mboxGetInfo(&box1);
+		if (!flag) {
+			memBlockDestory(&memblock);
+			flag = 1;
+		}
 		task2Flag = 0;
 		taskDelay(10);
 		task2Flag = 1;
