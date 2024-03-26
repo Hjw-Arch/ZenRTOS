@@ -12,6 +12,7 @@
 #include "rt_mailbox.h"
 #include "rt_memblock.h"
 #include "rt_eflaggroup.h"
+#include "rt_mutex.h"
 
 void appInit(void);
 

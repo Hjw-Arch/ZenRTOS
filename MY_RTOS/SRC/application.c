@@ -10,36 +10,36 @@ task_t ttask2;
 task_t ttask3;
 task_t ttask4;
 
-eFlagGroup_t eflaggroup;
+mutex_t mutex;
 
 int task1Flag;
 void task1Entry (void* param) {
 	setSysTick(SYS_TICK);
-	eFlagGroupInit(&eflaggroup, 0xFF);
-	eFlagGroupInfo_t info = eFlagGroupGetInfo(&eflaggroup);
-	taskDelay(10);
-	info = eFlagGroupGetInfo(&eflaggroup);
-	eFlagGroupDestory(&eflaggroup);
-	info = eFlagGroupGetInfo(&eflaggroup);
+	mutexInit(&mutex);
+	mutexInfo_t info = mutexGetInfo(&mutex);
+	mutexWait(&mutex, 0);
+	info = mutexGetInfo(&mutex);
+	mutexWait(&mutex, 0);
+	info = mutexGetInfo(&mutex);
+	uint32_t flag = 0;
 	while(1) {
 		task1Flag = 0;
 		taskDelay(10);
 		task1Flag = 1;
 		taskDelay(10);
+		
+		if (!flag) {
+			mutexDestory(&mutex);
+		}
 	}
 }
 
 
 int task2Flag;
 void task2Entry (void* param) {
-	uint32_t resultFlag;
-	
-	eFlagGroupWait(&eflaggroup, EFLAGGROUP_ANY_SET | EFLAGGROUP_CLEAR_AFTER, 0x1, &resultFlag, 0);
-	
-	eFlagGroupInfo_t info = eFlagGroupGetInfo(&eflaggroup);
-	
-	eFlagGroupWait(&eflaggroup, EFLAGGROUP_ANY_SET | EFLAGGROUP_CLEAR_AFTER, 0x1, &resultFlag, 0);
-	
+	mutexInfo_t info2 = mutexGetInfo(&mutex);
+	mutexWait(&mutex, 0);
+	info2 = mutexGetInfo(&mutex);
 	while(1) {
 		task2Flag = 0;
 		taskDelay(10);
