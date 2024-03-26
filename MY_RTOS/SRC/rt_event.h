@@ -9,6 +9,7 @@ typedef enum _eventType {
 	EVENT_TYPE_SEMAPHORE,
 	EVENT_TYPE_MAILBOX,
 	EVENT_TYPE_MEMBLOCK,
+	EVENT_TYPE_EFLAGGROUP,
 }eventType_t;
 
 // 事件控制块的定义
@@ -22,6 +23,7 @@ typedef struct _eventCtrlBlock_t {
 void eventInit(eventCtrlBlock_t* ecb, eventType_t type);
 void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state, uint32_t waitTime);
 task_t* eventWakeUp(eventCtrlBlock_t* event, void* msg, uint32_t result);
+void eventWakeUpGivenTask(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t result);
 void eventRemoveTask(task_t* task, void* msg, uint32_t result);
 uint32_t eventRemoveAllTask(eventCtrlBlock_t* event, void* msg, uint32_t result);
 uint32_t eventGetWaitNum(eventCtrlBlock_t* event);

@@ -12,11 +12,12 @@
 #define TASK_STATUS_DESTORYED	(1 << 3)		// 任务状态：删除态
 
 // 或许可以改进
-#define TASK_STATUS_WAIT_MASK	(0xff << 16)	// 事件等待
+#define TASK_STATUS_WAIT_MASK	(0xff << 16)	// 事件等待掩码，用于清除事件控制块的标志位
 
 #define TASK_STATUS_WAIT_SEMAPHORE		(1 << 16)	// 表示任务被阻塞在信号量上
 #define TASK_STATUS_WAIT_MAILBOX		(1 << 17)	// 表示任务被阻塞在邮箱上
 #define TASK_STATUS_WAIT_MEMBLOCK		(1 << 18)	// 表示任务被阻塞在存储块上
+#define TASK_STATUS_WAIT_EFLAGGROUP		(1 << 19)	// 表示任务被阻塞在事件标志组上
 
 // 定义任务堆栈的类型为uint32
 typedef uint32_t taskStack_t;
@@ -50,6 +51,8 @@ typedef struct _t_Task {
 	void* eventMsg;		// 事件信息
 	uint32_t eventWaitResult;	// 事件的等待结果
 	
+	uint32_t waitEventFlagType;		// 等待的事件标志组的类型，置位还是复位
+	uint32_t waitEventFlags;		// 等待的事件标志或者满足的事件标志，这个命名不太好，应该改一改
 }task_t;
 
 // 任务状态查询结构，用于保存查询的任务状态

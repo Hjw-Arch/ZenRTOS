@@ -7,9 +7,24 @@ void eventInit(eventCtrlBlock_t* ecb, eventType_t type){
 	listHeadInit(&ecb->waitlist);
 }
 
+void eventInsertTaskByPriority(eventCtrlBlock_t* event, task_t* task) {
+	uint32_t st = enterCritical();
+	
+	for(listNode* node = event->waitlist.lastNode; node != &event->waitlist.headNode;) {
+		task_t* temptask = getListNodeParent(node, task_t, linkNode);
+		
+		if (task->priority < temptask->priority) {
+			node = node->prev;
+		} else {
+			listInsert(&event->waitlist, node, &task->linkNode);
+		}
+	}
+	
+	leaveCritical(st);
+}
+
 // 将任务阻塞在事件控制块上
 // 此函数要求被操作的任务必须处于就绪态或运行态
-// 此函数是否要加临界区保护待决定
 void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state, uint32_t waitTime) {
 	uint32_t st = enterCritical();
 	
@@ -19,7 +34,13 @@ void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state,
 	task->eventWaitResult = NO_ERROR;
 	
 	taskSched2Unready(task);
-	
+/**
+#ifdef HIGH_RT_MODE		// HIGH_RT_MODE可能导致低优先级任务长时间得不到运行
+	eventInsertTaskByPriority(event, task);
+#else
+	listNodeInsert2Tail(&event->waitlist, &task->linkNode);
+#endif
+**/
 	listNodeInsert2Tail(&event->waitlist, &task->linkNode);
 	
 	if (waitTime) {
@@ -80,6 +101,25 @@ task_t* eventWakeUp(eventCtrlBlock_t* event, void* msg, uint32_t result) {
 	leaveCritical(st);
 	
 	return task;
+}
+
+void eventWakeUpGivenTask(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t result) {
+//	uint32_t st = enterCritical();
+	
+	listRemove(&event->waitlist, &task->linkNode);
+	
+	task->waitEvent = NULL;
+	task->eventMsg = msg;
+	task->eventWaitResult = result;
+	task->state &= ~TASK_STATUS_WAIT_MASK;
+	
+	if (task->state & TASK_STATUS_DELAY) {
+		taskSched2Undelay(task);
+	}
+	
+	taskSched2Ready(task);
+	
+//	leaveCritical(st);
 }
 
 

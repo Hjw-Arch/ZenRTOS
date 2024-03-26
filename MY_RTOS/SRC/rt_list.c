@@ -101,6 +101,11 @@ listNode* listRemoveFirst (listHead* listhead) {
 }
 
 void listInsert(listHead* listhead, listNode* node, listNode* node2insert) {
+	
+	uint32_t flag = checkNodeIsInList(listhead, node);
+	
+	assert(flag == 1);
+	
 	node2insert->prev = node;
 	node2insert->next = node->next;
 	

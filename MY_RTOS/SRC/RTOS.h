@@ -11,6 +11,7 @@
 #include "semaphore.h"
 #include "rt_mailbox.h"
 #include "rt_memblock.h"
+#include "rt_eflaggroup.h"
 
 void appInit(void);
 

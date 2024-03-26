@@ -71,7 +71,10 @@ uint32_t memBlockGetWithNoWait(memBlock_t* memblock, void* mem) {
 // 如果没有，则将其加入存储块队列
 void memBlockPost(memBlock_t* memblock, void* mem) {
 	uint32_t st = enterCritical();
-	
+
+	// TODO：
+	// 优化方案：判断是否有任务等待，如果有则唤醒一个，这样的逻辑可以直接用eventWakeUp来做
+	// eventWakeUp会唤醒一个最高优先级的任务，如果没有任务等待在此会返回NULL，因此可以判断是否有任务在此等待
 	if(eventGetWaitNum(&memblock->event) > 0) {
 		task_t* task = eventWakeUp(&memblock->event, mem, NO_ERROR);
 		if (task->priority < currentTask->priority) {

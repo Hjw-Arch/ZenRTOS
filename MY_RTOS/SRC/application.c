@@ -10,41 +10,30 @@ task_t ttask2;
 task_t ttask3;
 task_t ttask4;
 
-typedef uint8_t (*tBlock)[100];
-uint8_t mem[20][100];
-memBlock_t memblock;
-
+eFlagGroup_t eflaggroup;
 
 int task1Flag;
 void task1Entry (void* param) {
 	setSysTick(SYS_TICK);
-	tBlock block[20];
-	memBlockInit(&memblock, mem, 100, 20);
-	memBlockInfo_t info = memBlockGetInfo(&memblock);
-	for (int i = 0; i < 20; ++i) {
-		memBlockWait(&memblock, (uint8_t*)&block[i], 0);
-		info = memBlockGetInfo(&memblock);
-	}
-	
-	memBlockWait(&memblock, (uint8_t*)&block[0], 0);
-	
+	eFlagGroupInit(&eflaggroup, 0xFF);
 	while(1) {
 		task1Flag = 0;
 		taskDelay(10);
 		task1Flag = 1;
 		taskDelay(10);
+		
+		eFlagGroupPost(&eflaggroup, 0x4, 0);
 	}
 }
 
 
 int task2Flag;
 void task2Entry (void* param) {
-	uint32_t flag = 0;
+	uint32_t resultFlag;
+	
 	while(1) {
-		if (!flag) {
-			memBlockDestory(&memblock);
-			flag = 1;
-		}
+		eFlagGroupWait(&eflaggroup, EFLAGGROUP_ANY_RET | EFLAGGROUP_CLEAR_AFTER, 0x6, &resultFlag, 0);
+		eFlagGroupGetWithNoWait(&eflaggroup, EFLAGGROUP_ALL_RET, 0x3, &resultFlag);
 		task2Flag = 0;
 		taskDelay(10);
 		task2Flag = 1;
