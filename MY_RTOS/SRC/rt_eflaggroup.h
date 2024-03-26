@@ -21,6 +21,11 @@ typedef struct _eflaggroup {
 	eventCtrlBlock_t event;
 }eFlagGroup_t;
 
+typedef struct _eflaggroupinfo {
+	uint32_t flags;
+	uint32_t waitTaskNum;
+}eFlagGroupInfo_t;
+
 
 void eFlagGroupInit(eFlagGroup_t* eflaggroup, uint32_t flags);
 uint32_t eFlagGroupWait(eFlagGroup_t* eflaggroup, uint32_t waitFlagType, uint32_t expectedFlag, 
@@ -29,6 +34,8 @@ uint32_t eFlagGroupGetWithNoWait(eFlagGroup_t* eflaggroup, uint32_t waitFlagType
 					uint32_t* resultFlag);
 
 void eFlagGroupPost(eFlagGroup_t* eFlagGroup, uint32_t flags, uint32_t isSet);
-
+uint32_t eFlagGroupDestory(eFlagGroup_t* eFlagGroup);
+eFlagGroupInfo_t eFlagGroupGetInfo(eFlagGroup_t* eFlagGroup);
+// void eFlagGroupGetInfo(eFlagGroup_t* eFlagGroup, eFlagGroupInfo_t* info); // 上一函数的高效率版本
 
 #endif

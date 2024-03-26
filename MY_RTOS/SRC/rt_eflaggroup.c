@@ -126,3 +126,45 @@ void eFlagGroupPost(eFlagGroup_t* eFlagGroup, uint32_t flags, uint32_t isSet){
 	
 	leaveCritical(st);
 }
+
+
+uint32_t eFlagGroupDestory(eFlagGroup_t* eFlagGroup) {
+	uint32_t count;
+	
+	uint32_t st = enterCritical();
+	
+	
+	if ((count = eventRemoveAllTask(&eFlagGroup->event, NULL, ERROR_DELETED)) > 0) {
+		taskSched();
+	}
+	
+	leaveCritical(st);
+	
+	return count;
+}
+
+
+eFlagGroupInfo_t eFlagGroupGetInfo(eFlagGroup_t* eFlagGroup) {
+	eFlagGroupInfo_t info;
+	
+	uint32_t st = enterCritical();
+	
+	info.flags = eFlagGroup->flags;
+	info.waitTaskNum = getListNodeNum(&eFlagGroup->event.waitlist);
+	
+	leaveCritical(st);
+	
+	return info;
+}
+
+// 此函数效率高于上一个函数
+/**
+void eFlagGroupGetInfo(eFlagGroup_t* eFlagGroup, eFlagGroupInfo_t* info) {
+	uint32_t st = enterCritical();
+	
+	info->flags = eFlagGroup->flags;
+	info->waitTaskNum = getListNodeNum(&eFlagGroup->event.waitlist);
+	
+	leaveCritical(st);
+}
+**/

@@ -16,13 +16,16 @@ int task1Flag;
 void task1Entry (void* param) {
 	setSysTick(SYS_TICK);
 	eFlagGroupInit(&eflaggroup, 0xFF);
+	eFlagGroupInfo_t info = eFlagGroupGetInfo(&eflaggroup);
+	taskDelay(10);
+	info = eFlagGroupGetInfo(&eflaggroup);
+	eFlagGroupDestory(&eflaggroup);
+	info = eFlagGroupGetInfo(&eflaggroup);
 	while(1) {
 		task1Flag = 0;
 		taskDelay(10);
 		task1Flag = 1;
 		taskDelay(10);
-		
-		eFlagGroupPost(&eflaggroup, 0x4, 0);
 	}
 }
 
@@ -31,9 +34,13 @@ int task2Flag;
 void task2Entry (void* param) {
 	uint32_t resultFlag;
 	
+	eFlagGroupWait(&eflaggroup, EFLAGGROUP_ANY_SET | EFLAGGROUP_CLEAR_AFTER, 0x1, &resultFlag, 0);
+	
+	eFlagGroupInfo_t info = eFlagGroupGetInfo(&eflaggroup);
+	
+	eFlagGroupWait(&eflaggroup, EFLAGGROUP_ANY_SET | EFLAGGROUP_CLEAR_AFTER, 0x1, &resultFlag, 0);
+	
 	while(1) {
-		eFlagGroupWait(&eflaggroup, EFLAGGROUP_ANY_RET | EFLAGGROUP_CLEAR_AFTER, 0x6, &resultFlag, 0);
-		eFlagGroupGetWithNoWait(&eflaggroup, EFLAGGROUP_ALL_RET, 0x3, &resultFlag);
 		task2Flag = 0;
 		taskDelay(10);
 		task2Flag = 1;

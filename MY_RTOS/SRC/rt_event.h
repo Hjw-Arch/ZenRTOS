@@ -10,6 +10,7 @@ typedef enum _eventType {
 	EVENT_TYPE_MAILBOX,
 	EVENT_TYPE_MEMBLOCK,
 	EVENT_TYPE_EFLAGGROUP,
+	EVENT_TYPE_MUTEX,
 }eventType_t;
 
 // 事件控制块的定义

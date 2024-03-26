@@ -18,6 +18,7 @@
 #define TASK_STATUS_WAIT_MAILBOX		(1 << 17)	// 表示任务被阻塞在邮箱上
 #define TASK_STATUS_WAIT_MEMBLOCK		(1 << 18)	// 表示任务被阻塞在存储块上
 #define TASK_STATUS_WAIT_EFLAGGROUP		(1 << 19)	// 表示任务被阻塞在事件标志组上
+#define TASK_STATUS_WAIT_MUTEX			(1 << 20)	// 表示任务被阻塞在互斥信号量上
 
 // 定义任务堆栈的类型为uint32
 typedef uint32_t taskStack_t;
