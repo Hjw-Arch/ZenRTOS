@@ -25,13 +25,27 @@ typedef struct _rt_timer {
 	timerState_t state;
 }timer_t;
 
+typedef struct _timerinfo {
+	uint32_t originalDelayTicks;
+	uint32_t durationDelayTicks;
+	void (*timerFunc)(void* arg);
+	void* arg;
+	uint32_t config;
+	timerState_t state;
+}timerInfo_t;
+
 void timerInit(timer_t* timer, uint32_t originalDelayTicks, uint32_t durationTicks, void (*timerFunc)(void* arg), void* arg, uint32_t config);
 void timerFuncInit(void);
 void timerFuncPost(void);
 void timerStart(timer_t* timer);
 void timerStop(timer_t* timer);
 void timerResume(timer_t* timer);
-
+void timerDestory(timer_t* timer);
+timerInfo_t timerGetInfo(timer_t* timer);
+/**
+// 更高效率的版本
+void timerGetInfo(timer_t* timer, timerInfo_t* info);
+**/
 
 
 #endif

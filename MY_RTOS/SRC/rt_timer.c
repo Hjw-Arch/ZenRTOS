@@ -146,3 +146,37 @@ void timerResume(timer_t* timer) {
 	}
 }
 
+
+void timerDestory(timer_t* timer) {
+	timerStop(timer);
+	timer->state = TIMER_STATE_DESTORYED;
+}
+
+timerInfo_t timerGetInfo(timer_t* timer) {
+	timerInfo_t info;
+	uint32_t st = enterCritical();
+	
+	info.originalDelayTicks = timer->originalDelayTicks;
+	info.durationDelayTicks = timer->durationTicks;
+	info.timerFunc = timer->timerFunc;
+	info.state = timer->state;
+	info.arg = timer->arg;
+	
+	leaveCritical(st);
+	return info;
+}
+
+// 更高效率的版本
+/**
+void timerGetInfo(timer_t* timer, timerInfo_t* info) {
+	uint32_t st = enterCritical();
+	
+	info->originalDelayTicks = timer->originalDelayTicks;
+	info->durationDelayTicks = timer->durationTicks;
+	info->timerFunc = timer->timerFunc;
+	info->state = timer->state;
+	info->arg = timer->arg;
+	
+	leaveCritical(st);
+}
+**/

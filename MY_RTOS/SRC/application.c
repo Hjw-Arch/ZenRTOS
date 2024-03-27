@@ -43,11 +43,10 @@ void task1Entry (void* param) {
 		
 		if (!stopped) {
 			taskDelay(2000);
-			timerStop(&timer1);
-			taskDelay(200);
-			timerResume(&timer1);
-			stopped = 1;
+			timerDestory(&timer1);
 		}
+		
+		timerInfo_t info = timerGetInfo(&timer2);
 	}
 }
 
