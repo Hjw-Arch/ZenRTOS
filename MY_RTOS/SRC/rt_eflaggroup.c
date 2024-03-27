@@ -7,7 +7,7 @@ void eFlagGroupInit(eFlagGroup_t* eflaggroup, uint32_t flags) {
 }
 
 // 被改变的flags表示的是哪些标志位是被满足的
-uint32_t eFlagGroupCheckExpected(eFlagGroup_t* eFlagGroup, uint32_t waitEFlagType, uint32_t* flags) {
+static uint32_t eFlagGroupCheckExpected(eFlagGroup_t* eFlagGroup, uint32_t waitEFlagType, uint32_t* flags) {
 	uint32_t srcFlag = *flags;
 	uint32_t isWaitSet = waitEFlagType & EFLAGGROUP_SET;
 	uint32_t isWaitAll = waitEFlagType & EFLAGGROUP_ALL;

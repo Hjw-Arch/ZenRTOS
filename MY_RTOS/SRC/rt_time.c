@@ -3,6 +3,7 @@
 #include "lock.h"
 #include "rt_event.h"
 #include "semaphore.h"
+#include "rt_timer.h"
 
 listHead taskDelayedList;		// 延时队列
 
@@ -33,6 +34,7 @@ void taskDelay (uint32_t ms) {
 	
 }
 
+// 这里没有加保护，目前看是不用，但是如果后面有更高优先级的中断异常就需要加上
 void taskTimeSliceHandler() {
 	// 待完善：这里直接使用了list内部的元素进行迭代，没有进行封装，可以实现一个链表迭代器来封装一下
 	for (listNode* node = taskDelayedList.firstNode; node != &(taskDelayedList.headNode); node = node->next) {
@@ -53,6 +55,8 @@ void taskTimeSliceHandler() {
 		}
 		currentTask->slice = TIME_SLICE;
 	}
+	
+	timerFuncPost();
 	
 	taskSched();
 }

@@ -13,6 +13,7 @@
 #include "rt_memblock.h"
 #include "rt_eflaggroup.h"
 #include "rt_mutex.h"
+#include "rt_timer.h"
 
 void appInit(void);
 

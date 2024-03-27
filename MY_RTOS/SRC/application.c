@@ -10,26 +10,43 @@ task_t ttask2;
 task_t ttask3;
 task_t ttask4;
 
-mutex_t mutex;
+timer_t timer1, timer2, timer3;
+
+uint32_t bit1, bit2, bit3;
+
+void timerFuc(void* arg) {
+	uint32_t* ptrBit = (uint32_t*)arg;
+	*ptrBit ^= 0x1;
+	
+}
+
+void delay() {
+	for (uint32_t i = 0; i < 0xffff; ++i);
+}
 
 int task1Flag;
 void task1Entry (void* param) {
+	uint32_t stopped = 0;
+	
 	setSysTick(SYS_TICK);
-	mutexInit(&mutex);
-	mutexInfo_t info = mutexGetInfo(&mutex);
-	mutexWait(&mutex, 0);
-	info = mutexGetInfo(&mutex);
-	mutexWait(&mutex, 0);
-	info = mutexGetInfo(&mutex);
-	uint32_t flag = 0;
+	timerInit(&timer1, 100, 10, timerFuc, &bit1, TIMER_CONFIG_TYPE_STRICT);
+	timerStart(&timer1);
+	timerInit(&timer2, 200, 20, timerFuc, &bit2, TIMER_CONFIG_TYPE_STRICT);
+	timerStart(&timer2);
+	timerInit(&timer3, 300, 30, timerFuc, &bit3, TIMER_CONFIG_TYPE_LOOSE);
+	timerStart(&timer3);
 	while(1) {
 		task1Flag = 0;
 		taskDelay(10);
 		task1Flag = 1;
 		taskDelay(10);
 		
-		if (!flag) {
-			mutexDestory(&mutex);
+		if (!stopped) {
+			taskDelay(2000);
+			timerStop(&timer1);
+			taskDelay(200);
+			timerResume(&timer1);
+			stopped = 1;
 		}
 	}
 }
@@ -37,9 +54,6 @@ void task1Entry (void* param) {
 
 int task2Flag;
 void task2Entry (void* param) {
-	mutexInfo_t info2 = mutexGetInfo(&mutex);
-	mutexWait(&mutex, 0);
-	info2 = mutexGetInfo(&mutex);
 	while(1) {
 		task2Flag = 0;
 		taskDelay(10);

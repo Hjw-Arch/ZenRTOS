@@ -13,6 +13,9 @@ void rtosInit() {
 	// 初始化空闲任务
 	taskInit(&_idleTask, idleTaskEntry, (void*)0, &idleTaskEnv[512], RTOS_PRIORITY_COUNT - 1);
 	idleTask = &_idleTask;
+	
+	// 开启软定时器功能
+	timerFuncInit();
 }
 
 int main(){
