@@ -2,6 +2,8 @@
 #include "semaphore.h"
 #include "lock.h"
 
+// 同一个软定时器最好只在同一个任务内调用！
+
 static listHead timerStrictList;	// 在时间片中断内处理的定时器列表
 static listHead timerLooseList;	// 在定时器任务中处理的定时器列表
 static sem_t semForTimerProtect;
@@ -88,21 +90,26 @@ void timerInit(timer_t* timer, uint32_t originalDelayTicks, uint32_t durationTic
 	timer->state = TIMER_STATE_CREATED;
 }
 
+// 定时器最好只在一个任务内调用
+// 这里对全局变量的保护没有做好
 // 让定时器开始计时
 void timerStart(timer_t* timer) {
 	if (timer->state == TIMER_STATE_CREATED || timer->state == TIMER_STATE_STOPPED) {
-		timer->state = TIMER_STATE_STARTED;
-		timer->rtDelayTicks = timer->originalDelayTicks ? timer->originalDelayTicks : timer->durationTicks;
-		
 		if (timer->config & TIMER_CONFIG_TYPE_STRICT) {
 			// 中断处理函数也会访问timerStrictList，因此使用临界区
 			uint32_t st = enterCritical();
+			
 			listNodeInsert2Tail(&timerStrictList, &timer->linkNode);
+			timer->state = TIMER_STATE_STARTED;
+			timer->rtDelayTicks = timer->originalDelayTicks ? timer->originalDelayTicks : timer->durationTicks;
+			
 			leaveCritical(st);
 		} else {
 			// timerLooseList只会被timerTask访问，用信号量就可以
 			semWait(&semForTimerProtect, 0);
 			listNodeInsert2Tail(&timerLooseList, &timer->linkNode);
+			timer->state = TIMER_STATE_STARTED;
+			timer->rtDelayTicks = timer->originalDelayTicks ? timer->originalDelayTicks : timer->durationTicks;
 			semPost(&semForTimerProtect);
 		}
 	}
@@ -116,13 +123,14 @@ void timerStop(timer_t* timer) {
 		if (timer->config & TIMER_CONFIG_TYPE_STRICT) {
 			uint32_t st = enterCritical();
 			listRemove(&timerStrictList, &timer->linkNode);
+			timer->state = TIMER_STATE_STOPPED;
 			leaveCritical(st);
 		} else {
 			semWait(&semForTimerProtect, 0);
 			listRemove(&timerLooseList, &timer->linkNode);
+			timer->state = TIMER_STATE_STOPPED;
 			semPost(&semForTimerProtect);
 		}
-		timer->state = TIMER_STATE_STOPPED;
 	}
 	
 }
@@ -130,26 +138,45 @@ void timerStop(timer_t* timer) {
 // 恢复定时器运行
 void timerResume(timer_t* timer) {
 	if (timer->state == TIMER_STATE_STOPPED) {
-		timer->state = TIMER_STATE_STARTED;
 		
 		if (timer->config & TIMER_CONFIG_TYPE_STRICT) {
 			// 中断处理函数也会访问timerStrictList，因此使用临界区
 			uint32_t st = enterCritical();
 			listNodeInsert2Tail(&timerStrictList, &timer->linkNode);
+			timer->state = TIMER_STATE_STARTED;
 			leaveCritical(st);
 		} else {
 			// timerLooseList只会被timerTask访问，用信号量就可以
 			semWait(&semForTimerProtect, 0);
 			listNodeInsert2Tail(&timerLooseList, &timer->linkNode);
+			timer->state = TIMER_STATE_STARTED;
 			semPost(&semForTimerProtect);
 		}
 	}
 }
 
-
+// 这个函数的保护没有做好
+/**
 void timerDestory(timer_t* timer) {
 	timerStop(timer);
 	timer->state = TIMER_STATE_DESTORYED;
+}
+**/
+
+void timerDestory(timer_t* timer) {
+	if (timer->state == TIMER_STATE_RUNNING || timer->state == TIMER_STATE_STARTED) {
+		if (timer->config & TIMER_CONFIG_TYPE_STRICT) {
+			uint32_t st = enterCritical();
+			listRemove(&timerStrictList, &timer->linkNode);
+			timer->state = TIMER_STATE_DESTORYED;
+			leaveCritical(st);
+		} else {
+			semWait(&semForTimerProtect, 0);
+			listRemove(&timerLooseList, &timer->linkNode);
+			timer->state = TIMER_STATE_DESTORYED;
+			semPost(&semForTimerProtect);
+		}
+	}
 }
 
 timerInfo_t timerGetInfo(timer_t* timer) {

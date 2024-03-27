@@ -285,7 +285,12 @@ Section Cross References
     rt_mutex.o(i.mutexWait) refers to rt_task.o(i.taskSched2Ready) for taskSched2Ready
     rt_mutex.o(i.mutexWait) refers to rt_task.o(.data) for currentTask
     rt_timer.o(i.timerCallFuncList) refers to rt_list.o(i.listRemove) for listRemove
-    rt_timer.o(i.timerDestory) refers to rt_timer.o(i.timerStop) for timerStop
+    rt_timer.o(i.timerDestory) refers to lock.o(i.enterCritical) for enterCritical
+    rt_timer.o(i.timerDestory) refers to rt_list.o(i.listRemove) for listRemove
+    rt_timer.o(i.timerDestory) refers to lock.o(i.leaveCritical) for leaveCritical
+    rt_timer.o(i.timerDestory) refers to semaphore.o(i.semWait) for semWait
+    rt_timer.o(i.timerDestory) refers to semaphore.o(i.semPost) for semPost
+    rt_timer.o(i.timerDestory) refers to rt_timer.o(.bss) for timerStrictList
     rt_timer.o(i.timerFuncInit) refers to rt_list.o(i.listHeadInit) for listHeadInit
     rt_timer.o(i.timerFuncInit) refers to semaphore.o(i.semInit) for semInit
     rt_timer.o(i.timerFuncInit) refers to rt_task.o(i.taskInit) for taskInit
@@ -509,13 +514,14 @@ Removing Unused input sections from the image.
     Removing rt_mutex.o(i.mutexInit), (24 bytes).
     Removing rt_mutex.o(i.mutexPost), (152 bytes).
     Removing rt_mutex.o(i.mutexWait), (224 bytes).
-    Removing rt_timer.o(i.timerResume), (84 bytes).
+    Removing rt_timer.o(i.timerResume), (92 bytes).
+    Removing rt_timer.o(i.timerStop), (100 bytes).
     Removing system_armcm3.o(.rev16_text), (4 bytes).
     Removing system_armcm3.o(.revsh_text), (4 bytes).
     Removing system_armcm3.o(.rrx_text), (6 bytes).
     Removing system_armcm3.o(i.SystemCoreClockUpdate), (16 bytes).
 
-66 unused section(s) (total 3204 bytes) removed from the image.
+67 unused section(s) (total 3312 bytes) removed from the image.
 
 ==============================================================================
 
@@ -532,53 +538,53 @@ Image Symbol Table
     ../clib/angel/boardlib.s                 0x00000000   Number         0  boardinit1.o ABSOLUTE
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_copy.o ABSOLUTE
     ../clib/angel/handlers.s                 0x00000000   Number         0  __scatter_zi.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry2.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit.o ABSOLUTE
+    ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry4.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry.o ABSOLUTE
     ../clib/angel/kernel.s                   0x00000000   Number         0  rtexit2.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry2.o ABSOLUTE
-    ../clib/angel/kernel.s                   0x00000000   Number         0  __rtentry4.o ABSOLUTE
     ../clib/angel/rt.s                       0x00000000   Number         0  rt_raise.o ABSOLUTE
     ../clib/angel/scatter.s                  0x00000000   Number         0  __scatter.o ABSOLUTE
     ../clib/angel/startup.s                  0x00000000   Number         0  __main.o ABSOLUTE
-    ../clib/angel/sys.s                      0x00000000   Number         0  use_no_semi.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  indicate_semi.o ABSOLUTE
+    ../clib/angel/sys.s                      0x00000000   Number         0  use_no_semi.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  sys_stackheap_outer.o ABSOLUTE
     ../clib/angel/sys.s                      0x00000000   Number         0  libspace.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_command.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_wrch.o ABSOLUTE
     ../clib/angel/sysapp.c                   0x00000000   Number         0  sys_exit.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
+    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
     ../clib/armsys.c                         0x00000000   Number         0  _get_argv_nomalloc.o ABSOLUTE
-    ../clib/armsys.c                         0x00000000   Number         0  argv_veneer.o ABSOLUTE
-    ../clib/assert.c                         0x00000000   Number         0  assert.o ABSOLUTE
+    ../clib/armsys.c                         0x00000000   Number         0  no_argv.o ABSOLUTE
     ../clib/assert.c                         0x00000000   Number         0  assert_puts.o ABSOLUTE
+    ../clib/assert.c                         0x00000000   Number         0  assert.o ABSOLUTE
     ../clib/heapalloc.c                      0x00000000   Number         0  hrguard.o ABSOLUTE
     ../clib/heapaux.c                        0x00000000   Number         0  heapauxi.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libinit.o ABSOLUTE
-    ../clib/libinit.s                        0x00000000   Number         0  libshutdown2.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libinit2.o ABSOLUTE
+    ../clib/libinit.s                        0x00000000   Number         0  libshutdown2.o ABSOLUTE
     ../clib/libinit.s                        0x00000000   Number         0  libshutdown.o ABSOLUTE
     ../clib/memcpset.s                       0x00000000   Number         0  rt_memcpy_w.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_other.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_segv_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_cppl_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_pvfn_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_fpe_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_outer.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_inner.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_inner.o ABSOLUTE
-    ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_formal.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_abrt_outer.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_exit.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_stak_inner.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  __raise.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_general.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_formal.o ABSOLUTE
     ../clib/signal.c                         0x00000000   Number         0  defsig_rtmem_outer.o ABSOLUTE
+    ../clib/signal.c                         0x00000000   Number         0  defsig_rtred_inner.o ABSOLUTE
     ../clib/signal.s                         0x00000000   Number         0  defsig.o ABSOLUTE
-    ../clib/stdlib.c                         0x00000000   Number         0  exit.o ABSOLUTE
     ../clib/stdlib.c                         0x00000000   Number         0  abort.o ABSOLUTE
+    ../clib/stdlib.c                         0x00000000   Number         0  exit.o ABSOLUTE
     ../fplib/fpinit.s                        0x00000000   Number         0  fpinit.o ABSOLUTE
     RTE\Device\ARMCM3\startup_ARMCM3.s       0x00000000   Number         0  startup_armcm3.o ABSOLUTE
     RTE\Device\ARMCM3\system_ARMCM3.c        0x00000000   Number         0  system_armcm3.o ABSOLUTE
@@ -718,17 +724,16 @@ Image Symbol Table
     i.timerCallFuncList                      0x00000d70   Section        0  rt_timer.o(i.timerCallFuncList)
     timerCallFuncList                        0x00000d71   Thumb Code    72  rt_timer.o(i.timerCallFuncList)
     i.timerDestory                           0x00000db8   Section        0  rt_timer.o(i.timerDestory)
-    i.timerFuc                               0x00000dca   Section        0  application.o(i.timerFuc)
-    i.timerFuncInit                          0x00000dd8   Section        0  rt_timer.o(i.timerFuncInit)
-    i.timerFuncPost                          0x00000e28   Section        0  rt_timer.o(i.timerFuncPost)
-    i.timerGetInfo                           0x00000e40   Section        0  rt_timer.o(i.timerGetInfo)
-    i.timerInit                              0x00000e7a   Section        0  rt_timer.o(i.timerInit)
-    i.timerStart                             0x00000eb4   Section        0  rt_timer.o(i.timerStart)
-    i.timerStop                              0x00000f1c   Section        0  rt_timer.o(i.timerStop)
-    i.timerTaskFunc                          0x00000f78   Section        0  rt_timer.o(i.timerTaskFunc)
-    timerTaskFunc                            0x00000f79   Thumb Code    32  rt_timer.o(i.timerTaskFunc)
-    .constdata                               0x00000fa4   Section      256  bitmap.o(.constdata)
-    quickFindTable                           0x00000fa4   Data         256  bitmap.o(.constdata)
+    i.timerFuc                               0x00000e1c   Section        0  application.o(i.timerFuc)
+    i.timerFuncInit                          0x00000e28   Section        0  rt_timer.o(i.timerFuncInit)
+    i.timerFuncPost                          0x00000e78   Section        0  rt_timer.o(i.timerFuncPost)
+    i.timerGetInfo                           0x00000e90   Section        0  rt_timer.o(i.timerGetInfo)
+    i.timerInit                              0x00000eca   Section        0  rt_timer.o(i.timerInit)
+    i.timerStart                             0x00000f04   Section        0  rt_timer.o(i.timerStart)
+    i.timerTaskFunc                          0x00000f7c   Section        0  rt_timer.o(i.timerTaskFunc)
+    timerTaskFunc                            0x00000f7d   Thumb Code    32  rt_timer.o(i.timerTaskFunc)
+    .constdata                               0x00000fa8   Section      256  bitmap.o(.constdata)
+    quickFindTable                           0x00000fa8   Data         256  bitmap.o(.constdata)
     .data                                    0x20000000   Section        1  lock.o(.data)
     .data                                    0x20000004   Section       16  rt_task.o(.data)
     .data                                    0x20000014   Section       28  application.o(.data)
@@ -941,16 +946,15 @@ Image Symbol Table
     taskSched2Unready                        0x00000c55   Thumb Code    86  rt_task.o(i.taskSched2Unready)
     taskSwitch                               0x00000cb5   Thumb Code    10  switch.o(i.taskSwitch)
     taskTimeSliceHandler                     0x00000cc5   Thumb Code   158  rt_time.o(i.taskTimeSliceHandler)
-    timerDestory                             0x00000db9   Thumb Code    18  rt_timer.o(i.timerDestory)
-    timerFuc                                 0x00000dcb   Thumb Code    12  application.o(i.timerFuc)
-    timerFuncInit                            0x00000dd9   Thumb Code    52  rt_timer.o(i.timerFuncInit)
-    timerFuncPost                            0x00000e29   Thumb Code    16  rt_timer.o(i.timerFuncPost)
-    timerGetInfo                             0x00000e41   Thumb Code    58  rt_timer.o(i.timerGetInfo)
-    timerInit                                0x00000e7b   Thumb Code    56  rt_timer.o(i.timerInit)
-    timerStart                               0x00000eb5   Thumb Code    90  rt_timer.o(i.timerStart)
-    timerStop                                0x00000f1d   Thumb Code    80  rt_timer.o(i.timerStop)
-    Region$$Table$$Base                      0x000010a4   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x000010c4   Number         0  anon$$obj.o(Region$$Table)
+    timerDestory                             0x00000db9   Thumb Code    86  rt_timer.o(i.timerDestory)
+    timerFuc                                 0x00000e1d   Thumb Code    12  application.o(i.timerFuc)
+    timerFuncInit                            0x00000e29   Thumb Code    52  rt_timer.o(i.timerFuncInit)
+    timerFuncPost                            0x00000e79   Thumb Code    16  rt_timer.o(i.timerFuncPost)
+    timerGetInfo                             0x00000e91   Thumb Code    58  rt_timer.o(i.timerGetInfo)
+    timerInit                                0x00000ecb   Thumb Code    56  rt_timer.o(i.timerInit)
+    timerStart                               0x00000f05   Thumb Code   108  rt_timer.o(i.timerStart)
+    Region$$Table$$Base                      0x000010a8   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x000010c8   Number         0  anon$$obj.o(Region$$Table)
     schedLockCount                           0x20000000   Data           1  lock.o(.data)
     taskPriorityBitmap                       0x20000004   Data           4  rt_task.o(.data)
     currentTask                              0x20000008   Data           4  rt_task.o(.data)
@@ -990,9 +994,9 @@ Memory Map of the image
 
   Image Entry point : 0x0000018d
 
-  Load Region LR_1 (Base: 0x00000000, Size: 0x000010f8, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x00000000, Size: 0x000010fc, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Base: 0x00000000, Size: 0x000010c4, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x00000000, Size: 0x000010c8, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -1117,19 +1121,17 @@ Memory Map of the image
     0x00000cb4   0x00000010   Code   RO           72    i.taskSwitch        switch.o
     0x00000cc4   0x000000ac   Code   RO          626    i.taskTimeSliceHandler  rt_time.o
     0x00000d70   0x00000048   Code   RO          828    i.timerCallFuncList  rt_timer.o
-    0x00000db8   0x00000012   Code   RO          829    i.timerDestory      rt_timer.o
-    0x00000dca   0x0000000c   Code   RO          448    i.timerFuc          application.o
-    0x00000dd6   0x00000002   PAD
-    0x00000dd8   0x00000050   Code   RO          830    i.timerFuncInit     rt_timer.o
-    0x00000e28   0x00000018   Code   RO          831    i.timerFuncPost     rt_timer.o
-    0x00000e40   0x0000003a   Code   RO          832    i.timerGetInfo      rt_timer.o
-    0x00000e7a   0x00000038   Code   RO          833    i.timerInit         rt_timer.o
-    0x00000eb2   0x00000002   PAD
-    0x00000eb4   0x00000068   Code   RO          835    i.timerStart        rt_timer.o
-    0x00000f1c   0x0000005c   Code   RO          836    i.timerStop         rt_timer.o
-    0x00000f78   0x0000002c   Code   RO          837    i.timerTaskFunc     rt_timer.o
-    0x00000fa4   0x00000100   Data   RO          186    .constdata          bitmap.o
-    0x000010a4   0x00000020   Data   RO         1108    Region$$Table       anon$$obj.o
+    0x00000db8   0x00000064   Code   RO          829    i.timerDestory      rt_timer.o
+    0x00000e1c   0x0000000c   Code   RO          448    i.timerFuc          application.o
+    0x00000e28   0x00000050   Code   RO          830    i.timerFuncInit     rt_timer.o
+    0x00000e78   0x00000018   Code   RO          831    i.timerFuncPost     rt_timer.o
+    0x00000e90   0x0000003a   Code   RO          832    i.timerGetInfo      rt_timer.o
+    0x00000eca   0x00000038   Code   RO          833    i.timerInit         rt_timer.o
+    0x00000f02   0x00000002   PAD
+    0x00000f04   0x00000078   Code   RO          835    i.timerStart        rt_timer.o
+    0x00000f7c   0x0000002c   Code   RO          837    i.timerTaskFunc     rt_timer.o
+    0x00000fa8   0x00000100   Data   RO          186    .constdata          bitmap.o
+    0x000010a8   0x00000020   Data   RO         1108    Region$$Table       anon$$obj.o
 
 
     Execution Region ER_RW (Base: 0x20000000, Size: 0x00000034, Max: 0xffffffff, ABSOLUTE)
@@ -1173,16 +1175,16 @@ Image component sizes
        194          0          0          0          0       4841   rt_list.o
        580         60          0         16       2504       6676   rt_task.o
        232         20          0          0         12       3498   rt_time.o
-       548         74          0          0       4240       5499   rt_timer.o
+       554         74          0          0       4240       5055   rt_timer.o
        194         10          0          0          0       2066   semaphore.o
         64         26        192          0       4096        840   startup_armcm3.o
        104         26          0          0          0       7049   switch.o
         16          8          0          4          0        659   system_armcm3.o
 
     ----------------------------------------------------------------------
-      3126        430        480         52      27632      79295   Object Totals
+      3130        430        480         52      27632      78851   Object Totals
          0          0         32          0          0          0   (incl. Generated)
-        12          0          0          3          0          0   (incl. Padding)
+        10          0          0          3          0          0   (incl. Padding)
 
     ----------------------------------------------------------------------
 
@@ -1238,15 +1240,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      3812        522        480         52      27732      77091   Grand Totals
-      3812        522        480         52      27732      77091   ELF Image Totals
-      3812        522        480         52          0          0   ROM Totals
+      3816        522        480         52      27732      76699   Grand Totals
+      3816        522        480         52      27732      76699   ELF Image Totals
+      3816        522        480         52          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 4292 (   4.19kB)
+    Total RO  Size (Code + RO Data)                 4296 (   4.20kB)
     Total RW  Size (RW Data + ZI Data)             27784 (  27.13kB)
-    Total ROM Size (Code + RO Data + RW Data)       4344 (   4.24kB)
+    Total ROM Size (Code + RO Data + RW Data)       4348 (   4.25kB)
 
 ==============================================================================
 
