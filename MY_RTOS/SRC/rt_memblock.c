@@ -4,6 +4,8 @@
 
 
 // 初始化
+// 这里好像有问题
+// void* memStart 
 uint32_t memBlockInit(memBlock_t* memBlock, void* memStart, uint32_t blockSize, uint32_t blockNum){
 	uint8_t* memBlockStart = (uint8_t*)memStart;
 	uint8_t* memBlockEnd = memBlockStart + blockSize * blockNum;
@@ -21,7 +23,7 @@ uint32_t memBlockInit(memBlock_t* memBlock, void* memStart, uint32_t blockSize, 
 	while (memBlockStart < memBlockEnd) {
 		listNodeInit((listNode*)memBlockStart);
 		listNodeInsert2Tail(&memBlock->blockList, (listNode*)memBlockStart);
-		
+		// 这里好像有问题
 		memBlockStart += blockSize;
 	}
 	

@@ -11,7 +11,7 @@ void rtosInit() {
 	}
 	
 	// 初始化空闲任务
-	taskInit(&_idleTask, idleTaskEntry, (void*)0, &idleTaskEnv[512], RTOS_PRIORITY_COUNT - 1);
+	taskInit(&_idleTask, idleTaskEntry, (void*)0, idleTaskEnv, RTOS_PRIORITY_COUNT - 1, sizeof(idleTaskEnv));
 	idleTask = &_idleTask;
 	
 	// 开启软定时器功能
@@ -21,7 +21,7 @@ void rtosInit() {
 int main(){
 	rtosInit();
 	
-	appInit();
+//	appInit();
 	
 	nextTask = getHighestReadyTask();
 	

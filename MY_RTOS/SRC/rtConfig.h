@@ -22,7 +22,7 @@ typedef enum _error {
 #define TIMER_TASK_STACK_SIZE		1024	// 定时器任务的堆栈大小
 #define TIMER_TASK_PRIORITY			1		// 定时器任务的优先级，注意，不能和空闲任务的优先级一致，否则它两会按时间片交替运行
 
-// 高实时性
+// 高实时性模式
 #define HIGH_RT_MODE
 
 

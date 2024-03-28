@@ -27,7 +27,12 @@ struct _eventCtrlBlock_t;		// 前向引用
 
 // 定义任务结构
 typedef struct _t_Task {
-	taskStack_t *stack;  // 任务的栈指针
+	taskStack_t *stackTop;  // 任务的栈指针
+
+// 监测任务栈使用情况需要的字段	
+	taskStack_t *stackBase;	// 栈底指针
+	
+	uint32_t stackSize;	// 栈的容量
 	
 	uint32_t slice; // 时间片
 	
@@ -62,6 +67,9 @@ typedef struct _taskInfo {
 	uint32_t slice; // 时间片
 	uint32_t priority; // 任务的优先级
 	uint32_t suspendCounter; // 挂起计数器
+	uint32_t stackSize;	// 栈的容量
+	uint32_t stackMinFreeSize; // 栈的空闲容量
+	uint32_t stackRtFreeSize;	// 实时的剩余空间
 }taskInfo_t;
 
 extern task_t _idleTask;
@@ -80,7 +88,7 @@ void runFirstTask(void);
 void runFirstTask2(void);
 void taskSwitch(void);
 
-void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* stack, uint32_t priority);
+void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* stack, uint32_t priority, uint32_t stackSize);
 void taskSched(void);
 
 void idleTaskEntry (void* param);
@@ -103,6 +111,9 @@ void taskDeleteSelf(void);
 
 taskInfo_t taskGetInfo(task_t* task);
 // void taskGetInfo(task_t* task, taskInfo_t* taskinfo); // 此版本相较于上一个开销更小一点，不过小的不多
+
+
+void checkCpuUsage(void);
 
 #endif
 

@@ -56,6 +56,8 @@ void taskTimeSliceHandler() {
 		currentTask->slice = TIME_SLICE;
 	}
 	
+	checkCpuUsage();
+	
 	timerFuncPost();
 	
 	taskSched();

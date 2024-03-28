@@ -67,7 +67,7 @@ void timerFuncInit(void) {
 	#error "The priority of timerTask must be greater then (RTOS_PRIORITY_COUNT - 1)"
 #endif	
 	
-	taskInit(&timerTask, timerTaskFunc, NULL, &timerTaskStack[TIMER_TASK_STACK_SIZE], TIMER_TASK_PRIORITY);
+	taskInit(&timerTask, timerTaskFunc, NULL, timerTaskStack, TIMER_TASK_PRIORITY, sizeof(timerTaskStack));
 }
 
 

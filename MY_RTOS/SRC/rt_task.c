@@ -1,6 +1,10 @@
 #include "rt_task.h"
 #include "lock.h"
 #include "ARMCM3.h"
+#include <string.h>
+#include "rt_time.h"
+
+void appInit(void);
 
 Bitmap taskPriorityBitmap;
 
@@ -8,36 +12,42 @@ task_t _idleTask;
 
 task_t* currentTask;
 task_t* nextTask;
-task_t* idleTask;
+
 listHead taskTable[RTOS_PRIORITY_COUNT];
 
 taskStack_t idleTaskEnv[512];
 
 
 // 任务初始化
-void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* stack, uint32_t priority) {
+void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* stack, uint32_t priority, uint32_t stackSize) {
+	task->stackBase = stack;
+	task->stackSize = stackSize;
+	memset(stack, 0, stackSize);
+	
+	taskStack_t* stackTop = stack + stackSize / sizeof(taskStack_t);
+	
 	// 进入中断/异常时， 硬件会自动将8个寄存器压栈，顺序是xPSR、PC(R15)、LR(R14)、R12以及R3-R0
-	*(--stack) = (unsigned long)(1 << 24); // xPSR中第24位，即T标志位设置为1，否则进入ARM模式，这在CM3上不允许！
-	*(--stack) = (unsigned long)entry;
-	*(--stack) = (unsigned long)0x14;
-	*(--stack) = (unsigned long)0x12;
-	*(--stack) = (unsigned long)0x03;
-	*(--stack) = (unsigned long)0x02;
-	*(--stack) = (unsigned long)0x01;
-	*(--stack) = (unsigned long)param;
+	*(--stackTop) = (unsigned long)(1 << 24); // xPSR中第24位，即T标志位设置为1，否则进入ARM模式，这在CM3上不允许！
+	*(--stackTop) = (unsigned long)entry;
+	*(--stackTop) = (unsigned long)0x14;
+	*(--stackTop) = (unsigned long)0x12;
+	*(--stackTop) = (unsigned long)0x03;
+	*(--stackTop) = (unsigned long)0x02;
+	*(--stackTop) = (unsigned long)0x01;
+	*(--stackTop) = (unsigned long)param;
 	
 	// 手动保存R11-R4寄存器
-	*(--stack) = (unsigned long)0x11;
-	*(--stack) = (unsigned long)0x10;
-	*(--stack) = (unsigned long)0x09;
-	*(--stack) = (unsigned long)0x08;
-	*(--stack) = (unsigned long)0x07;
-	*(--stack) = (unsigned long)0x06;
-	*(--stack) = (unsigned long)0x05;
-	*(--stack) = (unsigned long)0x04;
+	*(--stackTop) = (unsigned long)0x11;
+	*(--stackTop) = (unsigned long)0x10;
+	*(--stackTop) = (unsigned long)0x09;
+	*(--stackTop) = (unsigned long)0x08;
+	*(--stackTop) = (unsigned long)0x07;
+	*(--stackTop) = (unsigned long)0x06;
+	*(--stackTop) = (unsigned long)0x05;
+	*(--stackTop) = (unsigned long)0x04;
 	
 		
-	task->stack = stack;
+	task->stackTop = stackTop;
 	task->delayTicks = 0;
 	task->priority = priority;
 	task->state = TASK_STATUS_READY;	// 初始状态为就绪态
@@ -78,11 +88,6 @@ void taskSched(void) {
 	}
 	
 	leaveCritical(st);
-}
-
-
-void idleTaskEntry (void* param) {
-	while(1) ;
 }
 
 
@@ -241,13 +246,25 @@ void taskDeleteSelf(void) {
 // 但这种方式更符合编程习惯
 taskInfo_t taskGetInfo(task_t* task) {
 	taskInfo_t taskinfo;
-	
+	taskStack_t* stackEnd;
 	uint32_t st = enterCritical();
 	
 	taskinfo.priority = task->priority;
 	taskinfo.slice = task->slice;
 	taskinfo.state = task->state;
 	taskinfo.suspendCounter = task->suspendCounter;
+	taskinfo.stackSize = task->stackSize;
+	
+	taskinfo.stackRtFreeSize = (task->stackTop - task->stackBase) * sizeof(taskStack_t);
+	
+	taskinfo.stackMinFreeSize = 0;
+	stackEnd = task->stackBase;
+	
+	while((*stackEnd++ == 0) && (stackEnd <= task->stackTop)) {
+		taskinfo.stackMinFreeSize++;
+	}
+	
+	taskinfo.stackMinFreeSize *= sizeof(taskStack_t);
 	
 	leaveCritical(st);
 	
@@ -256,13 +273,24 @@ taskInfo_t taskGetInfo(task_t* task) {
 
 /** 此版本相较于上一个函数，开销更小一点
 void taskGetInfo(task_t* task, taskInfo_t* taskinfo) {
-	
+	taskStack_t* stackEnd;
 	uint32_t st = enterCritical();
 	
 	taskinfo->priority = task->priority;
 	taskinfo->slice = task->slice;
 	taskinfo->state = task->state;
 	taskinfo->suspendCounter = task->suspendCounter;
+
+	taskinfo->stackRtFreeSize = (task->stackTop - task->stackBase) * sizeof(taskStack_t);
+	
+	taskinfo->stackMinFreeSize = 0;
+	stackEnd = task->stackBase;
+	
+	while((*stackEnd++ == 0) && (stackEnd <= task->stackTop)) {
+		taskinfo->stackMinFreeSize++;
+	}
+	
+	taskinfo->stackMinFreeSize *= sizeof(taskStack_t);
 	
 	leaveCritical(st);
 }
