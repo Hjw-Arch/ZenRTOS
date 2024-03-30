@@ -15,7 +15,7 @@ void rtosInit() {
 	idleTask = &_idleTask;
 	
 	// 开启软定时器功能
-	timerFuncInit();
+//	timerFuncInit();
 }
 
 int main(){

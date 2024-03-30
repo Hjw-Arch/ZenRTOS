@@ -4,18 +4,12 @@
 #include <string.h>
 #include "rt_time.h"
 
-void appInit(void);
-
 Bitmap taskPriorityBitmap;
-
-task_t _idleTask;
 
 task_t* currentTask;
 task_t* nextTask;
 
 listHead taskTable[RTOS_PRIORITY_COUNT];
-
-taskStack_t idleTaskEnv[512];
 
 
 // 任务初始化

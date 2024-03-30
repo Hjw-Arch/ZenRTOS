@@ -25,6 +25,12 @@ typedef enum _error {
 // 高实时性模式
 #define HIGH_RT_MODE
 
+// 开启软定时器功能
+#define SOFT_TIMER
+
+// 开始CPU利用率检查功能
+#define CPU_USAGE_ENABLE
+
 
 
 #endif

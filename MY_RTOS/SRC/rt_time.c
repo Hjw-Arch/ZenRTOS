@@ -4,6 +4,7 @@
 #include "rt_event.h"
 #include "semaphore.h"
 #include "rt_timer.h"
+#include "rt_idletask.h"
 
 listHead taskDelayedList;		// —” ±∂”¡–
 

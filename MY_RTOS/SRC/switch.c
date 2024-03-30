@@ -55,8 +55,8 @@ void runFirstTask() {
 void runFirstTask2() {
 //	将idletask的栈拿来用，将在任务切换中来保存任务运行前的R4-R11（没有用），这样不会浪费空间。
 //	只要将psp和currenttask指向一段无用的地址就可以了
-	__set_PSP((uint32_t)(&idleTaskEnv[256]));
-	currentTask = (task_t*)(&idleTaskEnv[256]);		// 将currenttask指向idletask栈区，在任务切换中来使用（没有用），这样不会浪费空间。
+	__set_PSP((uint32_t)(&idleTaskEnv[TASK_STACK_SIZE - 1 - 16]));
+	currentTask = (task_t*)(&idleTaskEnv[TASK_STACK_SIZE - 1 - 16]);		// 将currenttask指向idletask栈区，在任务切换中来使用（没有用），这样不会浪费空间。
 	
 	MEM8(NVIC_SYSPRI2) = NVIC_PENDSV_PRI;			// 设置PendSVC的优先级
 	MEM32(NVIC_INT_CTRL) = NVIC_PENDSVSET; 			// 使能PendSVC，触发PendSVC异常

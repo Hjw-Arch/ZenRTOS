@@ -15,6 +15,8 @@
 #include "rt_mutex.h"
 #include "rt_timer.h"
 
+#include "rt_idletask.h"
+
 void appInit(void);
 
 

@@ -72,12 +72,9 @@ typedef struct _taskInfo {
 	uint32_t stackRtFreeSize;	// 实时的剩余空间
 }taskInfo_t;
 
-extern task_t _idleTask;
 extern task_t* currentTask;
 extern task_t* nextTask;
-extern task_t* idleTask;
 extern listHead taskTable[RTOS_PRIORITY_COUNT];
-extern taskStack_t idleTaskEnv[512];
 
 extern listHead taskDelayedList;
 
@@ -111,9 +108,6 @@ void taskDeleteSelf(void);
 
 taskInfo_t taskGetInfo(task_t* task);
 // void taskGetInfo(task_t* task, taskInfo_t* taskinfo); // 此版本相较于上一个开销更小一点，不过小的不多
-
-
-void checkCpuUsage(void);
 
 #endif
 
