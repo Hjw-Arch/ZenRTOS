@@ -21,6 +21,7 @@ static float cpuUsage = 0.0f;
 
 static uint32_t enableCpuUsageState = 0;
 
+/**
 // 有和没有没区别
 static void cpuUsageStateInit(void) {
 	enableCpuUsageState = 0;
@@ -28,6 +29,7 @@ static void cpuUsageStateInit(void) {
 	idleCount = 0;
 	cpuUsage = 0.0f;
 }
+**/
 
 // 给tick中断使用
 void checkCpuUsage(void) {
@@ -46,6 +48,8 @@ void checkCpuUsage(void) {
 	if (tickCount == TICKS_PER_SEC) {
 		maxIdleCount = idleCount;
 		idleCount = 0;
+		
+		timerResetSemForTimerNotify();
 		
 		unlockSched();
 	} else if (tickCount % TICKS_PER_SEC == 0) {

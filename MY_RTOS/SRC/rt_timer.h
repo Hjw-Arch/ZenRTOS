@@ -48,4 +48,7 @@ void timerGetInfo(timer_t* timer, timerInfo_t* info);
 **/
 
 
+void timerResetSemForTimerNotify(void);		// 专用函数！禁止调用！
+
+
 #endif

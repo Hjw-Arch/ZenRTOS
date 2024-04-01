@@ -35,11 +35,11 @@ void task1Entry (void* param) {
 	mboxInit(&mbox, messageBuffer, 16);
 	
 	// 初始化软定时器
-	// 定时器1在系统启动后1000ms开始运行，随后每隔100ms运行一次定时器函数
-	timerInit(&timer1, 100, 10, timerFunc, &bit1, TIMER_CONFIG_TYPE_STRICT);
+	// 定时器1在系统启动后2000ms开始运行，随后每隔100ms运行一次定时器函数
+	timerInit(&timer1, 200, 10, timerFunc, &bit1, TIMER_CONFIG_TYPE_STRICT);
 	timerStart(&timer1);
-	// 定时器2在系统启动后2000ms开始运行，随后每隔200ms运行一次定时器函数
-	timerInit(&timer2, 200, 20, timerFunc, &bit2, TIMER_CONFIG_TYPE_LOOSE);
+	// 定时器2在系统启动后4000ms开始运行，随后每隔200ms运行一次定时器函数
+	timerInit(&timer2, 400, 20, timerFunc, &bit2, TIMER_CONFIG_TYPE_LOOSE);
 	timerStart(&timer2);
 	
 	while(1) {

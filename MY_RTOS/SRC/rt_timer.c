@@ -2,6 +2,11 @@
 #include "semaphore.h"
 #include "lock.h"
 
+// 与idletask配合的不好
+// 需要改进
+// 软软定时器由于第一秒内一直post，在一秒后能迅速运行完这一秒内的ticks次数的操作，不影响1s外的结果
+// 软硬定时器由于在任务内启动，在第1s内每任何动作
+
 // 同一个软定时器最好只在同一个任务内调用！
 
 static listHead timerStrictList;	// 在时间片中断内处理的定时器列表
@@ -11,6 +16,11 @@ static sem_t semForTimerNotify;	// 用于通知定时器任务开始执行,用事件标志组也行
 
 static task_t timerTask;
 static taskStack_t timerTaskStack[TIMER_TASK_STACK_SIZE];
+
+// 专用用途！禁止调用！
+void timerResetSemForTimerNotify(void) {
+	semForTimerNotify.counter = 0;
+}
 
 // 工具函数，用于遍历定时器列表执行倒计时操作
 static void timerCallFuncList(listHead* timerList) {

@@ -83,6 +83,7 @@ uint32_t semDestory(sem_t* semaphore) {
 	return count;
 }
 
+
 semInfo_t semGetInfo(sem_t* semaphore) {
 	semInfo_t info;
 	
