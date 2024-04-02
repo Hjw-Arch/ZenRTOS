@@ -1,6 +1,7 @@
 #include "semaphore.h"
 #include "lock.h"
 
+#if FUNCTION_SEMAPHORE_ENABLE == 1
 
 void semInit(sem_t* semaphore, uint32_t initCount, uint32_t maxCount) {
 
@@ -114,7 +115,7 @@ void semGetInfo(sem_t* semaphore, semInfo_t* info) {
 **/
 
 
-
+#endif
 
 
 

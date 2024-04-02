@@ -1,6 +1,8 @@
 #include "rt_eflaggroup.h"
 #include "lock.h"
 
+#if FUNCTION_EFLAGGROUP_EBABLE == 1
+
 void eFlagGroupInit(eFlagGroup_t* eflaggroup, uint32_t flags) {
 	eventInit(&eflaggroup->event, EVENT_TYPE_EFLAGGROUP);
 	eflaggroup->flags = flags;
@@ -168,3 +170,6 @@ void eFlagGroupGetInfo(eFlagGroup_t* eFlagGroup, eFlagGroupInfo_t* info) {
 	leaveCritical(st);
 }
 **/
+
+
+#endif

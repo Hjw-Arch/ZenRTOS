@@ -1,6 +1,7 @@
 #include "rt_mutex.h"
 #include "lock.h"
 
+#if FUNCTION_MUTEX_EBABLE == 1
 
 void mutexInit(mutex_t* mutex) {
 	eventInit(&mutex->event, EVENT_TYPE_MUTEX);
@@ -186,3 +187,6 @@ void mutexGetInfo(mutex_t* mutex, mutexInfo_t* info) {
 }
 **/
 
+
+
+#endif

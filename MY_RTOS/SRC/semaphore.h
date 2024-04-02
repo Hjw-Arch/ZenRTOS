@@ -30,6 +30,4 @@ semInfo_t semGetInfo(sem_t* semaphore);
 
 
 
-
 #endif
-

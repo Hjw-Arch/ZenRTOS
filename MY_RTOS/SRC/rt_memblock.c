@@ -2,7 +2,7 @@
 #include "rtLib.h"
 #include "lock.h"
 
-
+#if FUNCTION_MBLOCK_ENABLE == 1
 // 初始化
 // 这里好像有问题
 // void* memStart 
@@ -140,3 +140,5 @@ void memBlockGetInfo(memBlock_t* memblock, memBlockInfo_t* info) {
 }
 **/
 
+
+#endif

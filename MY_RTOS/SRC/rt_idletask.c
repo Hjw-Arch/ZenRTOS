@@ -11,6 +11,7 @@ void appInit(void);
 task_t _idleTask;
 taskStack_t idleTaskEnv[TASK_STACK_SIZE];
 
+#if FUNCTION_CPUUSAGE_ENABLE == 1
 // idletask
 task_t* idleTask;
 uint32_t idleCount = 0;
@@ -49,7 +50,12 @@ void checkCpuUsage(void) {
 		maxIdleCount = idleCount;
 		idleCount = 0;
 		
+		
+#if FUNCTION_SOFTTIMER_ENABLE == 1
+#if FUNCTION_SEMAPHORE_ENABLE == 1
 		timerResetSemForTimerNotify();
+#endif
+#endif
 		
 		unlockSched();
 	} else if (tickCount % TICKS_PER_SEC == 0) {
@@ -63,13 +69,15 @@ static void cpuUsageSyncWithSysTick (void) {
 	while (enableCpuUsageState == 0);
 }
 
+#endif
+
 void idleTaskEntry (void* param) {
 
 	lockSched();
 	appInit();
 	
 	
-#ifdef SOFT_TIMER
+#if FUNCTION_SOFTTIMER_ENABLE == 1
 	timerFuncInit();
 #endif
 	
@@ -77,6 +85,8 @@ void idleTaskEntry (void* param) {
 // 初始化时钟	
 	setSysTick(SYS_TICK);
 	
+	
+#if FUNCTION_CPUUSAGE_ENABLE == 1
 	cpuUsageSyncWithSysTick();
 	
 	// 加锁保护,可能不需要
@@ -85,13 +95,19 @@ void idleTaskEntry (void* param) {
 		idleCount++;
 		leaveCritical(st);
 	}
+#endif
+	
+	
 }
 
 // 这里没必要加锁
 // 如果在使用此函数时发生tick中断，那么有可能导致取到的usage不是最新的
 // 但是如果加了锁，在使用此函数时没有发生tick中断的话获取的就是最新值
 // 如果发生了tick中断，加锁只是延迟中断的发生，其实获取到的也不是真正意义上的最新值
+
+#if FUNCTION_CPUUSAGE_ENABLE == 1
 float cpuGetUsage(void) {
 	return cpuUsage;
 }
+#endif
 

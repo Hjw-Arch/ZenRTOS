@@ -23,13 +23,16 @@ typedef enum _error {
 #define TIMER_TASK_PRIORITY			1		// 定时器任务的优先级，注意，不能和空闲任务的优先级一致，否则它两会按时间片交替运行
 
 // 高实时性模式
-#define HIGH_RT_MODE
+#define HIGH_RT_MODE				1
 
-// 开启软定时器功能
-#define SOFT_TIMER
+#define	FUNCTION_SEMAPHORE_ENABLE	1		// 信号量功能
+#define	FUNCTION_MUTEX_EBABLE		1		// 互斥信号量
+#define	FUNCTION_EFLAGGROUP_EBABLE	1		// 事件标志组
+#define	FUNCTION_MBOX_ENABLE		1		// 邮箱
+#define	FUNCTION_MBLOCK_ENABLE		1		// 存储块
+#define	FUNCTION_SOFTTIMER_ENABLE	1		// 软定时器
+#define	FUNCTION_CPUUSAGE_ENABLE	1		// CPU使用率统计
 
-// 开始CPU利用率检查功能
-#define CPU_USAGE_ENABLE
 
 
 

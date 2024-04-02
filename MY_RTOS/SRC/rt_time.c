@@ -57,9 +57,15 @@ void taskTimeSliceHandler() {
 		currentTask->slice = TIME_SLICE;
 	}
 	
+#if FUNCTION_CPUUSAGE_ENABLE == 1
 	checkCpuUsage();
-	
+#endif
+
+#if FUNCTION_SEMAPHORE_ENABLE == 1
+#if FUNCTION_SOFTTIMER_ENABLE == 1
 	timerFuncPost();
+#endif
+#endif
 	
 	taskSched();
 }

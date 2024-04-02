@@ -1,6 +1,8 @@
 #include "rt_mailbox.h"
 #include "lock.h"
 
+#if FUNCTION_MBOX_ENABLE == 1
+
 // ÓÊÏä³õÊ¼»¯
 void mboxInit(mbox_t* mailbox, void** messageBuffer, uint32_t maxcount) {
 	eventInit(&mailbox->event, EVENT_TYPE_MAILBOX);
@@ -155,3 +157,6 @@ void mboxGetInfo(mbox_t* mbox, mboxInfo_t* info) {
 	leaveCritical(st);
 }
 **/
+
+
+#endif
