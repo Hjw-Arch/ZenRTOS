@@ -7,20 +7,22 @@ void eventInit(eventCtrlBlock_t* ecb, eventType_t type){
 	listHeadInit(&ecb->waitlist);
 }
 
-void eventInsertTaskByPriority(eventCtrlBlock_t* event, task_t* task) {
-	uint32_t st = enterCritical();
-	
-	for(listNode* node = event->waitlist.lastNode; node != &event->waitlist.headNode;) {
-		task_t* temptask = getListNodeParent(node, task_t, linkNode);
+// 共给eventWait使用，无需加锁保护
+static void eventInsertTaskByPriority(eventCtrlBlock_t* event, task_t* task) {
+	if (getListNodeNum(&event->waitlist) == 0) {
+		listNodeInsert2Tail(&event->waitlist, &task->linkNode);
+	} else {
+		for(listNode* node = event->waitlist.lastNode; node != &event->waitlist.headNode;) {
+			task_t* temptask = getListNodeParent(node, task_t, linkNode);
 		
-		if (task->priority < temptask->priority) {
-			node = node->prev;
-		} else {
-			listInsert(&event->waitlist, node, &task->linkNode);
+			if (task->priority < temptask->priority) {
+				node = node->prev;
+			} else {
+				listInsert(&event->waitlist, node, &task->linkNode);
+				return;
 		}
 	}
-	
-	leaveCritical(st);
+	}
 }
 
 // 将任务阻塞在事件控制块上
@@ -34,14 +36,13 @@ void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state,
 	task->eventWaitResult = NO_ERROR;
 	
 	taskSched2Unready(task);
-/**
+
 #ifdef HIGH_RT_MODE		// HIGH_RT_MODE可能导致低优先级任务长时间得不到运行
 	eventInsertTaskByPriority(event, task);
 #else
 	listNodeInsert2Tail(&event->waitlist, &task->linkNode);
 #endif
-**/
-	listNodeInsert2Tail(&event->waitlist, &task->linkNode);
+
 	
 	if (waitTime) {
 		taskSched2Delay(task, waitTime);
@@ -50,7 +51,7 @@ void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state,
 	leaveCritical(st);
 }
 
-
+/*
 // HIGH_RT_MODE有可能导致死锁，需要注意
 task_t* eventWakeUp(eventCtrlBlock_t* event, void* msg, uint32_t result) {	
 	
@@ -102,6 +103,39 @@ task_t* eventWakeUp(eventCtrlBlock_t* event, void* msg, uint32_t result) {
 	
 	return task;
 }
+*/
+ 
+task_t* eventWakeUp(eventCtrlBlock_t* event, void* msg, uint32_t result) {
+	task_t* task = NULL;
+	
+	uint32_t st = enterCritical();
+	
+	listNode* node = NULL;
+	if ((node = listRemoveFirst(&event->waitlist)) != NULL) {
+		task = getListNodeParent(node, task_t, linkNode);
+	}
+	
+	if (task == NULL) {
+		leaveCritical(st);
+		return NULL;
+	}
+	
+	task->waitEvent = NULL;
+	task->eventMsg = msg;
+	task->eventWaitResult = result;
+	task->state &= ~TASK_STATUS_WAIT_MASK;
+	
+	if (task->state & TASK_STATUS_DELAY) {
+		taskSched2Undelay(task);
+	}
+	
+	taskSched2Ready(task);
+	
+	leaveCritical(st);
+	
+	return task;
+}
+
 
 void eventWakeUpGivenTask(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t result) {
 //	uint32_t st = enterCritical();

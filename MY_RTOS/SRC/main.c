@@ -14,14 +14,10 @@ void rtosInit() {
 	taskInit(&_idleTask, idleTaskEntry, (void*)0, idleTaskEnv, RTOS_PRIORITY_COUNT - 1, sizeof(idleTaskEnv));
 	idleTask = &_idleTask;
 	
-	// 开启软定时器功能
-//	timerFuncInit();
 }
 
 int main(){
 	rtosInit();
-	
-//	appInit();
 	
 	nextTask = getHighestReadyTask();
 	

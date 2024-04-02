@@ -95,6 +95,13 @@ void task2Entry (void* param) {
 int task3Flag;
 void task3Entry (void* param) {
 	while(1) {
+		void* msg;
+		
+		uint32_t err = mboxWait(&mbox, &msg, 0);
+		if (err == NO_ERROR) {
+			task3Flag = *(int *)msg;
+			taskDelay(10);
+		}
 		task3Flag = 0;
 		taskDelay(10);
 		task3Flag = 1;
@@ -107,6 +114,13 @@ void task3Entry (void* param) {
 int task4Flag;
 void task4Entry (void* param) {
 	while(1) {
+		void* msg;
+		
+		uint32_t err = mboxWait(&mbox, &msg, 0);
+		if (err == NO_ERROR) {
+			task4Flag = *(int *)msg;
+			taskDelay(10);
+		}
 		task4Flag = 0;
 		taskDelay(10);
 		task4Flag = 1;
