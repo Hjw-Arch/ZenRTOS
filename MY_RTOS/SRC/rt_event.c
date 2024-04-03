@@ -7,6 +7,7 @@ void eventInit(eventCtrlBlock_t* ecb, eventType_t type){
 	listHeadInit(&ecb->waitlist);
 }
 
+#if HIGH_RT_MODE == 1
 // 共给eventWait使用，无需加锁保护
 static void eventInsertTaskByPriority(eventCtrlBlock_t* event, task_t* task) {
 	if (getListNodeNum(&event->waitlist) == 0) {
@@ -25,6 +26,8 @@ static void eventInsertTaskByPriority(eventCtrlBlock_t* event, task_t* task) {
 	}
 }
 
+#endif
+
 // 将任务阻塞在事件控制块上
 // 此函数要求被操作的任务必须处于就绪态或运行态
 void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state, uint32_t waitTime) {
@@ -37,7 +40,7 @@ void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state,
 	
 	taskSched2Unready(task);
 
-#ifdef HIGH_RT_MODE		// HIGH_RT_MODE可能导致低优先级任务长时间得不到运行
+#if HIGH_RT_MODE == 1		// HIGH_RT_MODE可能导致低优先级任务长时间得不到运行
 	eventInsertTaskByPriority(event, task);
 #else
 	listNodeInsert2Tail(&event->waitlist, &task->linkNode);
@@ -52,7 +55,7 @@ void eventWait(eventCtrlBlock_t* event, task_t* task, void* msg, uint32_t state,
 }
 
 /*
-// HIGH_RT_MODE有可能导致死锁，需要注意
+// HIGH_RT_MODE有可能导致低优先级任务长时间无法运行，需要注意
 task_t* eventWakeUp(eventCtrlBlock_t* event, void* msg, uint32_t result) {	
 	
 	task_t* task = NULL;

@@ -1,3 +1,4 @@
+#include "rt_time.h"
 #include "rt_task.h"
 #include "rtLib.h"
 #include "lock.h"
@@ -5,6 +6,7 @@
 #include "semaphore.h"
 #include "rt_timer.h"
 #include "rt_idletask.h"
+#include "rt_hooks.h"
 
 listHead taskDelayedList;		// —” ±∂”¡–
 
@@ -61,10 +63,12 @@ void taskTimeSliceHandler() {
 	checkCpuUsage();
 #endif
 
-#if FUNCTION_SEMAPHORE_ENABLE == 1
 #if FUNCTION_SOFTTIMER_ENABLE == 1
 	timerFuncPost();
 #endif
+
+#if FUNCTION_HOOKS_ENABLE == 1
+	hooksSysTick();
 #endif
 	
 	taskSched();

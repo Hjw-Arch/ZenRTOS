@@ -3,6 +3,7 @@
 #include "ARMCM3.h"
 #include <string.h>
 #include "rt_time.h"
+#include "rt_hooks.h"
 
 Bitmap taskPriorityBitmap;
 
@@ -58,6 +59,10 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 	
 	// 将task加入优先级队列，并将对应的位图置位
 	taskSched2Ready(task);
+
+#if FUNCTION_HOOKS_ENABLE == 1
+	hooksTaskInit(task);
+#endif
 }
 
 
@@ -78,6 +83,11 @@ void taskSched(void) {
 	// 如果最高优先级的任务不是当前的任务，则切换到最高优先级的任务进行运行，否则不切换
 	if (tempTask != currentTask) {
 		nextTask = tempTask;
+		
+#if FUNCTION_HOOKS_ENABLE == 1
+		hooksTaskSwitch(currentTask, nextTask);
+#endif
+		
 		taskSwitch();
 	}
 	

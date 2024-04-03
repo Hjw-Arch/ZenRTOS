@@ -3,7 +3,9 @@
 #include "lock.h"
 
 #if FUNCTION_SOFTTIMER_ENABLE == 1
-#if FUNCTION_SEMAPHORE_ENABLE == 1
+#if FUNCTION_SEMAPHORE_ENABLE == 0
+#error "Soft timer requests function semaphore must be opened"
+#endif
 
 // 同一个软定时器最好只在同一个任务内调用！
 
@@ -216,5 +218,4 @@ void timerGetInfo(timer_t* timer, timerInfo_t* info) {
 }
 **/
 
-#endif
 #endif

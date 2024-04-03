@@ -3,6 +3,8 @@
 #include "rt_time.h"
 #include "rt_timer.h"
 
+#include "rt_hooks.h"
+
 // 一秒钟产生的tick数，所以SYS_TICK最好是能被1000除尽的整数
 #define TICKS_PER_SEC		(1000 / SYS_TICK)
 
@@ -10,10 +12,10 @@ void appInit(void);
 
 task_t _idleTask;
 taskStack_t idleTaskEnv[TASK_STACK_SIZE];
+task_t* idleTask;
 
 #if FUNCTION_CPUUSAGE_ENABLE == 1
 // idletask
-task_t* idleTask;
 uint32_t idleCount = 0;
 uint32_t tickCount = 0;
 uint32_t maxIdleCount = 0;
@@ -52,9 +54,7 @@ void checkCpuUsage(void) {
 		
 		
 #if FUNCTION_SOFTTIMER_ENABLE == 1
-#if FUNCTION_SEMAPHORE_ENABLE == 1
 		timerResetSemForTimerNotify();
-#endif
 #endif
 		
 		unlockSched();
@@ -73,9 +73,9 @@ static void cpuUsageSyncWithSysTick (void) {
 
 void idleTaskEntry (void* param) {
 
+#if FUNCTION_CPUUSAGE_ENABLE == 1
 	lockSched();
 	appInit();
-	
 	
 #if FUNCTION_SOFTTIMER_ENABLE == 1
 	timerFuncInit();
@@ -84,18 +84,22 @@ void idleTaskEntry (void* param) {
 	
 // 初始化时钟	
 	setSysTick(SYS_TICK);
-	
-	
-#if FUNCTION_CPUUSAGE_ENABLE == 1
+
+// 忙等待第一个tick
 	cpuUsageSyncWithSysTick();
-	
+#endif
 	// 加锁保护,可能不需要
 	while(1) {
+#if FUNCTION_CPUUSAGE_ENABLE == 1
 		uint32_t st = enterCritical();
 		idleCount++;
 		leaveCritical(st);
-	}
 #endif
+
+#if FUNCTION_HOOKS_ENABLE == 1
+		hooksCpuIdle();
+#endif
+	}
 	
 	
 }
