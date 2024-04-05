@@ -1,4 +1,8 @@
+#if CORTEX_M4_FPU_OPENED == 1
+#include "stm32f4xx.h"
+#else
 #include "ARMCM3.h"
+#endif
 
 void taskSched(void);
 

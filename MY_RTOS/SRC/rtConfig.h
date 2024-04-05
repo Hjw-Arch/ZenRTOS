@@ -31,8 +31,10 @@ typedef enum _error {
 #define	FUNCTION_MBOX_ENABLE		1		// 邮箱
 #define	FUNCTION_MBLOCK_ENABLE		1		// 存储块
 #define	FUNCTION_SOFTTIMER_ENABLE	1		// 软定时器			此功能要求信号量必须开启
-#define	FUNCTION_CPUUSAGE_ENABLE	1		// CPU使用率统计	关闭此功能，打开hooks功能并在hooksCpuIdle实现低功耗模式
+#define	FUNCTION_CPUUSAGE_ENABLE	0		// CPU使用率统计	关闭此功能，打开hooks功能并在hooksCpuIdle实现低功耗模式
 #define FUNCTION_HOOKS_ENABLE		0		// 钩子函数
 
+#define CORTEX_M4_FPU_OPENED		0		// cortex-M4内核开启FPU
+// #define INIT_SIZE					16		// 若开启FPU，则改为34
 
 #endif

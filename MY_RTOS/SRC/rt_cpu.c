@@ -1,5 +1,9 @@
 #include<stdint.h>
+#if CORTEX_M4_FPU_OPENED == 1
+#include "stm32f4xx.h"
+#else
 #include "ARMCM3.h"
+#endif
 
 // 这个函数没有声明，虽然能跑，但是不规范
 // 设置SysTick定时中断的时间（中断周期，任务的时间片） 

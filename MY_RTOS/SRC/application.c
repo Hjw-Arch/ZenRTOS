@@ -10,14 +10,25 @@ task_t ttask2;
 task_t ttask3;
 task_t ttask4;
 
+timer_t timer;
+
+uint32_t bit = 0;
+
+void timerFunc(void* arg) {
+	*(uint32_t*)arg ^= 1;
+}
+
 int task1Flag;
 void task1Entry (void* param) {
 	
+	timerInit(&timer, 200, 20, timerFunc, &bit, TIMER_CONFIG_TYPE_LOOSE);
+	timerStart(&timer);
+	
 	while(1) {
 		task1Flag = 0;
-		taskDelay(10);
+		taskDelay(1000);
 		task1Flag = 1;
-		taskDelay(10);
+		taskDelay(1000);
 
 	}
 }

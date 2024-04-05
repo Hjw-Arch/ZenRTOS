@@ -1,9 +1,13 @@
 #include "rt_task.h"
 #include "lock.h"
-#include "ARMCM3.h"
 #include <string.h>
 #include "rt_time.h"
 #include "rt_hooks.h"
+#if CORTEX_M4_FPU_OPENED == 1
+#include "stm32f4xx.h"
+#else
+#include "ARMCM3.h"
+#endif
 
 Bitmap taskPriorityBitmap;
 
@@ -22,6 +26,9 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 	taskStack_t* stackTop = stack + stackSize / sizeof(taskStack_t);
 	
 	// 进入中断/异常时， 硬件会自动将8个寄存器压栈，顺序是xPSR、PC(R15)、LR(R14)、R12以及R3-R0
+#if CORTEX_M4_FPU_OPENED == 1
+	stackTop -= 18;
+#endif
 	*(--stackTop) = (unsigned long)(1 << 24); // xPSR中第24位，即T标志位设置为1，否则进入ARM模式，这在CM3上不允许！
 	*(--stackTop) = (unsigned long)entry;
 	*(--stackTop) = (unsigned long)0x14;

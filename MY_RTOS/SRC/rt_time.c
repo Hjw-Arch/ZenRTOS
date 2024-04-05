@@ -26,7 +26,6 @@ void taskDelay (uint32_t ms) {
 	
 	uint32_t st = enterCritical();
 
-	// 这里或许可以优化，因为taskSched2Delay应该包含taskSched2Unready
 	taskSched2Delay(currentTask, ms);
 	
 	taskSched2Unready(currentTask);
