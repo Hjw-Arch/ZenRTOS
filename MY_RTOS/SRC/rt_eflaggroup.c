@@ -94,6 +94,7 @@ uint32_t eFlagGroupGetWithNoWait(eFlagGroup_t* eflaggroup, uint32_t waitFlagType
 // 这样在取出任务的时候取出第一个就是优先级最高的一个
 // 那么此函数就可以直接按照优先级唤醒任务了
 void eFlagGroupPost(eFlagGroup_t* eFlagGroup, uint32_t flags, uint32_t isSet){
+	if (flags == 0) return;
 	if (isSet) {
 		eFlagGroup->flags |= flags;
 	} else {

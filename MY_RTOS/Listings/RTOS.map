@@ -506,7 +506,7 @@ Removing Unused input sections from the image.
     Removing rt_eflaggroup.o(i.eFlagGroupGetInfo), (42 bytes).
     Removing rt_eflaggroup.o(i.eFlagGroupGetWithNoWait), (68 bytes).
     Removing rt_eflaggroup.o(i.eFlagGroupInit), (18 bytes).
-    Removing rt_eflaggroup.o(i.eFlagGroupPost), (132 bytes).
+    Removing rt_eflaggroup.o(i.eFlagGroupPost), (140 bytes).
     Removing rt_eflaggroup.o(i.eFlagGroupWait), (120 bytes).
     Removing rt_mutex.o(i.mutexDestory), (102 bytes).
     Removing rt_mutex.o(i.mutexGetInfo), (72 bytes).
@@ -527,7 +527,7 @@ Removing Unused input sections from the image.
     Removing system_armcm3.o(.rrx_text), (6 bytes).
     Removing system_armcm3.o(i.SystemCoreClockUpdate), (16 bytes).
 
-70 unused section(s) (total 3396 bytes) removed from the image.
+70 unused section(s) (total 3404 bytes) removed from the image.
 
 ==============================================================================
 
