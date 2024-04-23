@@ -1,6 +1,6 @@
 #ifndef __LCD_H
 #define __LCD_H		
-#include "sys.h"	 
+#include "bitband.h"	 
 #include "stdlib.h" 
 
 

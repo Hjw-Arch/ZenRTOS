@@ -104,7 +104,7 @@ static void showWelcome(void) {
 
 
 
-
+/*
 // 工具函数，将浮点数转为字符串，方便打印输出
 static void floatToString(float num, char *str, int n) {
     int intPart = (int)num;  // 整数部分
@@ -152,6 +152,7 @@ static void floatToString(float num, char *str, int n) {
     }
     str[index] = '\0'; // 添加字符串结束符
 }
+*/
 
 static const char spaceCh[] = {KEYBOARD_SPACE, KEYBOARD_CR, KEYBOARD_LR, KEYBOARD_TAB, '\0'};
 
@@ -216,6 +217,12 @@ static void CMD_CPU(const char* CMD) {
 		}
 #endif
 		
+#if FUNCTION_CPUUSAGE_ENABLE == 0
+		printf(FOREGROUND_BROWN "%s: function of 'CPU usage' is not enabled in file 'rtConfig'\r\n" FOREGROUND_NONE, CMD);
+		printf(FOREGROUND_L_BLUE "Tips: You can enable this function in the 'rtConfig' file and compile again to support it\r\n" FOREGROUND_NONE);
+		return;
+#endif
+		
 		printf("CPU利用率: ");
 		
 		int usage = cpuGetUsage() * 100;
@@ -238,9 +245,9 @@ static void CMD_CPU(const char* CMD) {
 		int temperature = interTemperGetTemperature();
 		
 		if (temperature < 5000) {
-			printf("CPU温度: "FOREGROUND_GREEN"%d.%d°C\r\n"FOREGROUND_NONE, temperature / 100, temperature % 100);
+			printf("CPU温度: "FOREGROUND_L_GREEN"%d.%d°C\r\n"FOREGROUND_NONE, temperature / 100, temperature % 100);
 		} else if (temperature > 5000) {
-			printf("CPU温度: "FOREGROUND_RED"%d.%d°C\r\n"FOREGROUND_NONE, temperature / 100, temperature % 100);
+			printf("CPU温度: "FOREGROUND_L_RED"%d.%d°C\r\n"FOREGROUND_NONE, temperature / 100, temperature % 100);
 		}
 		
 		return;
@@ -482,7 +489,7 @@ static void CMD_EXIO(const char* CMD) {
 		} else if (strstr(type, "PF")) {
 			int temp = atoi(&type[2]);
 			if (temp == 8 || temp == 9 || temp == 10) {
-				IOState st = ExIOGetState(temp);
+				IOState st = ExIOGetState((IOType)temp);
 				if (st) printf(FOREGROUND_L_BLUE "%s: PF%d: High level\r\n" FOREGROUND_NONE , CMD, temp);
 				else printf(FOREGROUND_L_BLUE "%s: PF%d: Low level\r\n" FOREGROUND_NONE, CMD, temp);
 			} else {

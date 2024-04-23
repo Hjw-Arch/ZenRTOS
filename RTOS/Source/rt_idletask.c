@@ -73,8 +73,6 @@ static void cpuUsageSyncWithSysTick (void) {
 #endif
 
 void idleTaskEntry (void* param) {
-
-#if FUNCTION_CPUUSAGE_ENABLE == 1
 	lockSched();
 	
 #if FUNCTION_SOFTTIMER_ENABLE == 1
@@ -85,9 +83,12 @@ void idleTaskEntry (void* param) {
 	
 // 初始化时钟	
 	setSysTick(SYS_TICK);
-
+	
+#if FUNCTION_CPUUSAGE_ENABLE == 1
 // 忙等待第一个tick
 	cpuUsageSyncWithSysTick();
+#else
+	unlockSched();
 #endif
 	// 加锁保护,可能不需要
 	while(1) {

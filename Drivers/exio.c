@@ -50,7 +50,7 @@ void ExIOSetState(IOType type, IOState st) {
 IOState ExIOGetState(IOType type) {
 	IOState state;
 	uint32_t st = enterCritical();
-	state = PFout(type);
+	state = (IOState)PFout(type);
 	leaveCritical(st);
 	return state;
 }

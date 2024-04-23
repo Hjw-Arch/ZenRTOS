@@ -120,6 +120,11 @@ static void monitorGetCpuUsage() {
 	}
 #endif
 	
+#if FUNCTION_CPUUSAGE_ENABLE == 0
+		printf("\033[1;31mEnabled\033[0m     ");
+		return;
+#endif
+	
 	float usage = cpuGetUsage();
 	if (usage >= 60) {
 		printf("\033[1;31m");

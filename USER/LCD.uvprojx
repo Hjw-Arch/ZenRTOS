@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\sys;..\USER;..\HARDWARE\LCD;..\FWLIB\inc;..\SRC;..\HARDWARE\button;..\HARDWARE;..\HARDWARE\Include</IncludePath>
+              <IncludePath>..\CLI &amp; Monitor;..\CORE;..\Drivers\Include;..\FWLIB\inc;..\RTOS\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -382,72 +382,7 @@
             <File>
               <FileName>application.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\application.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>HARDWARE</GroupName>
-          <Files>
-            <File>
-              <FileName>lcd.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\LCD\lcd.c</FilePath>
-            </File>
-            <File>
-              <FileName>button.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\button.c</FilePath>
-            </File>
-            <File>
-              <FileName>cli.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\cli.c</FilePath>
-            </File>
-            <File>
-              <FileName>exevent.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\exevent.c</FilePath>
-            </File>
-            <File>
-              <FileName>exio.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\exio.c</FilePath>
-            </File>
-            <File>
-              <FileName>intertemperature.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\intertemperature.c</FilePath>
-            </File>
-            <File>
-              <FileName>light.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\light.c</FilePath>
-            </File>
-            <File>
-              <FileName>monitor.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\monitor.c</FilePath>
-            </File>
-            <File>
-              <FileName>uart.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\uart.c</FilePath>
-            </File>
-            <File>
-              <FileName>rng.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\HARDWARE\rng.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>SYSTEM</GroupName>
-          <Files>
-            <File>
-              <FileName>sys.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\SYSTEM\sys\sys.c</FilePath>
+              <FilePath>..\RTOS\application.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -462,7 +397,7 @@
             <File>
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\system_stm32f4xx.c</FilePath>
+              <FilePath>..\CORE\system_stm32f4xx.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -517,162 +452,147 @@
             <File>
               <FileName>bitmap.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\bitmap.c</FilePath>
+              <FilePath>..\RTOS\Source\bitmap.c</FilePath>
             </File>
             <File>
               <FileName>lock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\lock.c</FilePath>
-            </File>
-            <File>
-              <FileName>lock.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\lock.h</FilePath>
+              <FilePath>..\RTOS\Source\lock.c</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\main.c</FilePath>
+              <FilePath>..\RTOS\Source\main.c</FilePath>
             </File>
             <File>
               <FileName>rt_cpu.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_cpu.c</FilePath>
+              <FilePath>..\RTOS\Source\rt_cpu.c</FilePath>
             </File>
             <File>
               <FileName>rt_eflaggroup.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_eflaggroup.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_eflaggroup.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rt_eflaggroup.h</FilePath>
+              <FilePath>..\RTOS\Source\rt_eflaggroup.c</FilePath>
             </File>
             <File>
               <FileName>rt_event.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_event.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_event.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rt_event.h</FilePath>
+              <FilePath>..\RTOS\Source\rt_event.c</FilePath>
             </File>
             <File>
               <FileName>rt_hooks.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_hooks.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_hooks.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rt_hooks.h</FilePath>
+              <FilePath>..\RTOS\Source\rt_hooks.c</FilePath>
             </File>
             <File>
               <FileName>rt_idletask.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_idletask.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_idletask.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rt_idletask.h</FilePath>
+              <FilePath>..\RTOS\Source\rt_idletask.c</FilePath>
             </File>
             <File>
               <FileName>rt_list.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_list.c</FilePath>
+              <FilePath>..\RTOS\Source\rt_list.c</FilePath>
             </File>
             <File>
               <FileName>rt_mailbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_mailbox.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_mailbox.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rt_mailbox.h</FilePath>
+              <FilePath>..\RTOS\Source\rt_mailbox.c</FilePath>
             </File>
             <File>
               <FileName>rt_memblock.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_memblock.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_memblock.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rt_memblock.h</FilePath>
+              <FilePath>..\RTOS\Source\rt_memblock.c</FilePath>
             </File>
             <File>
               <FileName>rt_mutex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_mutex.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_mutex.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rt_mutex.h</FilePath>
+              <FilePath>..\RTOS\Source\rt_mutex.c</FilePath>
             </File>
             <File>
               <FileName>rt_task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_task.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rt_task.h</FilePath>
+              <FilePath>..\RTOS\Source\rt_task.c</FilePath>
             </File>
             <File>
               <FileName>rt_time.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_time.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_time.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rt_time.h</FilePath>
+              <FilePath>..\RTOS\Source\rt_time.c</FilePath>
             </File>
             <File>
               <FileName>rt_timer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\rt_timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_timer.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rt_timer.h</FilePath>
-            </File>
-            <File>
-              <FileName>rtConfig.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rtConfig.h</FilePath>
-            </File>
-            <File>
-              <FileName>rtLib.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\rtLib.h</FilePath>
-            </File>
-            <File>
-              <FileName>RTOS.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\RTOS.h</FilePath>
+              <FilePath>..\RTOS\Source\rt_timer.c</FilePath>
             </File>
             <File>
               <FileName>semaphore.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\semaphore.c</FilePath>
-            </File>
-            <File>
-              <FileName>semaphore.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\SRC\semaphore.h</FilePath>
+              <FilePath>..\RTOS\Source\semaphore.c</FilePath>
             </File>
             <File>
               <FileName>switch.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\SRC\switch.c</FilePath>
+              <FilePath>..\RTOS\Source\switch.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DRIVERS</GroupName>
+          <Files>
+            <File>
+              <FileName>button.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\button.c</FilePath>
+            </File>
+            <File>
+              <FileName>exevent.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\exevent.c</FilePath>
+            </File>
+            <File>
+              <FileName>exio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\exio.c</FilePath>
+            </File>
+            <File>
+              <FileName>intertemperature.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\intertemperature.c</FilePath>
+            </File>
+            <File>
+              <FileName>light.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\light.c</FilePath>
+            </File>
+            <File>
+              <FileName>rng.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\rng.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\lcd.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>CLI &amp; MONITOR</GroupName>
+          <Files>
+            <File>
+              <FileName>cli.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\CLI &amp; Monitor\cli.c</FilePath>
+            </File>
+            <File>
+              <FileName>monitor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\CLI &amp; Monitor\monitor.c</FilePath>
             </File>
           </Files>
         </Group>

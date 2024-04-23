@@ -90,5 +90,5 @@ double interTemperGetTemperature(void)
 	temperate = (float)adcx*(3.3 / 4096);		// 电压值
 	temperate = (temperate - 0.76) / 0.0025 + 25; // 转换为温度值 
 	//result = temperate *= 100;					// 扩大100倍.
-	return temperate;
+	return temperate * 100;
 }

@@ -8,6 +8,7 @@
 #include "rt_task.h"
 #include "rt_time.h"
 #include "rt_event.h"
+#include "rt_idletask.h"
 
 #if FUNCTION_SEMAPHORE_ENABLE == 1
 #include "semaphore.h"
@@ -38,8 +39,6 @@
 #if FUNCTION_HOOKS_ENABLE == 1
 #include "rt_hooks.h"
 #endif
-
-#include "rt_idletask.h"
 
 void appInit(void);
 
