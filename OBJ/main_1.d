@@ -1,0 +1,17 @@
+..\obj\main_1.o: ..\SRC\main.c
+..\obj\main_1.o: ..\SRC\RTOS.h
+..\obj\main_1.o: D:\Keil\ARM\ARMCC\Bin\..\include\stdint.h
+..\obj\main_1.o: ..\SRC\rtLib.h
+..\obj\main_1.o: ..\SRC\lock.h
+..\obj\main_1.o: ..\SRC\rtConfig.h
+..\obj\main_1.o: ..\SRC\rt_task.h
+..\obj\main_1.o: ..\SRC\rt_time.h
+..\obj\main_1.o: ..\SRC\rt_event.h
+..\obj\main_1.o: ..\SRC\semaphore.h
+..\obj\main_1.o: ..\SRC\rt_mailbox.h
+..\obj\main_1.o: ..\SRC\rt_memblock.h
+..\obj\main_1.o: ..\SRC\rt_eflaggroup.h
+..\obj\main_1.o: ..\SRC\rt_mutex.h
+..\obj\main_1.o: ..\SRC\rt_timer.h
+..\obj\main_1.o: ..\SRC\rt_hooks.h
+..\obj\main_1.o: ..\SRC\rt_idletask.h
