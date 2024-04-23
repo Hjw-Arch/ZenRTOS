@@ -13,5 +13,5 @@
 11. 支持内核裁剪
 ## 现已适配Cortex-M4内核，支持开启FPU
 可在文件`rtConfig.h`中进行配置
-## 分支`Respondent_version`针对STM32F407进行了的适配，支持多个驱动与命令行功能
+## 分支[`Respondent_version`](https://git.acwing.com/hjw_iie/my_rtos/-/tree/Respondent_version)针对STM32F407进行了的适配，支持多个驱动与命令行功能
 串口命令行建议使用[此项目](https://zhuanlan.zhihu.com/p/381099251)，即在Windows Terminal中使用串口连接，十分好用
