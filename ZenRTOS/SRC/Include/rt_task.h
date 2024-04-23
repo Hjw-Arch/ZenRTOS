@@ -87,6 +87,7 @@ void taskSwitch(void);
 
 void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* stack, uint32_t priority, uint32_t stackSize);
 void taskSched(void);
+void taskYield(void);
 
 void idleTaskEntry (void* param);
 task_t* getHighestReadyTask(void);

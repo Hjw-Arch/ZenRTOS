@@ -16,6 +16,8 @@ task_t* nextTask;
 
 listHead taskTable[RTOS_PRIORITY_COUNT];
 
+extern task_t* idleTask;
+
 
 // 任务初始化
 void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* stack, uint32_t priority, uint32_t stackSize) {
@@ -70,6 +72,10 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 #if FUNCTION_HOOKS_ENABLE == 1
 	hooksTaskInit(task);
 #endif
+
+	if(currentTask != idleTask && currentTask->priority > task->priority) {
+		taskSched();
+	}
 }
 
 
@@ -98,6 +104,40 @@ void taskSched(void) {
 		taskSwitch();
 	}
 	
+	leaveCritical(st);
+}
+
+void taskYield(void) {
+	uint32_t st = enterCritical();
+	
+	// 如果调度锁计数器大于0，则不切换任务
+	if (schedLockCount > 0) {
+		leaveCritical(st);
+		return;
+	}
+	
+	// 寻找最高优先级的任务
+	uint32_t hightPriorityTask = bitmapGetFirstSet(&taskPriorityBitmap);
+
+	
+	if (hightPriorityTask == currentTask->priority) {
+		listNode* node = listRemoveFirst(&taskTable[hightPriorityTask]);
+		listNodeInsert2Tail(&taskTable[hightPriorityTask], node);
+	}
+	
+	listNode* node = getFirstListNode(&taskTable[hightPriorityTask]);
+	
+	nextTask = getListNodeParent(node, task_t, linkNode);
+	
+	// 如果最高优先级的任务不是当前的任务，则切换到最高优先级的任务进行运行，否则不切换
+
+#if FUNCTION_HOOKS_ENABLE == 1
+		hooksTaskSwitch(currentTask, nextTask);
+#endif
+	if (nextTask != currentTask) {
+		taskSwitch();
+	}
+
 	leaveCritical(st);
 }
 

@@ -55,6 +55,8 @@ uint32_t eFlagGroupWait(eFlagGroup_t* eflaggroup, uint32_t waitFlagType, uint32_
 		leaveCritical(st);
 		
 		*resultFlag = currentTask->waitEventFlags;
+		currentTask->waitEventFlagType = waitFlagType;
+		currentTask->waitEventFlags = expectedFlag;
 		return currentTask->eventWaitResult;
 	}
 	
