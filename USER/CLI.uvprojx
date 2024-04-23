@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER,NDEBUG</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CLI &amp; Monitor;..\CORE;..\Drivers\Include;..\FWLIB\inc;..\RTOS\Include</IncludePath>
+              <IncludePath>..\CLI &amp; Monitor;..\CORE;..\Drivers\Include;..\FWLIB\inc;..\ZenRTOS\Include</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -382,7 +382,7 @@
             <File>
               <FileName>application.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\RTOS\application.c</FilePath>
+              <FilePath>..\ZenRTOS\application.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -447,96 +447,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>RTOS</GroupName>
-          <Files>
-            <File>
-              <FileName>bitmap.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\bitmap.c</FilePath>
-            </File>
-            <File>
-              <FileName>lock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\lock.c</FilePath>
-            </File>
-            <File>
-              <FileName>main.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\main.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_cpu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_cpu.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_eflaggroup.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_eflaggroup.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_event.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_event.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_hooks.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_hooks.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_idletask.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_idletask.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_list.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_list.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_mailbox.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_mailbox.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_memblock.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_memblock.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_mutex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_mutex.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_task.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_time.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_time.c</FilePath>
-            </File>
-            <File>
-              <FileName>rt_timer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\rt_timer.c</FilePath>
-            </File>
-            <File>
-              <FileName>semaphore.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\semaphore.c</FilePath>
-            </File>
-            <File>
-              <FileName>switch.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\RTOS\Source\switch.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>DRIVERS</GroupName>
           <Files>
             <File>
@@ -593,6 +503,96 @@
               <FileName>monitor.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\CLI &amp; Monitor\monitor.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>ZenRTOS</GroupName>
+          <Files>
+            <File>
+              <FileName>bitmap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\bitmap.c</FilePath>
+            </File>
+            <File>
+              <FileName>lock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\lock.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_cpu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_cpu.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_eflaggroup.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_eflaggroup.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_event.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_event.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_hooks.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_hooks.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_idletask.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_idletask.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_list.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_list.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_mailbox.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_mailbox.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_memblock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_memblock.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_mutex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_mutex.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_time.c</FilePath>
+            </File>
+            <File>
+              <FileName>rt_timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\rt_timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>semaphore.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\semaphore.c</FilePath>
+            </File>
+            <File>
+              <FileName>switch.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\ZenRTOS\Source\switch.c</FilePath>
             </File>
           </Files>
         </Group>
