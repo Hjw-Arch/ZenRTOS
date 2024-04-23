@@ -1,2 +1,5 @@
-/MY_RTOS/Objects
-/MY_RTOS/RTOS.*
+/ZenRTOS/Objects
+/ZenRTOS/RTOS.*
+/Zen_RTOS/Listings
+/Zen_RTOS/RTE
+DOCS
