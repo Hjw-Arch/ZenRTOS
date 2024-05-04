@@ -288,7 +288,7 @@ static void CMD_TASK(const char* CMD) {
 		
 		if (strcmp(type, "MONITOR") == 0) {
 			printf(FOREGROUND_L_RED "WARNING: Dangerous operation is not allowed to be performed! \r\n" FOREGROUND_NONE);
-			printf(FOREGROUND_L_RED "IDLETASK is a necessary component to keep the system running and is not allowed to be suspended\r\n" FOREGROUND_NONE);
+			printf(FOREGROUND_L_BLUE "Tips: Task 'MONITOR' can only be scheduled by interface of 'monitor'\r\n" FOREGROUND_NONE);
 			return;
 		}
 		
@@ -339,6 +339,70 @@ static void CMD_TASK(const char* CMD) {
 					if (isDelay) unlockSched();
 					
 					printf(FOREGROUND_L_BLUE "%s: Task '%s' has been suspended\r\n" FOREGROUND_NONE, CMD, type);
+					return;
+				}
+			}
+		}
+		printf(FOREGROUND_L_RED "%s: There is no such task \r\n" FOREGROUND_NONE, CMD);
+		return;
+	}
+	
+	if (strcmp(type, "delay") == 0) {
+		type = strtok(NULL, spaceCh);
+		
+		if (type == NULL) {
+			NO_ENOUGH_PARAM;
+			return;
+		}
+		
+		char* delayTime = strtok(NULL, spaceCh);
+		
+		if (isParamOver) {
+			return;
+		}
+		
+		int temp = atoi(delayTime);
+		
+		if (temp <= 0) {
+			printf(FOREGROUND_L_RED "%s: The entered delay period is invalid \r\n" FOREGROUND_NONE, CMD);
+			return;
+		}
+		
+		if (strcmp(type, "MONITOR") == 0) {
+			printf(FOREGROUND_L_RED "WARNING: Dangerous operation is not allowed to be performed! \r\n" FOREGROUND_NONE);
+			printf(FOREGROUND_L_BLUE "Tips: Task 'MONITOR' can only be scheduled by interface of 'monitor'\r\n" FOREGROUND_NONE);
+			return;
+		}
+		
+		if (strcmp(type, "IDLETASK") == 0) {
+			printf(FOREGROUND_L_RED "WARNING: IDLETASK is the must component of ZenRTOS, you can't delay it!\r\n" FOREGROUND_NONE);
+			return;
+		}
+		
+		if (strcmp(type, "CMD") == 0) {
+			printf(FOREGROUND_L_RED "WARNING: 'CMD' will be delayed, you won't be able to use the command line for %d ms!\r\n" FOREGROUND_NONE, temp);
+			printf(FOREGROUND_L_RED "Are you sure you want to do that? (Y/N)\r\n" FOREGROUND_NONE);
+			char ch;
+			uartRead(&ch, 1);
+			if (ch != 'y' && ch != 'Y') {
+				printf(FOREGROUND_L_BLUE "%s: Task 'CMD' is not delayed\r\n" FOREGROUND_NONE, CMD);
+				return;
+			} else {
+				printf("'CMD' is delayed\r\n");
+			}
+		}
+		
+		for (int i = 0; i < allTaskTableIndex; i++) {
+			if (allTask[i] != NULL) {
+				if (strcmp(type, allTask[i]->taskName) == 0) {
+					if (!(allTask[i]->state & TASK_STATUS_DELAY) && !(allTask[i]->state & TASK_STATUS_READY)) {
+						printf(FOREGROUND_L_RED "%s: Task '%s' does not have the conditions to be delayed! \r\n" FOREGROUND_NONE, CMD, type);
+						return;
+					}
+					
+					taskDelayOtherTask(allTask[i], temp);
+					
+					printf(FOREGROUND_L_BLUE "%s: Task '%s' has been delayed for %d ms\r\n" FOREGROUND_NONE, CMD, type, temp);
 					return;
 				}
 			}

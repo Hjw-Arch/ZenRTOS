@@ -25,7 +25,7 @@ void taskDelay (uint32_t ms) {
 	if (ms < SYS_TICK) ms = SYS_TICK;
 	
 	uint32_t st = enterCritical();
-
+	
 	taskSched2Delay(currentTask, ms);
 	
 	taskSched2Unready(currentTask);
@@ -34,6 +34,28 @@ void taskDelay (uint32_t ms) {
 	
 	leaveCritical(st);
 	
+}
+
+void taskDelayOtherTask (task_t* task, uint32_t ms) {
+	if (ms < SYS_TICK) ms = SYS_TICK;
+	
+	uint32_t st = enterCritical();
+	
+	if (task->state & TASK_STATUS_DELAY) {
+		task->delayTicks = (ms + SYS_TICK / 2) / SYS_TICK;
+		leaveCritical(st);
+		return;
+	}
+	
+	if (task->state & TASK_STATUS_READY) {
+		taskSched2Delay(task, ms);
+	
+		taskSched2Unready(task);
+	
+		taskSched();
+	}
+	
+	leaveCritical(st);
 }
 
 // 这里没有加保护，目前看是不用，但是如果后面有更高优先级的中断异常就需要加上
