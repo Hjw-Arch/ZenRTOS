@@ -11,6 +11,13 @@ extern uint8_t isenableLowPowerMode;
 #define  LowPowerMode			isenableLowPowerMode
 #endif
 
+#ifdef MONITOR_FUNCTION
+
+extern task_t* allTask[16];
+extern uint32_t allTaskTableIndex;
+
+#endif
+
 void hooksCpuIdle(void);
 void hooksSysTick(void);
 void hooksTaskSwitch(task_t* from, task_t* to);

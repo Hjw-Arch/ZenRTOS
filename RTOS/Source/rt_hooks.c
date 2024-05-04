@@ -11,6 +11,13 @@
 uint8_t isenableLowPowerMode = 0;
 #endif
 
+#ifdef MONITOR_FUNCTION
+
+task_t* allTask[16];
+uint32_t allTaskTableIndex = 0;
+
+#endif
+
 void hooksCpuIdle(void) {
 #if LOW_POWER_MODE == 1
 	if (isenableLowPowerMode) {
@@ -28,7 +35,11 @@ void hooksTaskSwitch(task_t* from, task_t* to){
 }
 
 void hooksTaskInit(task_t* task){
-	
+#ifdef MONITOR_FUNCTION
+
+	allTask[allTaskTableIndex++] = task;
+
+#endif
 }
 
 

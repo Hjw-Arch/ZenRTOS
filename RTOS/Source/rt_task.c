@@ -9,13 +9,6 @@
 #include "ARMCM3.h"
 #endif
 
-#ifdef MONITOR_FUNCTION
-
-task_t* allTask[16];
-uint32_t allTaskTableIndex = 0;
-
-#endif
-
 Bitmap taskPriorityBitmap;
 
 task_t* currentTask;
@@ -73,12 +66,6 @@ void taskInit (task_t* task, void (*entry)(void*), void* param, taskStack_t* sta
 	task->eventWaitResult = NO_ERROR;
 	listNodeInit(&(task->delayNode)); // 初始化延时结点
 	listNodeInit(&(task->linkNode)); // 初始化任务结点
-	
-#ifdef MONITOR_FUNCTION
-
-	allTask[allTaskTableIndex++] = task;
-
-#endif
 	
 	// 将task加入优先级队列，并将对应的位图置位
 	taskSched2Ready(task);

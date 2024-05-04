@@ -288,7 +288,7 @@
 
   <Group>
     <GroupName>USER</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -299,7 +299,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\application.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\application.c</PathWithFileName>
       <FilenameWithoutPath>application.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -548,7 +548,7 @@
 
   <Group>
     <GroupName>CLI &amp; MONITOR</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -580,7 +580,7 @@
 
   <Group>
     <GroupName>ZenRTOS</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -591,7 +591,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\bitmap.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\bitmap.c</PathWithFileName>
       <FilenameWithoutPath>bitmap.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -603,7 +603,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\lock.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\lock.c</PathWithFileName>
       <FilenameWithoutPath>lock.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -615,7 +615,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\main.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -627,7 +627,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_cpu.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_cpu.c</PathWithFileName>
       <FilenameWithoutPath>rt_cpu.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -639,7 +639,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_eflaggroup.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_eflaggroup.c</PathWithFileName>
       <FilenameWithoutPath>rt_eflaggroup.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -651,7 +651,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_event.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_event.c</PathWithFileName>
       <FilenameWithoutPath>rt_event.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -663,7 +663,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_hooks.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_hooks.c</PathWithFileName>
       <FilenameWithoutPath>rt_hooks.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -675,7 +675,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_idletask.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_idletask.c</PathWithFileName>
       <FilenameWithoutPath>rt_idletask.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -687,7 +687,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_list.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_list.c</PathWithFileName>
       <FilenameWithoutPath>rt_list.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -699,7 +699,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_mailbox.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_mailbox.c</PathWithFileName>
       <FilenameWithoutPath>rt_mailbox.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -711,7 +711,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_memblock.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_memblock.c</PathWithFileName>
       <FilenameWithoutPath>rt_memblock.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -723,7 +723,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_mutex.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_mutex.c</PathWithFileName>
       <FilenameWithoutPath>rt_mutex.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -735,7 +735,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_task.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_task.c</PathWithFileName>
       <FilenameWithoutPath>rt_task.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -747,7 +747,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_time.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_time.c</PathWithFileName>
       <FilenameWithoutPath>rt_time.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -759,7 +759,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\rt_timer.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\rt_timer.c</PathWithFileName>
       <FilenameWithoutPath>rt_timer.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -771,7 +771,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\semaphore.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\semaphore.c</PathWithFileName>
       <FilenameWithoutPath>semaphore.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -783,7 +783,7 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>..\ZenRTOS\Source\switch.c</PathWithFileName>
+      <PathWithFileName>..\RTOS\Source\switch.c</PathWithFileName>
       <FilenameWithoutPath>switch.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

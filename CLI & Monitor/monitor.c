@@ -12,9 +12,6 @@
 
 #ifdef MONITOR_FUNCTION
 
-extern task_t* allTask[16];
-extern uint32_t allTaskTableIndex;
-
 task_t monitorTask;
 static taskStack_t monitorTaskEnv[MONITOR_TASK_ENV_SIZE];
 
