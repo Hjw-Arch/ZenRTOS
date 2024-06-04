@@ -172,6 +172,135 @@ static void unknownCMD(const char* CMD) {
 	printf("%s: command not found\r\n", CMD);
 }
 
+static void CMD_HELP(const char* CMD) {
+	char *type = strtok(NULL, spaceCh);
+	
+	if (type != NULL) {
+		PARAM_TOOMANY;
+		return;
+	}
+	
+	printf("+ 使用说明\r\n	- 输入“help”可获取ZenRTOS的CLI使用说明\r\n	- 本CLI支持正常的输入、删除、错误信息提示\r\n\r\n");
+	printf("+ 清屏命令\r\n	- 输入“clear”可实现清屏，不保留历史信息\r\n	- 输入“cls”切换到新的一页，保留历史信息\r\n\r\n");
+	printf("+ 外部I/O控制\r\n	- 输入“exio set 端口 high/low”可设置对应端口的输出电压\r\n	- 输入“exio get 端口”可获取对应端口电压\r\n	- 输入“exio dir 端口”可设置对应端口输入输出方向\r\n\r\n");
+	printf("+ 系统硬件信息获取\r\n	- 输入“cpu info”可获取CPU、系统相关信息\r\n	- 输入“cpu usage”可获取实时CPU利用率\r\n	- 输入“cpu temp”可获取实时CPU温度\r\n\r\n");
+	printf("+ 软件信息\r\n	- 输入“lsos”可获取ZenRTOS的软件信息\r\n\r\n");
+	printf("+ 任务管理\r\n	- 输入“task info”可获取系统内所有的任务信息\r\n	- 输入“task suspend 任务”可将对应的任务挂起\r\n	- 输入“task delay 任务 时间”可将对应任务延时对应时间\r\n	- 输入“task wakeup 任务”可将对应被挂起的任务唤醒\r\n\r\n");
+	printf("+ 系统资源实时监控\r\n	- 输入“monitor on”可进入监控模式，实时查看系统内资源使用情况\r\n\r\n");
+	printf("+ 低功耗模式\r\n	- 输入“low-power on”可打开低功耗模式\r\n	- 输入“low-power off”可以关闭低功耗模式\r\n\r\n");
+	printf("+ 外部事件检测\r\n	- 按下开发板上按键可被RTOS检测并做出反应\r\n\r\n");
+	printf("+ 板上资源控制\r\n	- 输入“beep on/off”可打开或关闭beep\r\n	- 输入“led1/2 on/off”可打开或关闭对应的led灯\r\n	- 输入“light”可获取环境光强度\r\n\r\n");
+	printf("+ 软定时器示例\r\n	- 输入“beep squareware 半周期”可利用beep产生对应周期的方波\r\n\r\n");
+}
+
+static void CMD_LSOS(const char* CMD) {
+	char *type = strtok(NULL, spaceCh);
+	
+	if (type != NULL) {
+		PARAM_TOOMANY;
+		return;
+	}
+	
+	printf("ZenRTOS version v1.1\r\n");
+	
+	printf("SysTick cycle: " FOREGROUND_L_BLUE "%d us\r\n" FOREGROUND_NONE, SYS_TICK);
+	
+	printf("Task time slice: " FOREGROUND_L_BLUE "%d us \r\n" FOREGROUND_NONE, TIME_SLICE);
+	
+	printf("\r\nHigh real-time mode: ");		
+	
+#if HIGH_RT_MODE == 1
+	printf(FOREGROUND_L_BLUE "ON\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "OFF\r\n" FOREGROUND_NONE);
+#endif
+	
+	printf("Semaphore: ");
+
+#if FUNCTION_SEMAPHORE_ENABLE == 1
+	printf(FOREGROUND_L_BLUE "ENABLE\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "DISABLE\r\n" FOREGROUND_NONE);
+#endif
+	
+	printf("Mutex: ");
+	
+#if FUNCTION_MUTEX_EBABLE == 1
+	printf(FOREGROUND_L_BLUE "ENABLE\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "DISABLE\r\n" FOREGROUND_NONE);
+#endif
+
+	printf("Event flag groups: ");
+	
+#if FUNCTION_EFLAGGROUP_EBABLE == 1
+	printf(FOREGROUND_L_BLUE "ENABLE\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "DISABLE\r\n" FOREGROUND_NONE);
+#endif
+
+	printf("Mailbox: ");
+	
+#if FUNCTION_MBOX_ENABLE == 1
+	printf(FOREGROUND_L_BLUE "ENABLE\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "DISABLE\r\n" FOREGROUND_NONE);
+#endif
+
+
+	printf("Memory blocks: ");
+	
+#if FUNCTION_MBLOCK_ENABLE == 1
+	printf(FOREGROUND_L_BLUE "ENABLE\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "DISABLE\r\n" FOREGROUND_NONE);
+#endif
+
+
+	printf("Software Timer: ");
+	
+#if FUNCTION_SOFTTIMER_ENABLE == 1
+	printf(FOREGROUND_L_BLUE "ENABLE\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "DISABLE\r\n" FOREGROUND_NONE);
+#endif
+
+	printf("CPU Usage: ");
+	
+#if FUNCTION_CPUUSAGE_ENABLE == 1
+	printf(FOREGROUND_L_BLUE "ENABLE\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "DISABLE\r\n" FOREGROUND_NONE);
+#endif
+
+	printf("Hooks functions:  ");
+	
+#if FUNCTION_HOOKS_ENABLE == 1
+	printf(FOREGROUND_L_BLUE "ENABLE\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "DISABLE\r\n" FOREGROUND_NONE);
+#endif
+
+	printf("Low-power mode: ");
+	
+#if LOW_POWER_MODE == 1
+	printf(FOREGROUND_L_BLUE "ENABLE\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "DISABLE\r\n" FOREGROUND_NONE);
+#endif
+
+	printf("FPU: ");
+	
+#if CORTEX_M4_FPU_OPENED == 1
+	printf(FOREGROUND_L_BLUE "ENABLE\r\n\r\n" FOREGROUND_NONE);
+#else
+	printf(FOREGROUND_RED "DISABLE\r\n\r\n" FOREGROUND_NONE);
+#endif
+	
+	
+	
+}
+
 static void CMD_CPU(const char* CMD) {
 	char *type = strtok(NULL, spaceCh);
 	
@@ -848,6 +977,17 @@ static void processCMD(char* CMD) {
 		allowPrint;
 		return;
 	}
+	
+	if (strcmp(cmdStart, "help") == 0) {
+		CMD_HELP(cmdStart);
+		return;
+	}
+	
+	if (strcmp(cmdStart, "lsos") == 0) {
+		CMD_LSOS(cmdStart);
+		return;
+	}
+	
 		
 	unknownCMD(cmdStart);
 }
@@ -865,7 +1005,7 @@ static void taskCLIEntry(void* param) {
 }
 
 void CLIInit(void) {
-	strcpy(CMDPromateBuffer, FOREGROUND_L_GREEN "RTOS>>" FOREGROUND_NONE);
+	strcpy(CMDPromateBuffer, FOREGROUND_L_GREEN "ZenRTOS>>" FOREGROUND_NONE);
 	taskInit(&CLITask, taskCLIEntry, NULL, cliTaskEnv, CLI_TASK_PRIORITY, sizeof(cliTaskEnv), "CMD");
 }
 

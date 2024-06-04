@@ -34,7 +34,6 @@ void task1Entry (void* param) {
 }
 
 
-
 int task2Flag;
 void task2Entry (void* param) {
 	uint8_t x = 0;
@@ -56,11 +55,33 @@ void task2Entry (void* param) {
 			case 11:LCD_Clear(BROWN);break;
 		}
 		POINT_COLOR = RED;
-		LCD_ShowString(30,40,210,24,24,"SoC: STM32F407ZGT6");	
-		LCD_ShowString(30,70,200,16,16,"CPU Core: ARM Cortex-M4");
-		LCD_ShowString(30,90,200,16,16,"FPU: ENABLED");
-      	
-		LCD_ShowString(30,130,200,12,12,"2024/4/19");	      					 
+		LCD_ShowString(30,40,400,24,24,"HJW 2002020305 Graduation project");	
+		LCD_ShowString(130,80,210,24,24,"SoC: STM32F407ZGT6");	
+		LCD_ShowString(100,110,300,24,24,"CPU Core: ARM Cortex-M4");
+		LCD_ShowString(170,140,210,24,24,"FPU: ENABLED");
+		LCD_ShowString(180,170,200,24,24,"2024/6/12");	
+
+		
+		LCD_ShowString(50,230,460,16,16,"                    _ooOoo_                    ");
+		LCD_ShowString(50,246,460,16,16,"                   o8888888o                   ");
+		LCD_ShowString(50,262,460,16,16,"                   88\" . \"88                   ");
+		LCD_ShowString(50,278,460,16,16,"                   (| -_- |)                   ");
+		LCD_ShowString(50,294,460,16,16,"                    O\\ = /O                    ");
+		LCD_ShowString(50,310,460,16,16,"                ____/`---'\\____                ");
+		LCD_ShowString(50,326,460,16,16,"              .   ' \\\\| |// `.                 ");
+		LCD_ShowString(50,342,460,16,16,"               / \\\\||| : |||// \\               ");
+		LCD_ShowString(50,358,460,16,16,"             / _||||| -:- |||||- \\             ");
+		LCD_ShowString(50,374,460,16,16,"               | | \\\\\\ - /// | |               ");
+		LCD_ShowString(50,390,460,16,16,"             | \\_| ''\\---/'' | |               ");
+		LCD_ShowString(50,406,460,16,16,"              \\ .-\\__ `-` ___/-. /             ");
+		LCD_ShowString(50,422,460,16,16,"           ___`. .' /--.--\\ `. . __            ");
+		LCD_ShowString(50,438,460,16,16,"        .\"\" '< `.___\\_<|>_/___.' >'\"\".         ");
+		LCD_ShowString(50,454,460,16,16,"       | | : `- \\`.;`\\ _ /`;.`/ - ` : | |      ");
+		LCD_ShowString(50,470,460,16,16,"         \\ \\ `-. \\_ __\\ /__ _/ .-` / /         ");
+		LCD_ShowString(50,486,460,16,16," ======`-.____`-.___\\_____/___.-`____.-'====== ");
+		LCD_ShowString(50,502,460,16,16,"                    `=---='                    ");
+		LCD_ShowString(50,518,460,24,24,"           NEVER BUGS          ");
+		
 		x++;
 		if(x == 12) x=0;
 		LED1 = !LED1;
